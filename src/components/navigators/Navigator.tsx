@@ -11,6 +11,7 @@ import NotificationsScreen from '../../screens/Notifications';
 import SearchScreen from '../../screens/Search';
 import {useContext, useEffect} from 'react';
 import UserContext from '../../Contexts/UserContext';
+import {AllHabitsScreen} from '../../screens/AllHabits';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -39,8 +40,8 @@ const Navigator = () => {
         tabBarStyle: styles.navigator,
       }}>
       <Tab.Screen
-        name="Home"
-        component={HomeScreen}
+        name="HomeStack"
+        component={HomeStackNavigator}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={focused ? styles.iconFocused : null}>
@@ -146,6 +147,27 @@ const SocialStackNavigator = () => {
       <Stack.Screen
         name="Profile"
         component={ProfileScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+const HomeStackNavigator = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Add Habits"
+        component={AllHabitsScreen}
         options={{
           headerShown: false,
         }}

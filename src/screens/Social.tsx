@@ -18,7 +18,7 @@ import {mockProfileList} from '../test/mockProfile1';
 import LinearGradient from 'react-native-linear-gradient';
 import {mockPosts} from '../test/mockPosts';
 import {PostType} from '../components/types';
-import { PostModal } from "./Modals/PostModal";
+import {PostModal} from './Modals/PostModal';
 
 const CONTENT_STRING_SIZE: number = 65;
 

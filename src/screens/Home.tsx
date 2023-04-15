@@ -1,11 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {View, Text, ScrollView} from 'react-native';
+import {View, Text, ScrollView, Image, Pressable} from 'react-native';
 import Calendar from '../components/Calendar';
 import Styles from '../components/Styles';
-import AddHabitScreen from './Modals/AddHabit';
 import EditHabitScreen from './Modals/EditHabit';
 import {HabitType, ProfileType} from '../components/types';
-import {useIsFocused} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import {NonSwipeableItem, SwipeableItem} from '../components/Swipables';
 import {getProfileHabits} from '../components/firestore/getHabits';
@@ -118,26 +117,6 @@ const HomeScreen = () => {
     );
   };
 
-  const addHabit = (habit: HabitType) => {
-    setHabits(habits ? [...habits, habit] : [habit]);
-    const syncHabit = async () => {
-      try {
-        const query = await firestore().collection('Users').doc(username).get();
-        if (query.exists) {
-          const newProfile: ProfileType = query.data() as ProfileType;
-          newProfile.habits.push(habit);
-          await firestore()
-            .collection('Users')
-            .doc(username)
-            .update(newProfile);
-        }
-      } catch (err) {
-        console.error('Error adding habit: ', err);
-      }
-    };
-    syncHabit();
-  };
-
   const editHabit = (habit: HabitType, editType: string) => {
     const syncHabit = async () => {
       try {
@@ -180,7 +159,7 @@ const HomeScreen = () => {
   const habitList = (
     <ScrollView style={Styles.habitList} keyboardShouldPersistTaps="always">
       {habits && habits.length > 0 ? renderHabits('current', habits) : null}
-      <AddHabitScreen addHabit={addHabit} user={username} />
+      <HabitPageNavigator />
       {(habits && currentHabit < habits.length && selectedList === 'current') ||
       (swipedHabits &&
         currentHabit < swipedHabits.length &&
@@ -220,5 +199,24 @@ const HomeScreen = () => {
     </View>
   );
 };
+
+const HabitPageNavigator = () => {
+  const navigation = useNavigation();
+  return (
+    <Pressable
+      style={Styles.addButton}
+      onPress={() => navigation.navigate('Add Habits')}>
+      <Image
+        source={require('../icons/add.png')}
+        style={{
+          width: 60,
+          height: 60,
+          alignSelf: 'center',
+        }}
+        resizeMode="contain"
+      />
+    </Pressable>
+  );
+}
 
 export default HomeScreen;

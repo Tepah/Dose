@@ -814,6 +814,17 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     borderRadius: 10,
   },
+  allTagsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  tagContainer: {
+    flexDirection: 'row',
+    padding: 5,
+    backgroundColor: menu,
+    borderRadius: 5,
+    margin: 5,
+  },
 });
 
 export default styles;

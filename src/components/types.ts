@@ -37,4 +37,11 @@ export type HabitType = {
   streak: number;
   progress: {[key: string]: boolean};
   habitId: string;
+  habitTags: string[];
+};
+
+export type HabitDataType = {
+  name: string;
+  desc: string;
+  tags: string[];
 };

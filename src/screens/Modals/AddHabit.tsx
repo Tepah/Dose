@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Image,
   Modal,
@@ -10,22 +10,18 @@ import {
   StyleSheet,
 } from 'react-native';
 import Styles from '../../components/Styles';
-import {HabitType} from '../../components/types';
 import {CloseButton} from '../../components/Close';
-import firestore from '@react-native-firebase/firestore';
+import UserContext from '../../Contexts/UserContext';
+import {addHabitToDB} from '../../components/addHabit';
 
-interface Props {
-  addHabit: (habit: HabitType) => void;
-  user: string;
-}
-
-const AddHabitScreen = ({addHabit, user}: Props) => {
+const AddHabitScreen = () => {
+  const {username: user, setProfile} = useContext(UserContext);
   const [addScreenVisible, setAddScreenVisible] = useState(false);
   const [habitName, setHabitName] = useState('');
   const [habitDesc, setHabitDesc] = useState('');
+  const [tag, setTag] = useState('');
   const [habitTags, setHabitTags] = useState<string[]>([]);
   const [errorModal, setErrorModal] = useState(false);
-  let habitId = '';
 
   const openCloseModal = () => {
     setAddScreenVisible(() => !addScreenVisible);
@@ -33,56 +29,12 @@ const AddHabitScreen = ({addHabit, user}: Props) => {
     setHabitDesc('');
   };
 
-  const addHabitToDB = async () => {
-    try {
-      // Checks if habit name already exists in firestore
-      const habitRef = await firestore()
-        .collection('Habits')
-        .where('name', '==', habitName.toLowerCase())
-        .get();
-      if (habitRef.docs.length === 0) {
-        const newRef = await firestore().collection('Habits').doc();
-        await newRef.set({
-          name: habitName.toLowerCase(),
-          users: [user],
-        });
-        habitId = newRef.id;
-      } else {
-        habitId = habitRef.docs[0].id;
-        const docRef = firestore().collection('Habits').doc(habitId);
-        await docRef.update({
-          users: firestore.FieldValue.arrayUnion(user),
-        });
-      }
-      const userRef = await firestore().collection('Users').doc(user).get();
-      const habitExists = userRef
-        .data()
-        ?.habits.find((obj: HabitType) => obj.habitId === habitId);
-      if (!habitExists) {
-        const date = new Date().toLocaleDateString('en-US');
-        const progress: {[key: string]: boolean} = {};
-        progress[date] = false;
-        addHabit({
-          name: habitName,
-          description: habitDesc,
-          streak: 0,
-          progress: progress,
-          habitId: habitId,
-        });
-      } else {
-        throw new Error('Habit already exists on this user.');
-      }
-    } catch (err) {
-      console.error('Error adding habit to DB: ', err);
-    }
-  };
-
   const addHabitHandler = () => {
     if (habitName === '') {
       setErrorModal(true);
       return;
     }
-    addHabitToDB();
+    addHabitToDB(habitName, habitDesc, habitTags, user, setProfile);
     setHabitName('');
     openCloseModal();
   };
@@ -100,6 +52,24 @@ const AddHabitScreen = ({addHabit, user}: Props) => {
       </Modal>
     );
   };
+
+  const removeTagOnPress = (tagToRemove: string) => {
+    setHabitTags(prev => {
+      return prev.filter(item => item !== tagToRemove);
+    });
+  };
+
+  const renderTags = habitTags.map((currentTag, index) => {
+    return (
+      <Pressable key={index} onPress={() => removeTagOnPress(currentTag)}>
+        <View style={Styles.tagContainer}>
+          <Text style={[Styles.paragraphText]}>{currentTag}</Text>
+          <Image source={require('../../icons/close.png')} />
+        </View>
+      </Pressable>
+    );
+  });
+
   const addForm = () => {
     return (
       <View style={Styles.addHabitForm}>
@@ -130,16 +100,22 @@ const AddHabitScreen = ({addHabit, user}: Props) => {
           <TextInput
             multiline
             maxLength={30}
-            value={habitDesc}
+            value={tag}
             style={[Styles.input, innerStyles.inputBar]}
-            onChangeText={setHabitDesc}
+            onChangeText={setTag}
           />
           <Pressable
             style={[Styles.inputBarButton, Styles.addTagButton]}
-            onPress={() => console.log('Search!')}>
+            onPress={() =>
+              setHabitTags(prev => {
+                setTag('');
+                return [...prev, tag];
+              })
+            }>
             <Image source={require('../../icons/plus.png')} />
           </Pressable>
         </View>
+        <View style={Styles.allTagsContainer}>{renderTags}</View>
         <View style={Styles.buttonContainer}>
           <Pressable onPress={addHabitHandler} style={Styles.submitButton}>
             <Text style={[Styles.text, {textAlign: 'center'}]}>Submit</Text>
@@ -164,7 +140,7 @@ const AddHabitScreen = ({addHabit, user}: Props) => {
           style={{
             width: 60,
             height: 60,
-            alignSelf: 'center',
+            alignSelf: 'center'
           }}
           resizeMode="contain"
         />
