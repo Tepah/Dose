@@ -1,14 +1,14 @@
 import * as React from 'react';
 import {View, Text, Button, StyleSheet} from 'react-native';
 
-const HomeScreen = ({navigation}: Props) => {
+const StatsScreen = ({navigation}: Props) => {
   return (
     <View>
-      <Text>Home Page</Text>
+      <Text>Stats Page</Text>
       <View style={styles.container}>
         <Button
           title="Home"
-          onPress={() => navigation.navigate('Home')}
+        onPress={() => navigation.navigate('Home')}
         />
         <Button title="Social" onPress={() => navigation.navigate('Social')} />
         <Button title="Stats" onPress={() => navigation.navigate('Stats')} />
@@ -30,4 +30,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default StatsScreen;

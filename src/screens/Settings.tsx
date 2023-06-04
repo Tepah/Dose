@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {View, Text, Button, StyleSheet} from 'react-native';
 
-const HomeScreen = ({navigation}: Props) => {
+const SettingsScreen = ({navigation}: Props) => {
   return (
     <View>
-      <Text>Home Page</Text>
+      <Text>Stats Page</Text>
       <View style={styles.container}>
         <Button
           title="Home"
@@ -30,4 +30,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default SettingsScreen;
