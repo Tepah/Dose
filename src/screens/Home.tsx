@@ -1,33 +1,18 @@
 import * as React from 'react';
-import {View, Text, Button, StyleSheet} from 'react-native';
+import {View, Text} from 'react-native';
+import Navigator from '../components/Navigator';
+import Styles from '../components/Styles';
 
+class Props {
+  navigation: any;
+}
 const HomeScreen = ({navigation}: Props) => {
   return (
-    <View>
+    <View style={Styles.app}>
       <Text>Home Page</Text>
-      <View style={styles.container}>
-        <Button
-          title="Home"
-          onPress={() => navigation.navigate('Home')}
-        />
-        <Button title="Social" onPress={() => navigation.navigate('Social')} />
-        <Button title="Stats" onPress={() => navigation.navigate('Stats')} />
-        <Button title="Settings" onPress={() => navigation.navigate('Settings')} />
-      </View>
+      <Navigator navigation={navigation} />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  button: {
-    margin: 10,
-    minWidth: 120,
-  },
-});
 
 export default HomeScreen;
