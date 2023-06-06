@@ -12,18 +12,25 @@ const styles = StyleSheet.create({
   navigator: {
     backgroundColor: '#344966',
     position: 'absolute',
+    flex: 1,
     flexWrap: 'wrap',
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
+    borderRadius: 15,
     left: 0,
     right: 0,
     bottom: 0,
-    padding: 10,
+    padding: 5,
+    margin: 10,
   },
   button: {
     minHeight: 10,
     minWidth: 10,
     padding: 10,
+  },
+  icons: {
+    maxHeight: 28,
+    maxWidth: 28,
   },
 });
 

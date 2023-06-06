@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, TouchableOpacity, Image, Text } from 'react-native';
+import {View, TouchableOpacity, Image} from 'react-native';
 import styles from '../components/Styles';
 
 class Props {
@@ -12,23 +12,38 @@ const Navigator = ({navigation}: Props) => {
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate('Home')}>
-        <Text>Hello</Text>
-        <Image source={require('../icons/home.svg')} />
+        <Image
+          style={styles.icons}
+          source={require('../icons/home.png')}
+          resizeMode="contain"
+        />
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Social')}><Text>Hello</Text>
-        <Image source={require('../icons/social.svg')} />
+        onPress={() => navigation.navigate('Social')}>
+        <Image
+          style={styles.icons}
+          source={require('../icons/social.png')}
+          resizeMode="contain"
+        />
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Stats')}><Text>Hello</Text>
-        <Image source={require('../icons/stats.svg')} />
+        onPress={() => navigation.navigate('Stats')}>
+        <Image
+          style={styles.icons}
+          source={require('../icons/stats.png')}
+          resizeMode="contain"
+        />
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Settings')}><Text>Hello</Text>
-        <Image source={require('../icons/settings.svg')} />
+        onPress={() => navigation.navigate('Settings')}>
+        <Image
+          style={styles.icons}
+          source={require('../icons/settings.png')}
+          resizeMode="contain"
+        />
       </TouchableOpacity>
     </View>
   );
