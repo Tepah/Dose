@@ -1,41 +1,43 @@
 import React from 'react';
-import {View} from 'react-native';
 import HomeScreen from './src/screens/Home';
 import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SocialScreen from './src/screens/Social';
 import StatsScreen from './src/screens/Stats';
 import SettingsScreen from './src/screens/Settings';
-import Styles from './src/components/Styles';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import styles from './src/components/Styles';
 
-const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 function App(): JSX.Element {
   // const isDarkMode = useColorScheme() === 'dark';
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
+      <Tab.Navigator
+        screenOptions={{
+          tabBarStyle: styles.navigator,
+        }}>
+        <Tab.Screen
           name="Home"
           component={HomeScreen}
           options={{headerShown: false}}
         />
-        <Stack.Screen
+        <Tab.Screen
           name="Social"
           component={SocialScreen}
           options={{headerShown: false}}
         />
-        <Stack.Screen
+        <Tab.Screen
           name="Stats"
           component={StatsScreen}
           options={{headerShown: false}}
         />
-        <Stack.Screen
+        <Tab.Screen
           name="Settings"
           component={SettingsScreen}
           options={{headerShown: false}}
         />
-      </Stack.Navigator>
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }
