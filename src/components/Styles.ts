@@ -3,6 +3,8 @@ import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
   app: {
     flex: 1,
+    alignContent: 'center',
+    justifyContent: 'center',
     backgroundColor: '#1D2B3E',
   },
   text: {
@@ -12,17 +14,13 @@ const styles = StyleSheet.create({
   navigator: {
     backgroundColor: '#344966',
     position: 'absolute',
-    flex: 1,
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
     borderRadius: 15,
     left: 0,
     right: 0,
     bottom: 0,
     padding: 5,
     margin: 10,
+    borderTopWidth: 0,
   },
   button: {
     minHeight: 10,

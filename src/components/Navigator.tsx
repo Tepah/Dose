@@ -1,51 +1,78 @@
 import * as React from 'react';
-import {View, TouchableOpacity, Image} from 'react-native';
+import {Image} from 'react-native';
 import styles from '../components/Styles';
+import HomeScreen from '../screens/Home';
+import SocialScreen from '../screens/Social';
+import StatsScreen from '../screens/Stats';
+import SettingsScreen from '../screens/Settings';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-class Props {
-  navigation: any;
-}
+const Tab = createBottomTabNavigator();
 
-const Navigator = ({navigation}: Props) => {
+const Navigator = () => {
   return (
-    <View style={styles.navigator}>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Home')}>
-        <Image
-          style={styles.icons}
-          source={require('../icons/home.png')}
-          resizeMode="contain"
-        />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Social')}>
-        <Image
-          style={styles.icons}
-          source={require('../icons/social.png')}
-          resizeMode="contain"
-        />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Stats')}>
-        <Image
-          style={styles.icons}
-          source={require('../icons/stats.png')}
-          resizeMode="contain"
-        />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Settings')}>
-        <Image
-          style={styles.icons}
-          source={require('../icons/settings.png')}
-          resizeMode="contain"
-        />
-      </TouchableOpacity>
-    </View>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarShowLabel: false,
+        tabBarStyle: styles.navigator,
+      }}>
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          tabBarIcon: () => (
+            <Image
+              source={require('../icons/home.png')}
+              style={styles.icons}
+              resizeMode="contain"
+            />
+          ),
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen
+        name="Social"
+        component={SocialScreen}
+        options={{
+          tabBarIcon: () => (
+            <Image
+              source={require('../icons/social.png')}
+              style={styles.icons}
+              resizeMode="contain"
+            />
+          ),
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen
+        name="Stats"
+        component={StatsScreen}
+        options={{
+          tabBarIcon: () => (
+            <Image
+              source={require('../icons/stats.png')}
+              style={styles.icons}
+              resizeMode="contain"
+            />
+          ),
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+          tabBarIcon: () => (
+            <Image
+              source={require('../icons/settings.png')}
+              style={styles.icons}
+              resizeMode="contain"
+            />
+          ),
+          headerShown: false,
+        }}
+      />
+    </Tab.Navigator>
   );
 };
 

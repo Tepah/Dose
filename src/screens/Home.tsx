@@ -10,7 +10,6 @@ const HomeScreen = ({navigation}: Props) => {
   return (
     <View style={Styles.app}>
       <Text>Home Page</Text>
-      <Navigator navigation={navigation} />
     </View>
   );
 };
