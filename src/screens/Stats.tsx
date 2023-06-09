@@ -5,7 +5,7 @@ import Styles from '../components/Styles';
 const StatsScreen = () => {
   return (
     <View style={Styles.app}>
-      <Text>Stats Page</Text>
+      <Text style={Styles.text}>Stats Page</Text>
     </View>
   );
 };

@@ -5,7 +5,7 @@ import Styles from '../components/Styles';
 const SocialScreen = () => {
   return (
     <View style={Styles.app}>
-      <Text>Social Page</Text>
+      <Text style={Styles.text}>Social Page</Text>
     </View>
   );
 };

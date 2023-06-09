@@ -5,7 +5,7 @@ import Styles from '../components/Styles';
 const SettingsScreen = () => {
   return (
     <View style={Styles.app}>
-      <Text>Settings Page</Text>
+      <Text style={Styles.text}>Settings Page</Text>
     </View>
   );
 };

@@ -4,6 +4,7 @@ const styles = StyleSheet.create({
   app: {
     flex: 1,
     alignContent: 'center',
+    alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#1D2B3E',
   },
@@ -30,6 +31,14 @@ const styles = StyleSheet.create({
   icons: {
     maxHeight: 28,
     maxWidth: 28,
+  },
+  calendarContainer: {
+    paddingTop: 50,
+    backgroundColor: '#344966',
+    height: 110,
+    top: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
