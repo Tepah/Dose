@@ -1,14 +1,12 @@
 import * as React from 'react';
 import {View, Text} from 'react-native';
-import Navigator from '../components/Navigator';
+import Calendar from '../components/Calendar';
 import Styles from '../components/Styles';
 
-class Props {
-  navigation: any;
-}
-const HomeScreen = ({navigation}: Props) => {
+const HomeScreen = () => {
   return (
     <View style={Styles.app}>
+      <Calendar />
       <Text>Home Page</Text>
     </View>
   );
