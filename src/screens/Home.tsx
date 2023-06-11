@@ -5,12 +5,12 @@ import Styles from '../components/Styles';
 
 const HomeScreen = () => {
   return (
-    <>
+    <View style={Styles.app}>
       <Calendar />
-      <View style={Styles.app}>
+      <View>
         <Text style={Styles.text}>Home Page</Text>
       </View>
-    </>
+    </View>
   );
 };
 

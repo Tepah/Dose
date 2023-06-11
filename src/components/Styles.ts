@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: 'Helvetica',
+    fontSize: 28,
     color: '#D9D9D9',
   },
   navigator: {
@@ -33,10 +34,14 @@ const styles = StyleSheet.create({
     maxWidth: 28,
   },
   calendarContainer: {
+    position: 'absolute',
     paddingTop: 50,
+    paddingBottom: 30,
     backgroundColor: '#344966',
-    height: 110,
+    height: 115,
     top: 0,
+    left: 0,
+    right: 0,
     alignItems: 'center',
     justifyContent: 'center',
   },
