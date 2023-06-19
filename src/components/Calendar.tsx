@@ -1,8 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {View, Text, ScrollView, StyleSheet} from 'react-native';
 import styles from './Styles';
+import {useIsFocused} from '@react-navigation/native';
 
 const Calendar = () => {
+  const isFocused = useIsFocused();
+  const scrollViewRef = useRef(null);
   const months = {
     January: 31,
     February: 28,
@@ -20,26 +23,35 @@ const Calendar = () => {
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
-  const currentDay = currentDate.getDay();
+  const currentDay = currentDate.getDate();
   const [date, setDate] = useState({
     day: currentDay,
     month: currentMonth,
     year: currentYear,
   });
 
+  useEffect(() => {
+    const itemIndex = daysArray.findIndex(item => item === date.day);
+    const itemPosition = itemIndex * 35;
+
+    // @ts-ignore
+    scrollViewRef.current.scrollTo({x: itemPosition, animated: false});
+  }, [date.day, daysArray, isFocused]);
+
   const daysArray = Array.from({length: months.June}, (_, index) => index + 1);
   const renderViews = () => {
     return daysArray.map(day => (
       <View key={day} style={innerStyles.item}>
-        <View style={innerStyles.item}>
-          <Text style={[styles.text, innerStyles.day]}>{day}</Text>
-        </View>
-        {/* Add your code here to customize the view for each day */}
+        <Text
+          style={[
+            styles.text,
+            day === date.day ? innerStyles.currentDay : innerStyles.day,
+          ]}>
+          {day}
+        </Text>
       </View>
     ));
   };
-
-  useEffect(() => {}, [date]);
 
   return (
     <View style={styles.calendarContainer}>
@@ -47,7 +59,10 @@ const Calendar = () => {
         <Text style={styles.text}>{Object.keys(months)[date.month]}</Text>
       </View>
       <View style={innerStyles.scroll}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          ref={scrollViewRef}>
           {renderViews()}
         </ScrollView>
       </View>
@@ -69,8 +84,8 @@ const innerStyles = StyleSheet.create({
     fontSize: 20,
   },
   item: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },
