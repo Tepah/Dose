@@ -1,7 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {View, Text, ScrollView, StyleSheet} from 'react-native';
+import {View, Text, ScrollView, StyleSheet, Dimensions} from 'react-native';
 import styles from './Styles';
 import {useIsFocused} from '@react-navigation/native';
+
+const horizontalPadding = 20;
 
 const Calendar = () => {
   const isFocused = useIsFocused();
@@ -31,11 +33,17 @@ const Calendar = () => {
   });
 
   useEffect(() => {
-    const itemIndex = daysArray.findIndex(item => item === date.day);
-    const itemPosition = itemIndex * 35;
+    if (scrollViewRef.current && date.day - 1 >= 0) {
+      const itemWidth =
+        Dimensions.get('window').width - 0.02 * horizontalPadding;
+      const scrollViewWidth =
+        Dimensions.get('window').width - 0.04 * horizontalPadding;
+      const itemPosition =
+        (date.day - 1) * itemWidth + (itemWidth - scrollViewWidth) / 0.04;
 
-    // @ts-ignore
-    scrollViewRef.current.scrollTo({x: itemPosition, animated: false});
+      // @ts-ignore
+      scrollViewRef.current.scrollTo({x: itemPosition, animated: false});
+    }
   }, [date.day, daysArray, isFocused]);
 
   const daysArray = Array.from({length: months.June}, (_, index) => index + 1);
@@ -84,7 +92,8 @@ const innerStyles = StyleSheet.create({
     fontSize: 20,
   },
   item: {
-    paddingHorizontal: 15,
+    width: '4%',
+    paddingHorizontal: horizontalPadding,
     paddingVertical: 5,
     justifyContent: 'center',
     alignItems: 'center',
