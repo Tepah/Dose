@@ -34,6 +34,7 @@ const Navigator = () => {
         name="Social"
         component={SocialScreen}
         options={{
+          // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: () => (
             <Image
               source={require('../icons/social.png')}
@@ -62,6 +63,7 @@ const Navigator = () => {
         name="Settings"
         component={SettingsScreen}
         options={{
+          // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: () => (
             <Image
               source={require('../icons/settings.png')}
