@@ -13,6 +13,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#344966',
     borderRadius: 10,
+    height: 50,
+    marginVertical: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
+  habitContainerSwiped: {
+    flex: 1,
+    backgroundColor: '#1D2B3E',
+    borderRadius: 10,
     height: 40,
     marginVertical: 5,
     alignItems: 'center',
@@ -22,9 +32,8 @@ const styles = StyleSheet.create({
   habitList: {
     flex: 1,
     top: 110,
-    paddingVertical: 10,
+    marginVertical: 5,
     width: '90%',
-    alignSelf: 'center',
     alignContent: 'center',
   },
   text: {
@@ -32,9 +41,15 @@ const styles = StyleSheet.create({
     fontSize: 28,
     color: '#D9D9D9',
   },
+  doneText: {
+    fontFamily: 'Helvetica',
+    fontSize: 28,
+    color: '#2a3e59',
+    textDecorationLine: 'line-through',
+  },
   // Navigator Styles
   navigator: {
-    backgroundColor: '#344966',
+    backgroundColor: '#1D2B3E',
     position: 'absolute',
     height: '8%',
     left: 0,
