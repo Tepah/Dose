@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
   // Habit Styles
   habitContainer: {
     flex: 1,
-    backgroundColor: 'darkgray',
+    backgroundColor: '#343942',
     borderRadius: 15,
     height: 40,
     marginVertical: 5,
