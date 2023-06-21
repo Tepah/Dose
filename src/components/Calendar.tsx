@@ -32,14 +32,13 @@ const Calendar = () => {
     year: currentYear,
   });
 
+  // @ts-ignore
   useEffect(() => {
     if (scrollViewRef.current && date.day - 1 >= 0) {
-      const itemWidth =
-        Dimensions.get('window').width - 0.02 * horizontalPadding;
-      const scrollViewWidth =
-        Dimensions.get('window').width - 0.04 * horizontalPadding;
+      const itemWidth = Dimensions.get('window').width / 6;
+      const scrollViewWidth = 6 * itemWidth;
       const itemPosition =
-        (date.day - 1) * itemWidth + (itemWidth - scrollViewWidth) / 0.04;
+        (date.day - 1) * itemWidth - scrollViewWidth / 2 + itemWidth;
 
       // @ts-ignore
       scrollViewRef.current.scrollTo({x: itemPosition, animated: false});
@@ -71,7 +70,15 @@ const Calendar = () => {
           horizontal
           showsHorizontalScrollIndicator={false}
           ref={scrollViewRef}>
-          {renderViews()}
+          <View
+            style={{
+              flex: 1,
+              width: '100%',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            {renderViews()}
+          </View>
         </ScrollView>
       </View>
     </View>
@@ -92,11 +99,9 @@ const innerStyles = StyleSheet.create({
     fontSize: 20,
   },
   item: {
-    width: '4%',
-    paddingHorizontal: horizontalPadding,
+    width: Dimensions.get('window').width / 6,
     paddingVertical: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-end',
   },
 });
 
