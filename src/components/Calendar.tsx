@@ -3,8 +3,7 @@ import {View, Text, ScrollView, StyleSheet, Dimensions} from 'react-native';
 import styles from './Styles';
 import {useIsFocused} from '@react-navigation/native';
 
-const horizontalPadding = 20;
-
+/* TODO: Create a pull down calendar to change dates, maybe create a new color for dates that have completed tasks */
 const Calendar = () => {
   const isFocused = useIsFocused();
   const scrollViewRef = useRef(null);
@@ -43,7 +42,7 @@ const Calendar = () => {
       // @ts-ignore
       scrollViewRef.current.scrollTo({x: itemPosition, animated: false});
     }
-  }, [date.day, daysArray, isFocused]);
+  }, [date.day, isFocused]);
 
   const daysArray = Array.from({length: months.June}, (_, index) => index + 1);
   const renderViews = () => {
