@@ -8,6 +8,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#0D1821',
   },
+  addModal: {
+    flex: 1,
+    backgroundColor: '#1D2B3E',
+    height: '90%',
+  },
   // Habit Styles
   habitContainer: {
     flex: 1,
@@ -32,7 +37,7 @@ const styles = StyleSheet.create({
   habitList: {
     flex: 1,
     top: 110,
-    marginVertical: 5,
+    marginBottom: 160,
     width: '90%',
     alignContent: 'center',
   },

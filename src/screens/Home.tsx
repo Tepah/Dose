@@ -1,8 +1,17 @@
 import * as React from 'react';
 import {useRef, useState} from 'react';
-import {View, Text, ScrollView, Image, Pressable, Animated, PanResponder} from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  Pressable,
+  Animated,
+  PanResponder,
+} from 'react-native';
 import Calendar from '../components/Calendar';
 import Styles from '../components/Styles';
+import AddHabitScreen from './Modals/AddHabit';
 
 const SwipeableItem = ({
   type,
@@ -60,14 +69,14 @@ const SwipeableItem = ({
         {transform: [{translateX: pan.x}]},
       ]}
       {...panResponder.panHandlers}>
-      <Text style={ type === 'current' ? Styles.text : Styles.doneText}>{habit}</Text>
+      <Text style={type === 'current' ? Styles.text : Styles.doneText}>
+        {habit}
+      </Text>
     </Animated.View>
   );
 };
 
-/* TODO: Create a habit page where you can add habits and select them off from a list
- *   Create a way to swipe on habits
- *   Create a way to undo swipes*/
+/* TODO: Create a habit page where you can add habits and select them off from a list */
 const HomeScreen = () => {
   const [habits, setHabits] = useState<string[]>([
     'Habit 1',
@@ -90,27 +99,12 @@ const HomeScreen = () => {
       />
     ));
   };
-  // TODO: Create a page to add habits
-  const onPressAdd = () => {
-    setHabits([...habits, 'New Habit']);
-  };
   return (
     <View style={Styles.app}>
       <Calendar />
       <ScrollView style={Styles.habitList}>
         {renderHabits('current', habits)}
-        <Pressable onPress={onPressAdd}>
-          <Image
-            source={require('../icons/add.png')}
-            style={{
-              width: 50,
-              height: 50,
-              alignSelf: 'center',
-              marginVertical: 10,
-            }}
-            resizeMode="contain"
-          />
-        </Pressable>
+        <AddHabitScreen />
         {renderHabits('swiped', swipedHabits)}
       </ScrollView>
     </View>
