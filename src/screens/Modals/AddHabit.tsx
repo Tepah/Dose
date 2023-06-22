@@ -30,13 +30,21 @@ const AddHabitScreen = () => {
       </Pressable>
       <Modal
         animationType="slide"
-        transparent={false}
+        transparent={true}
         visible={addScreenVisible}
         onRequestClose={closeModal}>
         <View style={Styles.addModal}>
-          <View style={{alignItems: 'flex-end', top: 40}}>
+          <View
+            style={{
+              alignSelf: 'flex-end',
+              top: 20,
+              right: 15,
+            }}>
             <Pressable onPress={closeModal}>
-              <Image source={require('../../icons/close.png')} />
+              <Image
+                style={{height: 30, width: 30}}
+                source={require('../../icons/close.png')}
+              />
             </Pressable>
           </View>
           <Text style={Styles.text}>AddHabitScreen</Text>

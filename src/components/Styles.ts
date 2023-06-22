@@ -8,10 +8,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#0D1821',
   },
+  // Modal Styles
   addModal: {
     flex: 1,
     backgroundColor: '#1D2B3E',
     height: '90%',
+    marginTop: 120,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
   },
   // Habit Styles
   habitContainer: {
@@ -41,6 +45,7 @@ const styles = StyleSheet.create({
     width: '90%',
     alignContent: 'center',
   },
+  // Text Styles
   text: {
     fontFamily: 'Helvetica',
     fontSize: 28,
@@ -72,6 +77,7 @@ const styles = StyleSheet.create({
     maxHeight: 30,
     maxWidth: 30,
   },
+  // Calendar Styles
   calendarContainer: {
     position: 'absolute',
     paddingTop: 50,
@@ -86,6 +92,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  test: {
+    backgroundColor: 'black',
+  }
 });
 
 export default styles;
