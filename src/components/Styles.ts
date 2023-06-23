@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#0D1821',
   },
   // Modal Styles
+  // Add Modal Styles
   addModal: {
     flex: 1,
     backgroundColor: '#1D2B3E',
@@ -16,6 +17,11 @@ const styles = StyleSheet.create({
     marginTop: 120,
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
+  },
+  addHabitForm: {
+    flex: 1,
+    padding: 20,
+    justifyContent: 'space-between',
   },
   // Habit Styles
   habitContainer: {
