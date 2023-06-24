@@ -1,11 +1,24 @@
-import React, {useState} from 'react';
-import { Button, Image, Modal, Pressable, Switch, Text, TextInput, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  Image,
+  Modal,
+  Pressable,
+  Switch,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import Styles from '../../components/Styles';
 
 const AddHabitScreen = () => {
   const [addScreenVisible, setAddScreenVisible] = useState(false);
   const [habitName, setHabitName] = useState('');
   const [isWeekly, setIsWeekly] = useState(true);
+  const renders = useRef(1);
+
+  useEffect(() => {
+    renders.current = renders.current + 1;
+  });
 
   const openCloseModal = () => {
     setAddScreenVisible(() => !addScreenVisible);
@@ -19,18 +32,20 @@ const AddHabitScreen = () => {
 
   return (
     <View>
-      <Pressable onPress={openCloseModal}>
-        <Image
-          source={require('../../icons/add.png')}
-          style={{
-            width: 50,
-            height: 50,
-            alignSelf: 'center',
-            marginVertical: 10,
-          }}
-          resizeMode="contain"
-        />
-      </Pressable>
+      <View>
+        <Pressable onPress={openCloseModal}>
+          <Image
+            source={require('../../icons/add.png')}
+            style={{
+              width: 50,
+              height: 50,
+              alignSelf: 'center',
+              marginVertical: 10,
+            }}
+            resizeMode="contain"
+          />
+        </Pressable>
+      </View>
       <Modal
         animationType="slide"
         transparent={true}
@@ -52,10 +67,11 @@ const AddHabitScreen = () => {
           </View>
           <View style={Styles.addHabitForm}>
             <Text style={[Styles.text, {alignSelf: 'center'}]}>Add Habit</Text>
-            <Text style={Styles.text}>Name</Text>
+            <Text style={[Styles.text, {fontSize: 20}]}>Name</Text>
             <TextInput
               style={Styles.input}
               placeholder={'Habit Name'}
+              autoFocus={true}
               value={habitName}
               onChangeText={setHabitName}
             />
@@ -71,7 +87,16 @@ const AddHabitScreen = () => {
               }
               value={isWeekly}
             />
-            <Button title={'Submit'} onPress={handleSubmit} />
+            <View style={Styles.buttonContainer}>
+              <Pressable
+                onPress={handleSubmit}
+                style={Styles.submitButton}>
+                <Text style={[Styles.text, {textAlign: 'center'}]}>
+                  Submit
+                </Text>
+              </Pressable>
+            </View>
+            <Text>I rendered {renders.current} times</Text>
           </View>
         </View>
       </Modal>

@@ -13,14 +13,13 @@ const styles = StyleSheet.create({
   addModal: {
     flex: 1,
     backgroundColor: '#1D2B3E',
-    height: '90%',
     marginTop: 120,
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
   },
   addHabitForm: {
-    flex: 1,
     padding: 20,
+    height: '50%',
     justifyContent: 'space-between',
   },
   // Habit Styles
@@ -74,10 +73,22 @@ const styles = StyleSheet.create({
     padding: 5,
     borderTopWidth: 0,
   },
+  buttonContainer: {
+    height: 70,
+    width: 180,
+    alignSelf: 'center',
+    alignContent: 'center',
+  },
   button: {
     minHeight: 10,
     minWidth: 10,
     padding: 10,
+  },
+  submitButton: {
+    backgroundColor: '#b4cded',
+    padding: 10,
+    borderRadius: 15,
+    alignContent: 'center',
   },
   icons: {
     maxHeight: 30,
@@ -100,7 +111,15 @@ const styles = StyleSheet.create({
   },
   test: {
     backgroundColor: 'black',
-  }
+  },
+  input: {
+    fontFamily: 'Helvetica',
+    fontSize: 20,
+    color: '#D9D9D9',
+    backgroundColor: '#344966',
+    padding: 5,
+    borderRadius: 5,
+  },
 });
 
 export default styles;
