@@ -52,6 +52,9 @@ const Calendar = () => {
           style={[
             styles.text,
             day === date.day ? innerStyles.currentDay : innerStyles.day,
+            {
+              textAlign: 'center',
+            },
           ]}>
           {day}
         </Text>
@@ -102,7 +105,6 @@ const innerStyles = StyleSheet.create({
     paddingVertical: 5,
     justifyContent: 'center',
     alignItems: 'flex-end',
-    textAlign: 'center',
   },
 });
 

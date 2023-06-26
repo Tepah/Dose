@@ -34,13 +34,9 @@ const SwipeableItem = ({
 
   const panResponder = PanResponder.create({
     onMoveShouldSetPanResponder: () => true,
-    onPanResponderMove: Animated.event(
-      [
-        null,
-        {dx: pan.x},
-      ],
-      {useNativeDriver: false}
-    ),
+    onPanResponderMove: Animated.event([null, {dx: pan.x}], {
+      useNativeDriver: false,
+    }),
     onPanResponderRelease: () => {
       Animated.spring(pan, {
         toValue: {x: 0, y: 0},
@@ -76,7 +72,6 @@ const SwipeableItem = ({
   );
 };
 
-/* TODO: Create a habit page where you can add habits and select them off from a list */
 const HomeScreen = () => {
   const [habits, setHabits] = useState<string[]>([
     'Habit 1',
@@ -99,12 +94,17 @@ const HomeScreen = () => {
       />
     ));
   };
+
+  const addHabit = (name: string, weekly: boolean) => {
+    setHabits([...habits, name]);
+  };
+
   return (
     <View style={Styles.app}>
       <Calendar />
       <ScrollView style={Styles.habitList}>
         {renderHabits('current', habits)}
-        <AddHabitScreen />
+        <AddHabitScreen addHabit={addHabit} />
         {renderHabits('swiped', swipedHabits)}
       </ScrollView>
     </View>

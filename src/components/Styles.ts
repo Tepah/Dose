@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     height: '50%',
     justifyContent: 'space-between',
   },
-  // Habit Styles
+  // Home Page Styles
   habitContainer: {
     flex: 1,
     backgroundColor: '#344966',
@@ -49,6 +49,30 @@ const styles = StyleSheet.create({
     marginBottom: 160,
     width: '90%',
     alignContent: 'center',
+  },
+
+  // Social Page Styles
+  header: {
+    position: 'absolute',
+    flex: 1,
+    backgroundColor: '#1D2B3E',
+    padding: 5,
+    paddingTop: 30,
+    height: 80,
+    top: 0,
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerNav: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    flexDirection: 'row',
+    height: '100%',
+  },
+  headerText: {
+    flex: 1,
   },
   // Text Styles
   text: {
