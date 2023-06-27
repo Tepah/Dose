@@ -94,7 +94,7 @@ const AddHabitScreen = ({addHabit}: Props) => {
   const showModalButton = () => {
     return (
       <View>
-        <Pressable onPress={openCloseModal}>
+        <Pressable style={Styles.addButton} onPress={openCloseModal}>
           <Image
             source={require('../../icons/add.png')}
             style={{

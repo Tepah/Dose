@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#0D1821',
   },
+  //------------------------------------------------------------------------//
   // Modal Styles
   // Add Modal Styles
   addModal: {
@@ -22,6 +23,12 @@ const styles = StyleSheet.create({
     height: '50%',
     justifyContent: 'space-between',
   },
+  addButton: {
+    width: 50,
+    height: 50,
+    alignSelf: 'center',
+  },
+  //------------------------------------------------------------------------//
   // Home Page Styles
   habitContainer: {
     flex: 1,
@@ -50,7 +57,7 @@ const styles = StyleSheet.create({
     width: '90%',
     alignContent: 'center',
   },
-
+  //------------------------------------------------------------------------//
   // Social Page Styles
   header: {
     position: 'absolute',
@@ -73,7 +80,61 @@ const styles = StyleSheet.create({
   },
   headerText: {
     flex: 1,
+    paddingLeft: 10,
   },
+  navButtons: {
+    padding: 30,
+    height: 40,
+    width: '25%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  socialView: {
+    width: '100%',
+    top: 80,
+    marginBottom: 150,
+  },
+  imagePostContainer: {
+    width: '100%',
+    height: 550,
+  },
+  imagePost: {
+    width: '100%',
+    height: 400,
+  },
+  reactBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 15,
+    height: 80,
+  },
+  userInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  reactButtons: {
+    alignItems: 'flex-end',
+  },
+  likeButton: {
+    justifyContent: 'center',
+    width: 40,
+    height: 40,
+  },
+  likeButtonImage: {
+    alignSelf: 'center',
+    width: 30,
+    height: 30,
+  },
+  postCaptionContainer: {
+    paddingHorizontal: 15,
+  },
+  userPostImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+  },
+  //------------------------------------------------------------------------//
   // Text Styles
   text: {
     fontFamily: 'Helvetica',
@@ -86,6 +147,15 @@ const styles = StyleSheet.create({
     color: '#2a3e59',
     textDecorationLine: 'line-through',
   },
+  userText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    padding: 5,
+  },
+  caption: {
+    fontSize: 22,
+  },
+  //------------------------------------------------------------------------//
   // Navigator Styles
   navigator: {
     backgroundColor: '#1D2B3E',
@@ -118,6 +188,7 @@ const styles = StyleSheet.create({
     maxHeight: 30,
     maxWidth: 30,
   },
+  //------------------------------------------------------------------------//
   // Calendar Styles
   calendarContainer: {
     position: 'absolute',
