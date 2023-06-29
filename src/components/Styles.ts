@@ -94,6 +94,26 @@ const styles = StyleSheet.create({
     top: 80,
     marginBottom: 150,
   },
+  challengePostContainer: {
+    width: '100%',
+    height: 300,
+  },
+  challengePost: {
+    width: '95%',
+    height: 150,
+    backgroundColor: '#344966',
+    borderRadius: 10,
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+  challengers: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
   imagePostContainer: {
     width: '100%',
     height: 550,

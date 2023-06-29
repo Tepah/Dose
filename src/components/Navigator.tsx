@@ -6,6 +6,7 @@ import SocialScreen from '../screens/Social';
 import StatsScreen from '../screens/Stats';
 import SettingsScreen from '../screens/Settings';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { mockProfile1 } from "../test/mockProfile1";
 
 const Tab = createBottomTabNavigator();
 
@@ -66,8 +67,8 @@ const Navigator = () => {
           // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: () => (
             <Image
-              source={require('../icons/settings.png')}
-              style={styles.icons}
+              source={mockProfile1.profilePic}
+              style={[styles.icons, styles.userPostImage]}
               resizeMode="contain"
             />
           ),

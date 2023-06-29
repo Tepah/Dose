@@ -2,10 +2,10 @@ import * as React from 'react';
 import {useState} from 'react';
 import {View, Text, Pressable, Image, ScrollView} from 'react-native';
 import Styles from '../components/Styles';
-
+import {mockProfile1} from '../test/mockProfile1';
 const SocialScreen = () => {
   const navButton = (type: string, link: string) => {
-    // TODO: Make notification button and search button
+    // TODO: Make notification button and search button work
     return (
       <Pressable style={Styles.navButtons}>
         <Image source={link} />
@@ -29,9 +29,12 @@ const SocialScreen = () => {
         <View style={Styles.userInfo}>
           <Image
             style={Styles.userPostImage}
-            source={require('../test/profile.png')} />
+            source={mockProfile1.profilePic}
+          />
           <Pressable>
-            <Text style={[Styles.text, Styles.userText]}>@petah</Text>
+            <Text style={[Styles.text, Styles.userText]}>
+              {mockProfile1.username}
+            </Text>
           </Pressable>
         </View>
         <View style={Styles.reactButtons}>
@@ -51,6 +54,15 @@ const SocialScreen = () => {
       </View>
     );
   };
+  const postCaption = () => {
+    return (
+      <View style={Styles.postCaptionContainer}>
+        <Text style={[Styles.text, Styles.caption]}>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
+        </Text>
+      </View>
+    );
+  };
   const imagePost = () => {
     return (
       <View style={Styles.imagePostContainer}>
@@ -59,11 +71,35 @@ const SocialScreen = () => {
           source={require('../test/water.jpeg')}
         />
         {reactBar()}
-        <View style={Styles.postCaptionContainer}>
-          <Text style={[Styles.text, Styles.caption]}>
-            started their dose of water
-          </Text>
+        {postCaption()}
+      </View>
+    );
+  };
+
+  const challengePost = () => {
+    return (
+      <View style={Styles.challengePostContainer}>
+        <View style={Styles.challengePost}>
+          <View style={Styles.challengers}>
+            <Image
+              style={Styles.userPostImage}
+              source={mockProfile1.profilePic}
+            />
+            <Text style={[Styles.text, Styles.userText]}>
+              {mockProfile1.username}
+            </Text>
+          </View>
+          <Text style={Styles.text}>challenged</Text>
+          <View style={Styles.challengers}>
+            <Image
+              style={Styles.userPostImage}
+              source={mockProfile1.profilePic}
+            />
+            <Text style={[Styles.text, Styles.userText]}>@tom</Text>
+          </View>
         </View>
+        {reactBar()}
+        {postCaption()}
       </View>
     );
   };
@@ -73,6 +109,7 @@ const SocialScreen = () => {
       <ScrollView style={Styles.socialView}>
         {imagePost()}
         {imagePost()}
+        {challengePost()}
         {imagePost()}
       </ScrollView>
     </View>
