@@ -3,27 +3,31 @@ import {useState} from 'react';
 import {View, Text, Pressable, Image, ScrollView} from 'react-native';
 import Styles from '../components/Styles';
 import {mockProfile1} from '../test/mockProfile1';
-const SocialScreen = () => {
+const SocialScreen = ({navigation}: any) => {
   const navButton = (type: string, link: string) => {
     // TODO: Make notification button and search button work
     return (
-      <Pressable style={Styles.navButtons}>
-        <Image source={link} />
-      </Pressable>
+      <View style={Styles.navButtons}>
+        <Pressable
+          style={Styles.navButtons}
+          onPress={() => navigation.navigate(type)}>
+          <Image source={link} />
+        </Pressable>
+      </View>
     );
   };
   const socialHeader = () => (
     <View style={Styles.header}>
       <Text style={[Styles.text, Styles.headerText]}>dose</Text>
       <View style={Styles.headerNav}>
-        {navButton('search', require('../icons/search.png'))}
-        {navButton('notification', require('../icons/notification.png'))}
+        {navButton('Search', require('../icons/search.png'))}
+        {navButton('Notification', require('../icons/notification.png'))}
       </View>
     </View>
   );
 
+  const [liked, setLiked] = useState(false);
   const reactBar = () => {
-    const [liked, setLiked] = useState(false);
     return (
       <View style={Styles.reactBar}>
         <View style={Styles.userInfo}>

@@ -13,6 +13,9 @@ import Calendar from '../components/Calendar';
 import Styles from '../components/Styles';
 import AddHabitScreen from './Modals/AddHabit';
 
+/* TODO: Incorporate visible talley marks for streaks, add past date rendering, */
+/*   add clickable past dates to track progress, but don't allow editing on past dates. */
+/*   make dates have completion status icons. */
 const SwipeableItem = ({
   type,
   habits,

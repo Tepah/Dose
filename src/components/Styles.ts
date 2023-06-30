@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   socialView: {
     width: '100%',
     top: 80,
-    marginBottom: 150,
+    marginBottom: 130,
   },
   challengePostContainer: {
     width: '100%',

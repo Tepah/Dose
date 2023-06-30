@@ -6,9 +6,13 @@ import SocialScreen from '../screens/Social';
 import StatsScreen from '../screens/Stats';
 import SettingsScreen from '../screens/Settings';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import { mockProfile1 } from "../test/mockProfile1";
+import {mockProfile1} from '../test/mockProfile1';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import NotificationsScreen from '../screens/Notifications';
+import SearchScreen from "../screens/Search";
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
 const Navigator = () => {
   return (
@@ -33,7 +37,7 @@ const Navigator = () => {
       />
       <Tab.Screen
         name="Social"
-        component={SocialScreen}
+        component={StackNavigator}
         options={{
           // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: () => (
@@ -76,6 +80,34 @@ const Navigator = () => {
         }}
       />
     </Tab.Navigator>
+  );
+};
+
+const StackNavigator = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Social"
+        component={SocialScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Notification"
+        component={NotificationsScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Search"
+        component={SearchScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </Stack.Navigator>
   );
 };
 
