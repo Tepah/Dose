@@ -235,6 +235,26 @@ const styles = StyleSheet.create({
     padding: 5,
     borderRadius: 5,
   },
+  //------------------------------------------------------------------------//
+  // Notification Styles
+  notificationContainer: {
+    flex: 1,
+    backgroundColor: '#1D2B3E',
+    width: '100%',
+    height: 100,
+    borderColor: 'white',
+    borderBottomWidth: 0.5,
+    padding: 10,
+  },
+  notificationScroll: {
+    flex: 1,
+    width: '100%',
+    marginTop: 20,
+    marginBottom: 55,
+  },
+  notificationText: {
+    fontSize: 20,
+  },
 });
 
 export default styles;
