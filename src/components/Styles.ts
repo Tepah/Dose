@@ -242,9 +242,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#1D2B3E',
     width: '100%',
     height: 100,
-    borderColor: 'white',
-    borderBottomWidth: 0.5,
     padding: 10,
+    marginBottom: 1,
+    borderRadius: 8,
   },
   notificationScroll: {
     flex: 1,
@@ -254,6 +254,15 @@ const styles = StyleSheet.create({
   },
   notificationText: {
     fontSize: 20,
+  },
+  notificationHeaderText: {
+    textAlign: 'left',
+    alignSelf: 'flex-start',
+    paddingTop: 30,
+  },
+  notificationTextContainer: {
+    flex: 1,
+    width: '60%',
   },
 });
 
