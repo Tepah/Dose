@@ -1,19 +1,25 @@
 import {StyleSheet} from 'react-native';
 
+const main = '#0D1821';
+const secondary = '#344966';
+const tertiary = '#2A3E59';
+const menu = '#1D2B3E';
+const fontColor = '#D9D9D9';
+
 const styles = StyleSheet.create({
   app: {
     flex: 1,
     alignContent: 'center',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#0D1821',
+    backgroundColor: main,
   },
   //------------------------------------------------------------------------//
   // Modal Styles
   // Add Modal Styles
   addModal: {
     flex: 1,
-    backgroundColor: '#1D2B3E',
+    backgroundColor: menu,
     marginTop: 120,
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
@@ -32,7 +38,7 @@ const styles = StyleSheet.create({
   // Home Page Styles
   habitContainer: {
     flex: 1,
-    backgroundColor: '#344966',
+    backgroundColor: secondary,
     borderRadius: 10,
     height: 50,
     marginVertical: 5,
@@ -42,7 +48,7 @@ const styles = StyleSheet.create({
   },
   habitContainerSwiped: {
     flex: 1,
-    backgroundColor: '#1D2B3E',
+    backgroundColor: menu,
     borderRadius: 10,
     height: 40,
     marginVertical: 5,
@@ -62,7 +68,7 @@ const styles = StyleSheet.create({
   header: {
     position: 'absolute',
     flex: 1,
-    backgroundColor: '#1D2B3E',
+    backgroundColor: menu,
     padding: 5,
     paddingTop: 30,
     height: 80,
@@ -101,7 +107,7 @@ const styles = StyleSheet.create({
   challengePost: {
     width: '95%',
     height: 150,
-    backgroundColor: '#344966',
+    backgroundColor: secondary,
     borderRadius: 10,
     flexDirection: 'row',
     alignContent: 'center',
@@ -159,12 +165,12 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'Helvetica',
     fontSize: 28,
-    color: '#D9D9D9',
+    color: fontColor,
   },
   doneText: {
     fontFamily: 'Helvetica',
     fontSize: 28,
-    color: '#2a3e59',
+    color: tertiary,
     textDecorationLine: 'line-through',
   },
   userText: {
@@ -178,7 +184,7 @@ const styles = StyleSheet.create({
   //------------------------------------------------------------------------//
   // Navigator Styles
   navigator: {
-    backgroundColor: '#1D2B3E',
+    backgroundColor: menu,
     position: 'absolute',
     height: '8%',
     left: 0,
@@ -214,7 +220,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     paddingTop: 50,
     paddingBottom: 30,
-    backgroundColor: '#1D2B3E',
+    backgroundColor: menu,
     height: 110,
     top: 0,
     left: 0,
@@ -230,8 +236,8 @@ const styles = StyleSheet.create({
   input: {
     fontFamily: 'Helvetica',
     fontSize: 20,
-    color: '#D9D9D9',
-    backgroundColor: '#344966',
+    color: fontColor,
+    backgroundColor: secondary,
     padding: 5,
     borderRadius: 5,
   },
@@ -239,7 +245,7 @@ const styles = StyleSheet.create({
   // Notification Styles
   notificationContainer: {
     flex: 1,
-    backgroundColor: '#1D2B3E',
+    backgroundColor: menu,
     width: '100%',
     height: 100,
     padding: 10,
@@ -268,28 +274,40 @@ const styles = StyleSheet.create({
   // Profile Styles
   profileContainer: {
     flex: 1,
-    backgroundColor: '#1D2B3E',
+    backgroundColor: main,
   },
   profileHeader: {
-    flex: 2,
+    backgroundColor: menu,
+    marginTop: 30,
+    height: 140,
     width: '100%',
-    backgroundColor: 'white',
-    padding: 5,
+    padding: 10,
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   profilePicture: {
-    flex: 2,
     padding: 5,
-    height: 50,
-    width: 50,
+    height: 80,
+    width: 80,
     borderRadius: 50,
   },
   profileNameText: {
-    flex: 1,
     fontSize: 20,
     fontWeight: 'bold',
   },
-
+  profileHeaderText: {fontSize: 15},
+  profileHeaderUser: {
+    flex: 2,
+    alignItems: 'center',
+  },
+  followCount: {
+    alignSelf: 'center',
+  },
+  followContainer: {
+    flex: 1,
+    padding: 5,
+  },
 });
 
 export default styles;
