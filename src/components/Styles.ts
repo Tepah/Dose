@@ -264,6 +264,32 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '60%',
   },
+  //------------------------------------------------------------------------//
+  // Profile Styles
+  profileContainer: {
+    flex: 1,
+    backgroundColor: '#1D2B3E',
+  },
+  profileHeader: {
+    flex: 2,
+    width: '100%',
+    backgroundColor: 'white',
+    padding: 5,
+    flexDirection: 'row',
+  },
+  profilePicture: {
+    flex: 2,
+    padding: 5,
+    height: 50,
+    width: 50,
+    borderRadius: 50,
+  },
+  profileNameText: {
+    flex: 1,
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+
 });
 
 export default styles;

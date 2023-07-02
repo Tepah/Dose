@@ -4,7 +4,7 @@ import styles from '../components/Styles';
 import HomeScreen from '../screens/Home';
 import SocialScreen from '../screens/Social';
 import StatsScreen from '../screens/Stats';
-import SettingsScreen from '../screens/Settings';
+import ProfileScreen from '../screens/Profile';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {mockProfile1} from '../test/mockProfile1';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -37,7 +37,7 @@ const Navigator = () => {
       />
       <Tab.Screen
         name="Social"
-        component={StackNavigator}
+        component={SocialStackNavigator}
         options={{
           // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: () => (
@@ -65,8 +65,8 @@ const Navigator = () => {
         }}
       />
       <Tab.Screen
-        name="Settings"
-        component={SettingsScreen}
+        name="Profile"
+        component={ProfileScreen}
         options={{
           // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: () => (
@@ -83,7 +83,7 @@ const Navigator = () => {
   );
 };
 
-const StackNavigator = () => {
+const SocialStackNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
