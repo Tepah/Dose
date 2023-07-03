@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Pressable, ScrollView, Text, View} from 'react-native';
-import Styles from "../components/Styles";
-import { mockProfile1 } from "../test/mockProfile1";
+import Styles from '../components/Styles';
+import {mockProfile1} from '../test/mockProfile1';
 
 /* TODO: Implement different types of pressables so */
 const NotificationsScreen = () => {

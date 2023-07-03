@@ -167,6 +167,11 @@ const styles = StyleSheet.create({
     fontSize: 28,
     color: fontColor,
   },
+  paragraphText: {
+    fontFamily: 'Helvetica',
+    fontSize: 20,
+    color: fontColor,
+  },
   doneText: {
     fontFamily: 'Helvetica',
     fontSize: 28,
@@ -273,21 +278,23 @@ const styles = StyleSheet.create({
   //------------------------------------------------------------------------//
   // Profile Styles
   profileContainer: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: main,
+    width: '100%',
+    marginBottom: 50,
   },
   profileHeader: {
+    flex: 3,
     backgroundColor: menu,
     marginTop: 30,
-    height: 140,
     width: '100%',
-    padding: 10,
+    paddingTop: 5,
+    paddingHorizontal: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   profilePicture: {
-    padding: 5,
     height: 80,
     width: 80,
     borderRadius: 50,
@@ -296,7 +303,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-  profileHeaderText: {fontSize: 15},
+  profileHeaderText: {
+    fontSize: 15,
+  },
   profileHeaderUser: {
     flex: 2,
     alignItems: 'center',
@@ -307,6 +316,84 @@ const styles = StyleSheet.create({
   followContainer: {
     flex: 1,
     padding: 5,
+  },
+  profileDescriptionContainer: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  profileTabsContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
+  profileTabText: {
+    fontSize: 20,
+    textAlign: 'center',
+  },
+  profileTabButton: {
+    flex: 1,
+    padding: 10,
+    borderColor: fontColor,
+  },
+  profileTabSelected: {
+    backgroundColor: menu,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+  },
+  profileHabitsContainer: {
+    flex: 9,
+    backgroundColor: menu,
+  },
+  profileHabit: {
+    padding: 15,
+    margin: 5,
+    borderRadius: 5,
+    backgroundColor: secondary,
+  },
+  proHabitText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  proHabitDescriptionText: {
+    fontSize: 20,
+  },
+  proHabitStreakText: {
+    fontSize: 16,
+    color: 'grey',
+  },
+  mediaTabContainer: {
+    backgroundColor: menu,
+    width: '100%',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingTop: 5,
+  },
+  postSquare: {
+    width: '32%',
+    margin: '.6%',
+    aspectRatio: 1,
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
+  postSquareImage: {
+    width: '100%',
+    height: '100%',
+    aspectRatio: 1,
+  },
+  postSquareChallenge: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 5,
+    backgroundColor: tertiary,
+    padding: 10,
+  },
+  challengeSquareText: {
+    fontSize: 50,
+  },
+  challengeSquareChallenger: {
+    alignSelf: 'flex-end',
+    fontSize: 28,
   },
 });
 
