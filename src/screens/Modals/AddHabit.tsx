@@ -10,8 +10,13 @@ import {
 } from 'react-native';
 import Styles from '../../components/Styles';
 
+type HabitType = {
+  name: string;
+  description: string;
+  streak: number;
+};
 interface Props {
-  addHabit: (name: string, weekly: boolean) => void;
+  addHabit: (habit: HabitType) => void;
 }
 
 const AddHabitScreen = ({addHabit}: Props) => {
@@ -26,7 +31,7 @@ const AddHabitScreen = ({addHabit}: Props) => {
   };
 
   const addHabitHandler = () => {
-    addHabit(habitName, isWeekly);
+    addHabit({name: habitName, description: '', streak: 0});
     setHabitName('');
     setIsWeekly(true);
     openCloseModal();

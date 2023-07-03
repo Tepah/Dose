@@ -1,9 +1,9 @@
-import * as React from 'react';
-import { View, Text, ScrollView, Image, Pressable } from "react-native";
+import React from 'react';
+import {View, Text, ScrollView, Image, Pressable} from 'react-native';
 import Styles from '../components/Styles';
 import {mockProfile1} from '../test/mockProfile1';
 import {useState} from 'react';
-import { mockPosts } from "../test/mockPosts";
+import {mockPosts} from '../test/mockPosts';
 
 const ProfileScreen = () => {
   const profileInfo = (
@@ -16,7 +16,7 @@ const ProfileScreen = () => {
       </View>
       <View style={Styles.followContainer}>
         <Text style={[Styles.text, Styles.profileHeaderText]}>Habits</Text>
-        <Text style={[Styles.text, Styles.followCount]}>{Object.keys(mockProfile1.habits).length}</Text>
+        <Text style={[Styles.text, Styles.followCount]}>{mockProfile1.habits.length}</Text>
       </View>
       <View style={Styles.followContainer}>
         <Text style={[Styles.text, Styles.profileHeaderText]}>Following</Text>
@@ -75,17 +75,21 @@ const ProfileScreen = () => {
     </View>
   );
 
-  const mappedHabits = Object.keys(mockProfile1.habits).map(habit => {
+  type habitType = {
+    name: string;
+    description: string;
+    streak: number;
+  };
+
+  const mappedHabits = mockProfile1.habits.map((habit: habitType) => {
     return (
       <View style={Styles.profileHabit}>
-        <Text style={[Styles.text, Styles.proHabitText]}>
-          {mockProfile1.habits[habit].name}
-        </Text>
+        <Text style={[Styles.text, Styles.proHabitText]}>{habit.name}</Text>
         <Text style={[Styles.text, Styles.proHabitDescriptionText]}>
-          {mockProfile1.habits[habit].description}
+          {habit.description}
         </Text>
         <Text style={[Styles.text, Styles.proHabitStreakText]}>
-          Going for {mockProfile1.habits[habit].streak} days
+          Going for {habit.streak} days
         </Text>
       </View>
     );
@@ -95,13 +99,17 @@ const ProfileScreen = () => {
     const mapPosts = mockPosts.map(post => {
       let postContent = null;
       if (post.postType === 'image') {
-        postContent = <Image source={post.image} style={Styles.postSquareImage} />
-      } else if (post.postType == 'challenge') {
+        postContent = (
+          <Image source={post.image} style={Styles.postSquareImage} />
+        );
+      } else if (post.postType === 'challenge') {
         // TODO: Add challenge image
         postContent = (
           <View style={Styles.postSquareChallenge}>
             <Text style={[Styles.text, Styles.challengeSquareText]}>VS</Text>
-            <Text style={[Styles.text, Styles.challengeSquareChallenger]}>{post.challenger}</Text>
+            <Text style={[Styles.text, Styles.challengeSquareChallenger]}>
+              {post.challenger}
+            </Text>
           </View>
         );
       }

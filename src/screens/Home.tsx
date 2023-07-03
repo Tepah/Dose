@@ -4,14 +4,19 @@ import {
   View,
   Text,
   ScrollView,
-  Image,
-  Pressable,
   Animated,
   PanResponder,
 } from 'react-native';
 import Calendar from '../components/Calendar';
 import Styles from '../components/Styles';
 import AddHabitScreen from './Modals/AddHabit';
+import {mockProfile1} from '../test/mockProfile1';
+
+type HabitType = {
+  name: string;
+  description: string;
+  streak: number;
+};
 
 /* TODO: Incorporate visible talley marks for streaks, add past date rendering, */
 /*   add clickable past dates to track progress, but don't allow editing on past dates. */
@@ -26,11 +31,11 @@ const SwipeableItem = ({
   index,
 }: {
   type: string;
-  habits: string[];
-  swipedHabits: string[];
-  setSwipedHabits: React.Dispatch<React.SetStateAction<string[]>>;
-  setHabits: React.Dispatch<React.SetStateAction<string[]>>;
-  habit: string;
+  habits: {name: string; description: string; streak: number}[];
+  swipedHabits: HabitType[];
+  setSwipedHabits: React.Dispatch<React.SetStateAction<HabitType[]>>;
+  setHabits: React.Dispatch<React.SetStateAction<HabitType[]>>;
+  habit: HabitType;
   index: number;
 }) => {
   const pan = useRef(new Animated.ValueXY()).current;
@@ -69,23 +74,19 @@ const SwipeableItem = ({
       ]}
       {...panResponder.panHandlers}>
       <Text style={type === 'current' ? Styles.text : Styles.doneText}>
-        {habit}
+        {habit.name}
       </Text>
     </Animated.View>
   );
 };
 
 const HomeScreen = () => {
-  const [habits, setHabits] = useState<string[]>([
-    'Habit 1',
-    'Habit 2',
-    'Habit 3',
-  ]);
-  const [swipedHabits, setSwipedHabits] = useState<string[]>([]);
+  const [habits, setHabits] = useState<HabitType[]>(mockProfile1.habits);
+  const [swipedHabits, setSwipedHabits] = useState<HabitType[]>([]);
 
   // TODO: Different colors?
-  const renderHabits = (type: string, list: string[]) => {
-    return list.map((habit, index) => (
+  const renderHabits = (type: string, list: HabitType[]) => {
+    return list.map((habit: HabitType, index) => (
       <SwipeableItem
         type={type}
         habits={habits}
@@ -97,9 +98,8 @@ const HomeScreen = () => {
       />
     ));
   };
-
-  const addHabit = (name: string, weekly: boolean) => {
-    setHabits([...habits, name]);
+  const addHabit = (habit: HabitType) => {
+    setHabits([...habits, habit]);
   };
 
   return (
