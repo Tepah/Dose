@@ -5,8 +5,8 @@ import {
   Text,
   ScrollView,
   Animated,
-  PanResponder,
-} from 'react-native';
+  PanResponder, Pressable
+} from "react-native";
 import Calendar from '../components/Calendar';
 import Styles from '../components/Styles';
 import AddHabitScreen from './Modals/AddHabit';
@@ -62,6 +62,9 @@ const SwipeableItem = ({
       }
     },
   });
+  const handleLongPress = () => {
+    console.log('once');
+  };
 
   return (
     <Animated.View
@@ -73,9 +76,21 @@ const SwipeableItem = ({
         {transform: [{translateX: pan.x}]},
       ]}
       {...panResponder.panHandlers}>
-      <Text style={type === 'current' ? Styles.text : Styles.doneText}>
-        {habit.name}
-      </Text>
+      <Pressable
+        style={Styles.habitButton}
+        onLongPress={() => handleLongPress()}>
+        <Text style={type === 'current' ? Styles.text : Styles.doneText}>
+          {habit.name}
+        </Text>
+        <Text
+          style={
+            type === 'current'
+              ? [Styles.text, Styles.streakText]
+              : [Styles.text, Styles.doneStreakText]
+          }>
+          Streak: {habit.streak} days
+        </Text>
+      </Pressable>
     </Animated.View>
   );
 };

@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     alignSelf: 'center',
+    marginVertical: 10,
   },
   //------------------------------------------------------------------------//
   // Home Page Styles
@@ -40,29 +41,28 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: secondary,
     borderRadius: 10,
-    height: 50,
+    height: 100,
     marginVertical: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignContent: 'center',
+    padding: 20,
   },
   habitContainerSwiped: {
     flex: 1,
     backgroundColor: menu,
     borderRadius: 10,
-    height: 40,
+    height: 100,
     marginVertical: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignContent: 'center',
+    padding: 20,
   },
   habitList: {
-    flex: 1,
+    flexGrow: 1,
     top: 110,
     marginBottom: 160,
     width: '90%',
     alignContent: 'center',
   },
+  habitButton: {flex: 1},
+  streakText: {fontSize: 18, color: fontColor},
+  doneStreakText: {fontSize: 18, color: tertiary},
   //------------------------------------------------------------------------//
   // Social Page Styles
   header: {
@@ -395,6 +395,19 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     fontSize: 28,
   },
+  //------------------------------------------------------------------------//
+  // Error Styles
+  errorContainer: {
+    position: 'absolute',
+    flex: 1,
+    padding: 10,
+    paddingVertical: 40,
+    top: 20,
+    backgroundColor: main,
+    borderRadius: 5,
+    alignSelf: 'center',
+  },
+  errorText: {color: 'red', fontSize: 26},
 });
 
 export default styles;

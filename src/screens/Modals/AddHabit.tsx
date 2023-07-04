@@ -22,18 +22,21 @@ interface Props {
 const AddHabitScreen = ({addHabit}: Props) => {
   const [addScreenVisible, setAddScreenVisible] = useState(false);
   const [habitName, setHabitName] = useState('');
-  const [isWeekly, setIsWeekly] = useState(true);
+  const [habitDesc, setHabitDesc] = useState('');
+  const [errorModal, setErrorModal] = useState(false);
 
   const openCloseModal = () => {
     setAddScreenVisible(() => !addScreenVisible);
     setHabitName('');
-    setIsWeekly(true);
   };
 
   const addHabitHandler = () => {
+    if (habitName === '') {
+      setErrorModal(true);
+      return;
+    }
     addHabit({name: habitName, description: '', streak: 0});
     setHabitName('');
-    setIsWeekly(true);
     openCloseModal();
   };
   const addModal = () => {
@@ -71,27 +74,36 @@ const AddHabitScreen = ({addHabit}: Props) => {
     return (
       <View style={Styles.addHabitForm}>
         <Text style={[Styles.text, {alignSelf: 'center'}]}>Add Habit</Text>
-        <Text style={[Styles.text, {fontSize: 20}]}>Name</Text>
+        <Text style={Styles.paragraphText}>Name</Text>
         <TextInput
           value={habitName}
           style={Styles.input}
           placeholder={'Habit Name'}
+          placeholderTextColor={'grey'}
           autoFocus={true}
           onChangeText={setHabitName}
+          maxLength={20}
         />
-        <Text style={[Styles.text, {fontSize: 20}]}>Daily</Text>
-        <Switch
-          value={isWeekly}
-          onChange={() => setIsWeekly(previousState => !previousState)}
-          trackColor={{true: '#7e7e7e'}}
-          thumbColor={isWeekly ? '#ffffff' : '#f4f3f4'}
-          ios_backgroundColor="#3e3e3e"
+        <Text style={[Styles.paragraphText]}>Description (optional)</Text>
+        <TextInput
+          multiline
+          maxLength={120}
+          value={habitDesc}
+          style={Styles.input}
+          onChangeText={setHabitDesc}
         />
         <View style={Styles.buttonContainer}>
           <Pressable onPress={addHabitHandler} style={Styles.submitButton}>
             <Text style={[Styles.text, {textAlign: 'center'}]}>Submit</Text>
           </Pressable>
         </View>
+        <Modal visible={errorModal} animationType="fade" transparent={true}>
+          <View style={Styles.errorContainer}>
+            <Text style={[Styles.text, Styles.errorText]}>
+              Habit name cannot be empty.
+            </Text>
+          </View>
+        </Modal>
       </View>
     );
   };
@@ -103,10 +115,9 @@ const AddHabitScreen = ({addHabit}: Props) => {
           <Image
             source={require('../../icons/add.png')}
             style={{
-              width: 50,
-              height: 50,
+              width: 60,
+              height: 60,
               alignSelf: 'center',
-              marginVertical: 10,
             }}
             resizeMode="contain"
           />
@@ -115,6 +126,15 @@ const AddHabitScreen = ({addHabit}: Props) => {
     );
   };
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setErrorModal(false);
+    }, 3000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [errorModal]);
   return (
     <View>
       {showModalButton()}

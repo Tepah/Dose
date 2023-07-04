@@ -87,7 +87,7 @@ const SocialStackNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Social"
+        name="Feed"
         component={SocialScreen}
         options={{
           headerShown: false,
