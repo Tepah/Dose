@@ -32,6 +32,7 @@ const SwipeableItem = ({
   setEditModalVisible,
   habit,
   currentHabitIndex,
+  setCurrentHabitIndex,
   index,
 }: {
   type: string;
@@ -42,7 +43,8 @@ const SwipeableItem = ({
   editModalVisible: boolean;
   setEditModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   habit: HabitType;
-  currentHabitIndex: React.MutableRefObject<number>;
+  currentHabitIndex: number;
+  setCurrentHabitIndex: React.Dispatch<React.SetStateAction<number>>;
   index: number;
 }) => {
   const pan = useRef(new Animated.ValueXY()).current;
@@ -71,11 +73,8 @@ const SwipeableItem = ({
   });
   const handleLongPress = () => {
     setEditModalVisible(() => true);
+    setCurrentHabitIndex(index);
   };
-
-  useEffect(() => {
-    currentHabitIndex.current = index;
-  }, [currentHabitIndex, editModalVisible, index]);
 
   return (
     <Animated.View
@@ -115,7 +114,7 @@ const HomeScreen = () => {
   const [habits, setHabits] = useState<HabitType[]>(mockProfile1.habits);
   const [swipedHabits, setSwipedHabits] = useState<HabitType[]>([]);
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
-  const currentHabit = useRef<number>(0);
+  const [currentHabit, setCurentHabit] = useState<number>(0);
 
   // TODO: Different colors?
   const renderHabits = (type: string, list: HabitType[]) => {
@@ -130,6 +129,7 @@ const HomeScreen = () => {
         setEditModalVisible={setEditModalVisible}
         habit={habit}
         currentHabitIndex={currentHabit}
+        setCurrentHabitIndex={setCurentHabit}
         index={index}
       />
     ));
@@ -150,7 +150,8 @@ const HomeScreen = () => {
         <AddHabitScreen addHabit={addHabit} />
         <EditHabitScreen
           editHabit={editHabit}
-          habit={habits[currentHabit.current]}
+          habits={habits}
+          currentHabitIndex={currentHabit}
           visible={editModalVisible}
           setVisible={setEditModalVisible}
         />

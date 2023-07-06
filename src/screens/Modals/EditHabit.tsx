@@ -2,29 +2,28 @@ import React, {useEffect, useState} from 'react';
 import {
   Image,
   Modal,
-  Pressable,
+  Pressable, ScrollView,
   Text,
-  TextInput,
-  View,
-} from 'react-native';
+  View
+} from "react-native";
 import Styles from '../../components/Styles';
-import AddHabitScreen from './AddHabit';
+import {HabitType} from "../../components/types";
+import { mockFriends } from "../../test/mockFriends";
 
-type HabitType = {
-  name: string;
-  description: string;
-  streak: number;
-};
 interface Props {
   editHabit: (habit: HabitType, index: number) => void;
   visible: boolean;
-  habit: HabitType;
+  habits: HabitType[];
+  currentHabitIndex: number;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const EditHabitScreen = ({editHabit, visible, habit, setVisible}: Props) => {
-  const [habitName, setHabitName] = useState(habit.name);
-  const [habitDesc, setHabitDesc] = useState(habit.description);
+const EditHabitScreen = ({editHabit, visible, habits, currentHabitIndex, setVisible}: Props) => {
+  const [habitName, setHabitName] = useState(habits[currentHabitIndex].name);
+  const [habitDesc, setHabitDesc] = useState(
+    habits[currentHabitIndex].description,
+  );
+  const [habitStreak, setHabitStreak] = useState(habits[currentHabitIndex].streak);
 
   const openCloseModal = () => {
     setVisible(() => !visible);
@@ -44,8 +43,17 @@ const EditHabitScreen = ({editHabit, visible, habit, setVisible}: Props) => {
       </Modal>
     );
   };
+
+  useEffect(() => {
+    setHabitName(() => habits[currentHabitIndex].name);
+    setHabitDesc(() => habits[currentHabitIndex].description);
+    setHabitStreak(() => habits[currentHabitIndex].streak);
+    console.log('habit', habits[currentHabitIndex], 'index', currentHabitIndex);
+  }, [habits, currentHabitIndex, visible]);
+
   const closeModal = () => {
     return (
+      // TODO: Fix and change this damn button
       <Pressable
         style={{
           alignSelf: 'flex-end',
@@ -60,14 +68,46 @@ const EditHabitScreen = ({editHabit, visible, habit, setVisible}: Props) => {
       </Pressable>
     );
   };
+  const mapFollowing = mockFriends.map((following, index) => {
+    return (
+      <View key={index} style={Styles.individualFollowing}>
+        <Image
+          style={Styles.friendProfilePic}
+          source={following.profilePic} />
+        <Text style={[Styles.text, Styles.userText]}>{following.username}</Text>
+      </View>
+    );
+  });
   const editForm = () => {
     return (
-      <View style={Styles.addHabitForm}>
-        <Text style={[Styles.text, {alignSelf: 'center', fontWeight: 'bold'}]}>
-          {habitName}
-        </Text>
-        <Text style={[Styles.text]}>Description: </Text>
-        <Text style={[Styles.paragraphText]}>{habitDesc}</Text>
+      <View>
+        <View style={Styles.pageHeader}>
+          <Text style={Styles.title}>{habitName}</Text>
+        </View>
+        <ScrollView style={Styles.fullPageScroller}>
+          <View style={Styles.editDescriptionContainer}>
+            <View>
+              <Text style={[Styles.text]}>Description: </Text>
+              <Text style={[Styles.paragraphText]}>{habitDesc}</Text>
+            </View>
+          </View>
+          <View style={Styles.editModalStreaks}>
+            <Text style={[Styles.text]}>Streak: </Text>
+            <Text style={[Styles.text]}>{habitStreak}</Text>
+          </View>
+          <View style={Styles.editModalSocial}>
+            <Text style={Styles.text}>People doing this:</Text>
+            <View style={Styles.editModalFollowing}>
+              {mapFollowing}
+              <View style={Styles.individualFollowing}>
+                <Image
+                  style={Styles.friendProfilePic}
+                  source={require('../../icons/add.png')}
+                />
+              </View>
+            </View>
+          </View>
+        </ScrollView>
       </View>
     );
   };

@@ -36,8 +36,42 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   // Edit Modal Styles
+  pageHeader: {
+    padding: 10,
+  },
   editModalContainer: {
     backgroundColor: main,
+    padding: 10,
+    width: '100%',
+  },
+  editDescriptionContainer: {
+    padding: 15,
+    borderRadius: 10,
+    marginVertical: 5,
+  },
+  editModalStreaks: {
+    padding: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginVertical: 5,
+  },
+  editModalSocial: {
+    padding: 15,
+    borderRadius: 10,
+    marginVertical: 5,
+    backgroundColor: menu,
+  },
+  editModalFollowing: {
+    paddingVertical: 10,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignContent: 'center',
+    justifyContent: 'space-between',
+  },
+  individualFollowing: {
+    padding: 5,
+    justifyContent: 'center',
+    alignContent: 'center',
   },
   //------------------------------------------------------------------------//
   // Home Page Styles
@@ -189,6 +223,13 @@ const styles = StyleSheet.create({
   },
   caption: {
     fontSize: 22,
+  },
+  title: {
+    fontFamily: 'Helvetica',
+    fontSize: 28,
+    color: fontColor,
+    alignSelf: 'center',
+    fontWeight: 'bold',
   },
   //------------------------------------------------------------------------//
   // Navigator Styles
@@ -412,6 +453,17 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   errorText: {color: 'red', fontSize: 26},
+  //------------------------------------------------------------------------//
+  // Reusable Styles
+  fullPageScroller: {
+    height: '100%',
+  },
+  friendProfilePic: {
+    height: 70,
+    aspectRatio: 1,
+    borderRadius: 50,
+    alignSelf: 'center',
+  },
 });
 
 export default styles;

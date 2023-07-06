@@ -37,19 +37,19 @@ export const mockProfile1: profile = {
     },
     {
       name: 'Habit 4',
-      description: 'This is habit 3',
+      description: 'This is habit 4',
       streak: 1,
       startDate: '2023-04-01',
     },
     {
       name: 'Habit 5',
-      description: 'This is habit 3',
+      description: 'This is habit 5',
       streak: 1,
       startDate: '2023-05-01',
     },
     {
       name: 'Habit 6',
-      description: 'This is habit 3',
+      description: 'This is habit 6',
       streak: 1,
       startDate: '2024-08-01',
     },
