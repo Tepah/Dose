@@ -1,16 +1,17 @@
-import * as React from 'react';
-import {useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
   ScrollView,
   Animated,
-  PanResponder, Pressable
-} from "react-native";
+  PanResponder,
+  Pressable,
+} from 'react-native';
 import Calendar from '../components/Calendar';
 import Styles from '../components/Styles';
 import AddHabitScreen from './Modals/AddHabit';
 import {mockProfile1} from '../test/mockProfile1';
+import EditHabitScreen from './Modals/EditHabit';
 
 type HabitType = {
   name: string;
@@ -18,7 +19,7 @@ type HabitType = {
   streak: number;
 };
 
-/* TODO: Incorporate visible talley marks for streaks, add past date rendering, */
+/* TODO: add past date rendering, */
 /*   add clickable past dates to track progress, but don't allow editing on past dates. */
 /*   make dates have completion status icons. */
 const SwipeableItem = ({
@@ -27,7 +28,10 @@ const SwipeableItem = ({
   swipedHabits,
   setSwipedHabits,
   setHabits,
+  editModalVisible,
+  setEditModalVisible,
   habit,
+  currentHabitIndex,
   index,
 }: {
   type: string;
@@ -35,7 +39,10 @@ const SwipeableItem = ({
   swipedHabits: HabitType[];
   setSwipedHabits: React.Dispatch<React.SetStateAction<HabitType[]>>;
   setHabits: React.Dispatch<React.SetStateAction<HabitType[]>>;
+  editModalVisible: boolean;
+  setEditModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   habit: HabitType;
+  currentHabitIndex: React.MutableRefObject<number>;
   index: number;
 }) => {
   const pan = useRef(new Animated.ValueXY()).current;
@@ -63,8 +70,12 @@ const SwipeableItem = ({
     },
   });
   const handleLongPress = () => {
-    console.log('once');
+    setEditModalVisible(() => true);
   };
+
+  useEffect(() => {
+    currentHabitIndex.current = index;
+  }, [currentHabitIndex, editModalVisible, index]);
 
   return (
     <Animated.View
@@ -77,6 +88,7 @@ const SwipeableItem = ({
       ]}
       {...panResponder.panHandlers}>
       <Pressable
+        key={index}
         style={Styles.habitButton}
         onLongPress={() => handleLongPress()}>
         <Text style={type === 'current' ? Styles.text : Styles.doneText}>
@@ -88,7 +100,11 @@ const SwipeableItem = ({
               ? [Styles.text, Styles.streakText]
               : [Styles.text, Styles.doneStreakText]
           }>
-          Streak: {habit.streak} days
+          {habit.streak > 0 ? (
+            <Text>Streak: {habit.streak} days</Text>
+          ) : (
+            <Text>Start this today!</Text>
+          )}
         </Text>
       </Pressable>
     </Animated.View>
@@ -98,17 +114,22 @@ const SwipeableItem = ({
 const HomeScreen = () => {
   const [habits, setHabits] = useState<HabitType[]>(mockProfile1.habits);
   const [swipedHabits, setSwipedHabits] = useState<HabitType[]>([]);
+  const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
+  const currentHabit = useRef<number>(0);
 
   // TODO: Different colors?
   const renderHabits = (type: string, list: HabitType[]) => {
-    return list.map((habit: HabitType, index) => (
+    return list.map((habit: HabitType, index: number) => (
       <SwipeableItem
         type={type}
         habits={habits}
         swipedHabits={swipedHabits}
         setSwipedHabits={setSwipedHabits}
         setHabits={setHabits}
+        editModalVisible={editModalVisible}
+        setEditModalVisible={setEditModalVisible}
         habit={habit}
+        currentHabitIndex={currentHabit}
         index={index}
       />
     ));
@@ -117,12 +138,22 @@ const HomeScreen = () => {
     setHabits([...habits, habit]);
   };
 
+  const editHabit = (habit: HabitType, index: number) => {
+    setHabits([...habits.slice(0, index), habit, ...habits.slice(index + 1)]);
+  };
+
   return (
     <View style={Styles.app}>
       <Calendar />
       <ScrollView style={Styles.habitList}>
         {renderHabits('current', habits)}
         <AddHabitScreen addHabit={addHabit} />
+        <EditHabitScreen
+          editHabit={editHabit}
+          habit={habits[currentHabit.current]}
+          visible={editModalVisible}
+          setVisible={setEditModalVisible}
+        />
         {renderHabits('swiped', swipedHabits)}
       </ScrollView>
     </View>

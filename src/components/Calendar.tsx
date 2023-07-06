@@ -44,7 +44,10 @@ const Calendar = () => {
     }
   }, [date.day, isFocused]);
 
-  const daysArray = Array.from({length: months.June}, (_, index) => index + 1);
+  const daysArray = Array.from(
+    {length: Object.values(months)[date.month]},
+    (_, index) => index + 1,
+  );
   const renderViews = () => {
     return daysArray.map(day => (
       <View key={day} style={innerStyles.item}>

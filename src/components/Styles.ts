@@ -35,6 +35,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: 10,
   },
+  // Edit Modal Styles
+  editModalContainer: {
+    backgroundColor: main,
+  },
   //------------------------------------------------------------------------//
   // Home Page Styles
   habitContainer: {

@@ -1,9 +1,8 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   Modal,
   Pressable,
-  Switch,
   Text,
   TextInput,
   View,
