@@ -1,11 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useRef, useState } from "react";
 import {
   Image,
   Modal,
-  Pressable, ScrollView,
+  Pressable,
+  ScrollView,
   Text,
   TextInput,
-  View
+  View,
 } from 'react-native';
 import Styles from '../../components/Styles';
 import {HabitType} from '../../components/types';
@@ -37,7 +38,13 @@ const closeModal = (closeFunction) => {
   );
 };
 
-const EditHabitScreen = ({editHabit, visible, habits, currentHabitIndex, setVisible}: Props) => {
+const EditHabitScreen = ({
+  editHabit,
+  visible,
+  habits,
+  currentHabitIndex,
+  setVisible,
+}: Props) => {
   const [habitName, setHabitName] = useState(habits[currentHabitIndex].name);
   const [habitDesc, setHabitDesc] = useState(
     habits[currentHabitIndex].description,
@@ -79,9 +86,24 @@ const EditHabitScreen = ({editHabit, visible, habits, currentHabitIndex, setVisi
     );
   });
   const [editModalVisible, setEditModalVisible] = useState(false);
+  const [newHabit, setNewHabit] = useState<HabitType>({
+    name: habitName,
+    description: habitDesc,
+    streak: habitStreak,
+  });
   const editForm = () => {
     const onEditButtonPress = () => {
+      setNewHabit({
+        name: habitName,
+        description: habitDesc,
+        streak: habitStreak,
+      });
       setEditModalVisible(true);
+    };
+
+    const onEditDescriptionSave = () => {
+      editHabit(newHabit, currentHabitIndex);
+      setEditModalVisible(false);
     };
 
     return (
@@ -114,10 +136,17 @@ const EditHabitScreen = ({editHabit, visible, habits, currentHabitIndex, setVisi
                       autoFocus={true}
                       multiline
                       maxLength={120}
-                      value={habitDesc}
+                      value={newHabit.description}
+                      onChangeText={(text) => setNewHabit({...newHabit, description: text})}
                       style={Styles.input}
-                      onChangeText={setHabitDesc}
                     />
+                    <Pressable
+                      style={Styles.submitButton}
+                      onPress={() => onEditDescriptionSave()}>
+                      <Text style={[Styles.text, {textAlign: 'center'}]}>
+                        Submit
+                      </Text>
+                    </Pressable>
                     {closeModal(() => setEditModalVisible(false))}
                   </View>
                 </View>
