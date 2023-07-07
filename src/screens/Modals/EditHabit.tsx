@@ -4,6 +4,7 @@ import {
   Modal,
   Pressable, ScrollView,
   Text,
+  TextInput,
   View
 } from 'react-native';
 import Styles from '../../components/Styles';
@@ -17,6 +18,24 @@ interface Props {
   currentHabitIndex: number;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+const closeModal = (closeFunction) => {
+  return (
+    // TODO: Change the damn button
+    <Pressable
+      style={{
+        position: 'absolute',
+        top: 15,
+        right: 15,
+      }}
+      onPress={closeFunction}>
+      <Image
+        style={{height: 30, width: 30}}
+        source={require('../../icons/close.png')}
+      />
+    </Pressable>
+  );
+};
 
 const EditHabitScreen = ({editHabit, visible, habits, currentHabitIndex, setVisible}: Props) => {
   const [habitName, setHabitName] = useState(habits[currentHabitIndex].name);
@@ -38,7 +57,7 @@ const EditHabitScreen = ({editHabit, visible, habits, currentHabitIndex, setVisi
         onRequestClose={openCloseModal}>
         <View style={Styles.editModalContainer}>
           {editForm()}
-          {closeModal()}
+          {closeModal(openCloseModal)}
         </View>
       </Modal>
     );
@@ -51,23 +70,6 @@ const EditHabitScreen = ({editHabit, visible, habits, currentHabitIndex, setVisi
     console.log('habit', habits[currentHabitIndex], 'index', currentHabitIndex);
   }, [habits, currentHabitIndex, visible]);
 
-  const closeModal = () => {
-    return (
-      // TODO: Change the damn button
-      <Pressable
-        style={{
-          position: 'absolute',
-          top: 15,
-          right: 15,
-        }}
-        onPress={openCloseModal}>
-        <Image
-          style={{height: 30, width: 30}}
-          source={require('../../icons/close.png')}
-        />
-      </Pressable>
-    );
-  };
   const mapFollowing = mockFriends.map((following, index) => {
     return (
       <View key={index} style={Styles.individualFollowing}>
@@ -79,7 +81,7 @@ const EditHabitScreen = ({editHabit, visible, habits, currentHabitIndex, setVisi
   const [editModalVisible, setEditModalVisible] = useState(false);
   const editForm = () => {
     const onEditButtonPress = () => {
-      setEditModalVisible(true)
+      setEditModalVisible(true);
     };
 
     return (
@@ -101,10 +103,24 @@ const EditHabitScreen = ({editHabit, visible, habits, currentHabitIndex, setVisi
                 />
               </Pressable>
               <Modal
-                animationType={"slide"}
-                visible={editModalVisible}>
-                <View style={Styles.test}></View>
-                <Pressable style={[{flex: 1}]} onPress={() => setEditModalVisible(false)}><Text>Close</Text></Pressable>
+                animationType={'slide'}
+                transparent={true}
+                visible={editModalVisible}
+                onRequestClose={() => setEditModalVisible(false)}>
+                <View style={Styles.centeredView}>
+                  <View style={Styles.editDescriptionModal}>
+                    <Text style={Styles.text}>Edit Description</Text>
+                    <TextInput
+                      autoFocus={true}
+                      multiline
+                      maxLength={120}
+                      value={habitDesc}
+                      style={Styles.input}
+                      onChangeText={setHabitDesc}
+                    />
+                    {closeModal(() => setEditModalVisible(false))}
+                  </View>
+                </View>
               </Modal>
             </View>
           </View>

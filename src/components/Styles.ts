@@ -73,6 +73,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center',
   },
+  editDescriptionModal: {
+    width: '100%',
+    marginHorizontal: 20,
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: main,
+  },
   //------------------------------------------------------------------------//
   // Home Page Styles
   habitContainer: {
@@ -288,6 +295,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: fontColor,
     backgroundColor: secondary,
+    marginVertical: 10,
     padding: 5,
     borderRadius: 5,
   },
@@ -471,6 +479,11 @@ const styles = StyleSheet.create({
   },
   editButtonImage: {
     alignSelf: 'center',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
