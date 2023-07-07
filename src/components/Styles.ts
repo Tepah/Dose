@@ -464,6 +464,14 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignSelf: 'center',
   },
+  editButton: {
+    position: 'absolute',
+    right: 10,
+    top: 10,
+  },
+  editButtonImage: {
+    alignSelf: 'center',
+  },
 });
 
 export default styles;

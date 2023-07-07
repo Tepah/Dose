@@ -148,6 +148,7 @@ const HomeScreen = () => {
       <ScrollView style={Styles.habitList}>
         {renderHabits('current', habits)}
         <AddHabitScreen addHabit={addHabit} />
+        {/*// TODO: Fix for swiped list*/}
         <EditHabitScreen
           editHabit={editHabit}
           habits={habits}

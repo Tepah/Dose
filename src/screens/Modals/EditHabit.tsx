@@ -5,10 +5,10 @@ import {
   Pressable, ScrollView,
   Text,
   View
-} from "react-native";
+} from 'react-native';
 import Styles from '../../components/Styles';
-import {HabitType} from "../../components/types";
-import { mockFriends } from "../../test/mockFriends";
+import {HabitType} from '../../components/types';
+import {mockFriends} from '../../test/mockFriends';
 
 interface Props {
   editHabit: (habit: HabitType, index: number) => void;
@@ -37,8 +37,8 @@ const EditHabitScreen = ({editHabit, visible, habits, currentHabitIndex, setVisi
         visible={visible}
         onRequestClose={openCloseModal}>
         <View style={Styles.editModalContainer}>
-          {closeModal()}
           {editForm()}
+          {closeModal()}
         </View>
       </Modal>
     );
@@ -53,11 +53,11 @@ const EditHabitScreen = ({editHabit, visible, habits, currentHabitIndex, setVisi
 
   const closeModal = () => {
     return (
-      // TODO: Fix and change this damn button
+      // TODO: Change the damn button
       <Pressable
         style={{
-          alignSelf: 'flex-end',
-          top: 20,
+          position: 'absolute',
+          top: 15,
           right: 15,
         }}
         onPress={openCloseModal}>
@@ -71,14 +71,17 @@ const EditHabitScreen = ({editHabit, visible, habits, currentHabitIndex, setVisi
   const mapFollowing = mockFriends.map((following, index) => {
     return (
       <View key={index} style={Styles.individualFollowing}>
-        <Image
-          style={Styles.friendProfilePic}
-          source={following.profilePic} />
+        <Image style={Styles.friendProfilePic} source={following.profilePic} />
         <Text style={[Styles.text, Styles.userText]}>{following.username}</Text>
       </View>
     );
   });
+  const [editModalVisible, setEditModalVisible] = useState(false);
   const editForm = () => {
+    const onEditButtonPress = () => {
+      setEditModalVisible(true)
+    };
+
     return (
       <View>
         <View style={Styles.pageHeader}>
@@ -89,6 +92,20 @@ const EditHabitScreen = ({editHabit, visible, habits, currentHabitIndex, setVisi
             <View>
               <Text style={[Styles.text]}>Description: </Text>
               <Text style={[Styles.paragraphText]}>{habitDesc}</Text>
+              <Pressable
+                style={Styles.editButton}
+                onPress={() => onEditButtonPress()}>
+                <Image
+                  style={Styles.editButtonImage}
+                  source={require('../../icons/pencil.png')}
+                />
+              </Pressable>
+              <Modal
+                animationType={"slide"}
+                visible={editModalVisible}>
+                <View style={Styles.test}></View>
+                <Pressable style={[{flex: 1}]} onPress={() => setEditModalVisible(false)}><Text>Close</Text></Pressable>
+              </Modal>
             </View>
           </View>
           <View style={Styles.editModalStreaks}>
