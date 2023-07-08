@@ -18,9 +18,10 @@ interface Props {
   habits: HabitType[];
   currentHabitIndex: number;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedList: string;
 }
 
-const closeModal = (closeFunction) => {
+const closeModal = (closeFunction: () => void) => {
   return (
     // TODO: Change the damn button
     <Pressable
@@ -71,10 +72,12 @@ const EditHabitScreen = ({
   };
 
   useEffect(() => {
-    setHabitName(() => habits[currentHabitIndex].name);
-    setHabitDesc(() => habits[currentHabitIndex].description);
-    setHabitStreak(() => habits[currentHabitIndex].streak);
-    console.log('habit', habits[currentHabitIndex], 'index', currentHabitIndex);
+    if (habits.length >= currentHabitIndex) {
+      setHabitName(() => habits[currentHabitIndex].name);
+      setHabitDesc(() => habits[currentHabitIndex].description);
+      setHabitStreak(() => habits[currentHabitIndex].streak);
+      console.log('habit', habits[currentHabitIndex], 'index', currentHabitIndex);
+    }
   }, [habits, currentHabitIndex, visible]);
 
   const mapFollowing = mockFriends.map((following, index) => {

@@ -28,10 +28,9 @@ const SwipeableItem = ({
   swipedHabits,
   setSwipedHabits,
   setHabits,
-  editModalVisible,
   setEditModalVisible,
   habit,
-  currentHabitIndex,
+  setSelectedList,
   setCurrentHabitIndex,
   index,
 }: {
@@ -40,10 +39,9 @@ const SwipeableItem = ({
   swipedHabits: HabitType[];
   setSwipedHabits: React.Dispatch<React.SetStateAction<HabitType[]>>;
   setHabits: React.Dispatch<React.SetStateAction<HabitType[]>>;
-  editModalVisible: boolean;
   setEditModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   habit: HabitType;
-  currentHabitIndex: number;
+  setSelectedList: React.Dispatch<React.SetStateAction<string>>;
   setCurrentHabitIndex: React.Dispatch<React.SetStateAction<number>>;
   index: number;
 }) => {
@@ -74,6 +72,7 @@ const SwipeableItem = ({
   const handleLongPress = () => {
     setEditModalVisible(() => true);
     setCurrentHabitIndex(index);
+    setSelectedList(type);
   };
 
   return (
@@ -114,7 +113,8 @@ const HomeScreen = () => {
   const [habits, setHabits] = useState<HabitType[]>(mockProfile1.habits);
   const [swipedHabits, setSwipedHabits] = useState<HabitType[]>([]);
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
-  const [currentHabit, setCurentHabit] = useState<number>(0);
+  const [currentHabit, setCurrentHabit] = useState<number>(0);
+  const [selectedList, setSelectedList] = useState<string>('')
 
   // TODO: Different colors?
   const renderHabits = (type: string, list: HabitType[]) => {
@@ -125,11 +125,10 @@ const HomeScreen = () => {
         swipedHabits={swipedHabits}
         setSwipedHabits={setSwipedHabits}
         setHabits={setHabits}
-        editModalVisible={editModalVisible}
         setEditModalVisible={setEditModalVisible}
         habit={habit}
-        currentHabitIndex={currentHabit}
-        setCurrentHabitIndex={setCurentHabit}
+        setSelectedList={setSelectedList}
+        setCurrentHabitIndex={setCurrentHabit}
         index={index}
       />
     ));
@@ -155,6 +154,7 @@ const HomeScreen = () => {
           currentHabitIndex={currentHabit}
           visible={editModalVisible}
           setVisible={setEditModalVisible}
+          selectedList={selectedList}
         />
         {renderHabits('swiped', swipedHabits)}
       </ScrollView>
