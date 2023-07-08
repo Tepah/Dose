@@ -147,15 +147,23 @@ const HomeScreen = () => {
       <ScrollView style={Styles.habitList}>
         {renderHabits('current', habits)}
         <AddHabitScreen addHabit={addHabit} />
-        {/*// TODO: Fix for swiped list*/}
-        <EditHabitScreen
-          editHabit={editHabit}
-          habits={habits}
-          currentHabitIndex={currentHabit}
-          visible={editModalVisible}
-          setVisible={setEditModalVisible}
-          selectedList={selectedList}
-        />
+        {(currentHabit < habits.length && selectedList === 'current') ||
+        (currentHabit < swipedHabits.length && selectedList === 'swiped') ? (
+          <EditHabitScreen
+            editHabit={editHabit}
+            habits={
+              selectedList === 'current'
+                ? habits
+                : selectedList === 'swiped'
+                ? swipedHabits
+                : []
+            }
+            currentHabitIndex={currentHabit}
+            visible={editModalVisible}
+            setVisible={setEditModalVisible}
+            selectedList={selectedList}
+          />
+        ) : null}
         {renderHabits('swiped', swipedHabits)}
       </ScrollView>
     </View>
