@@ -6,6 +6,21 @@ import {useState} from 'react';
 import {mockPosts} from '../test/mockPosts';
 
 const ProfileScreen = () => {
+  const profileCounter = (type: string) => {
+    return (
+      <View style={Styles.followContainer}>
+        <Text style={[Styles.text, Styles.profileHeaderText]}>Habits</Text>
+        <Text style={[Styles.text, Styles.followCount]}>
+          {type === 'habits'
+            ? mockProfile1.habits.length
+            : type === 'following'
+            ? mockProfile1.following
+            : mockProfile1.followers}
+        </Text>
+      </View>
+    );
+  };
+
   const profileInfo = (
     <View style={Styles.profileHeader}>
       <View style={Styles.profileHeaderUser}>
@@ -14,24 +29,12 @@ const ProfileScreen = () => {
           {mockProfile1.username}
         </Text>
       </View>
-      <View style={Styles.followContainer}>
-        <Text style={[Styles.text, Styles.profileHeaderText]}>Habits</Text>
-        <Text style={[Styles.text, Styles.followCount]}>{mockProfile1.habits.length}</Text>
-      </View>
-      <View style={Styles.followContainer}>
-        <Text style={[Styles.text, Styles.profileHeaderText]}>Following</Text>
-        <Text style={[Styles.text, Styles.followCount]}>
-          {mockProfile1.following}
-        </Text>
-      </View>
-      <View style={Styles.followContainer}>
-        <Text style={[Styles.text, Styles.profileHeaderText]}>Followers</Text>
-        <Text style={[Styles.text, Styles.followCount]}>
-          {mockProfile1.followers}
-        </Text>
-      </View>
+      {profileCounter("habits")}
+      {profileCounter("following")}
+      {profileCounter("followers")}
     </View>
   );
+
   const [selected, setSelected] = useState(true);
   const profileTabs = () => {
     const onTabPress = (value: string) => {

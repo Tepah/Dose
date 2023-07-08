@@ -17,22 +17,28 @@ const NotificationsScreen = () => {
     'Notification 9',
   ]);
 
+  const renderNotifications = notifications.map(
+    (notification: string, index: number) => (
+      <Pressable key={index} style={Styles.notificationContainer}>
+        <Text style={[Styles.text, Styles.userText]}>
+          {mockProfile1.username}
+        </Text>
+        <View style={Styles.notificationTextContainer}>
+          <Text style={[Styles.text, Styles.notificationText]}>
+            {notification}
+          </Text>
+        </View>
+      </Pressable>
+    ),
+  );
+
   return (
     <View style={Styles.app}>
       <Text style={[Styles.text, Styles.notificationHeaderText]}>
         Notifications
       </Text>
       <ScrollView style={Styles.notificationScroll}>
-        {notifications.map(notification => (
-          <Pressable style={Styles.notificationContainer}>
-            <Text style={[Styles.text, Styles.userText]}>{mockProfile1.username}</Text>
-            <View style={Styles.notificationTextContainer}>
-              <Text style={[Styles.text, Styles.notificationText]}>
-                {notification}
-              </Text>
-            </View>
-          </Pressable>
-        ))}
+        {renderNotifications}
       </ScrollView>
     </View>
   );

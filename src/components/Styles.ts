@@ -358,6 +358,7 @@ const styles = StyleSheet.create({
   },
   profileHeaderText: {
     fontSize: 15,
+    textAlign: 'center',
   },
   profileHeaderUser: {
     flex: 2,

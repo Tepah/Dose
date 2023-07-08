@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -12,12 +12,7 @@ import Styles from '../components/Styles';
 import AddHabitScreen from './Modals/AddHabit';
 import {mockProfile1} from '../test/mockProfile1';
 import EditHabitScreen from './Modals/EditHabit';
-
-type HabitType = {
-  name: string;
-  description: string;
-  streak: number;
-};
+import {HabitType} from '../components/types';
 
 /* TODO: add past date rendering, */
 /*   add clickable past dates to track progress, but don't allow editing on past dates. */
@@ -114,7 +109,7 @@ const HomeScreen = () => {
   const [swipedHabits, setSwipedHabits] = useState<HabitType[]>([]);
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
   const [currentHabit, setCurrentHabit] = useState<number>(0);
-  const [selectedList, setSelectedList] = useState<string>('')
+  const [selectedList, setSelectedList] = useState<string>('');
 
   // TODO: Different colors?
   const renderHabits = (type: string, list: HabitType[]) => {
