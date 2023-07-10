@@ -1,9 +1,9 @@
-import * as React from "react";
-import { Dimensions, Image, ScrollView, Text, View } from "react-native";
-import Styles from "../components/Styles";
-import { mockProfile1 } from "../test/mockProfile1";
-import { ContributionGraph } from "react-native-chart-kit";
-import { HabitType } from "../components/types";
+import * as React from 'react';
+import {Dimensions, Image, ScrollView, Text, View} from 'react-native';
+import Styles from '../components/Styles';
+import {mockProfile1} from '../test/mockProfile1';
+import { ContributionGraph, LineChart } from "react-native-chart-kit";
+import {HabitType} from '../components/types';
 
 const StatsHeader = () => {
   return (
@@ -15,15 +15,23 @@ const StatsHeader = () => {
 
 const StatsProfileCard = () => {
   const chartData = createChartData();
+  const handleToolTip: any = {};
   return (
     <View style={Styles.statsCardContainer}>
-      <Image
-        source={mockProfile1.profilePic}
-        style={Styles.profileStatsImage}
-      />
-      <Text style={[Styles.text, Styles.profileStatsText]}>
-        {mockProfile1.username}
-      </Text>
+      <View style={Styles.statProfileContainer}>
+        <Image
+          source={mockProfile1.profilePic}
+          style={Styles.profileStatsImage}
+        />
+        <View style={Styles.statsProfileTextContainer}>
+          <Text style={[Styles.text, Styles.profileStatsText]}>
+            {mockProfile1.username}
+          </Text>
+          <Text style={[Styles.paragraphText, Styles.statStartDateText]}>
+            Member since {mockProfile1.startDate}
+          </Text>
+        </View>
+      </View>
       <ContributionGraph
         style={{alignSelf: 'center', marginTop: 10}}
         values={chartData}
@@ -39,7 +47,7 @@ const StatsProfileCard = () => {
           color: (opacity = 1) => `rgba(200, 300, 300, ${opacity})`,
           style: {borderRadius: 10, padding: 10},
         }}
-        tooltipDataAttrs={<Text>tbd</Text>}
+        tooltipDataAttrs={() => handleToolTip}
       />
     </View>
   );
@@ -47,12 +55,12 @@ const StatsProfileCard = () => {
 
 const formatDate = (date: string) => {
   const [month, day, year] = date.split('/');
-  const newDate = new Date(year, month - 1, day);
+  const newDate = new Date(Number(year), Number(month) - 1, Number(day));
   return newDate.toISOString().split('T')[0];
 };
 
 const createChartData = () => {
-  const chartData: {date: string, count: number}[] = [];
+  const chartData: {date: string; count: number}[] = [];
 
   for (let i = 0; i < mockProfile1.habits.length; i++) {
     Object.keys(mockProfile1.habits[i].progress).forEach(date => {
@@ -105,6 +113,52 @@ const StatsCharts = () => {
   );
 };
 
+const WeeklyStats = () => {
+  const weekLabels: string[] = [];
+  const weekData: number[] = [0, 0, 0, 0, 0, 0, 0];
+  const progressKeys = Object.keys(mockProfile1.habits[0].progress);
+  for (let i = progressKeys.length - 1; i > progressKeys.length - 8; i--) {
+    const [month, day, year] = progressKeys[i].split('/');
+    weekLabels.unshift(month + '/' + day);
+    for (let j = 0; j < mockProfile1.habits.length; j++) {
+      if (mockProfile1.habits[j].progress[progressKeys[i]]) {
+        weekData[7 - (progressKeys.length - i)]++;
+      }
+    }
+  }
+  console.log(weekLabels, weekData);
+  return (
+    <View style={Styles.statsCardContainer}>
+      <Text style={[Styles.text]}>Weekly Stats</Text>
+      <LineChart
+        data={{
+          labels: weekLabels,
+          datasets: [
+            {
+              data: weekData,
+            },
+          ],
+        }}
+        width={Dimensions.get('window').width - 55}
+        height={220}
+        fromZero={true}
+        chartConfig={{
+          backgroundColor: '#1D2B3E',
+          backgroundGradientFrom: '#344966',
+          backgroundGradientTo: '#1D2B3E',
+          decimalPlaces: 2, // optional, defaults to 2dp
+          color: (opacity = 255) => `rgba(200, 300, 300, ${opacity})`,
+        }}
+        bezier
+        style={{
+          marginVertical: 8,
+          borderRadius: 16,
+        }}
+      />
+    </View>
+  );
+};
+
 const StatsScreen = () => {
   return (
     <View style={Styles.app}>
@@ -112,6 +166,7 @@ const StatsScreen = () => {
       <ScrollView style={Styles.statsContainer}>
         <StatsProfileCard />
         <StatsCharts />
+        <WeeklyStats />
       </ScrollView>
     </View>
   );

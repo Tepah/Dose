@@ -197,20 +197,38 @@ const styles = StyleSheet.create({
   // Stats Page Styles
   statsContainer: {flexGrow: 1, top: '12%', marginBottom: 90, width: '100%'},
   statsCardContainer: {
-    marginVertical: 10,
+    marginVertical: 5,
     marginHorizontal: 10,
     padding: 20,
     borderRadius: 10,
     backgroundColor: secondary,
   },
+  statProfileContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
   profileStatsText: {
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   profileStatsImage: {
+    flex: 1,
+    padding: 20,
     marginVertical: 10,
     height: 120,
     width: 120,
+    aspectRatio: 1,
     borderRadius: 60,
+  },
+  statsProfileTextContainer: {
+    flex: 2,
+    padding: 20,
+    justifyContent: 'center',
+  },
+  statStartDateText: {
+    fontSize: 18,
+    padding: 10,
+    textAlign: 'center',
   },
   indHabitContainer: {
     marginTop: 5,

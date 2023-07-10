@@ -22,6 +22,8 @@ export const mockProfile1: profile = {
       description: 'This is habit 1',
       streak: 3,
       progress: {
+        '7/3/2023': true,
+        '7/4/2023': true,
         '7/5/2023': true,
         '7/6/2023': true,
         '7/7/2023': false,
@@ -34,11 +36,14 @@ export const mockProfile1: profile = {
       description: 'This is habit 2',
       streak: 2,
       progress: {
+        '7/3/2023': true,
+        '7/4/2023': true,
         '7/5/2023': true,
         '7/6/2023': true,
         '7/7/2023': true,
         '7/8/2023': false,
         '7/9/2023': true,
+        '7/10/2023': false,
       },
     },
     {
@@ -46,11 +51,14 @@ export const mockProfile1: profile = {
       description: 'This is habit 3',
       streak: 0,
       progress: {
+        '7/3/2023': true,
+        '7/4/2023': true,
         '7/5/2023': true,
         '7/6/2023': true,
         '7/7/2023': true,
         '7/8/2023': true,
         '7/9/2023': false,
+        '7/10/2023': true,
       },
     },
     {
@@ -58,11 +66,14 @@ export const mockProfile1: profile = {
       description: 'This is habit 4',
       streak: 1,
       progress: {
+        '7/3/2023': true,
+        '7/4/2023': true,
         '7/5/2023': true,
         '7/6/2023': true,
         '7/7/2023': true,
         '7/8/2023': false,
         '7/9/2023': true,
+        '7/10/2023': false,
       },
     },
     {
@@ -75,6 +86,7 @@ export const mockProfile1: profile = {
         '7/7/2023': true,
         '7/8/2023': true,
         '7/9/2023': false,
+        '7/10/2023': true,
       },
     },
     {
@@ -82,11 +94,14 @@ export const mockProfile1: profile = {
       description: 'This is habit 6',
       streak: 1,
       progress: {
+        '7/3/2023': true,
+        '7/4/2023': true,
         '7/5/2023': true,
         '7/6/2023': true,
         '7/7/2023': true,
         '7/8/2023': true,
         '7/9/2023': false,
+        '7/10/2023': false,
       },
     },
   ],
