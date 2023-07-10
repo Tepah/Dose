@@ -195,21 +195,21 @@ const HomeScreen = () => {
   );
 
   useEffect(() => {
+    setCurrentDate(() => new Date().toLocaleDateString('en-US'));
     setDate(() => currentDate);
-  }, [isFocused]);
+  }, [currentDate, isFocused]);
 
   useEffect(() => {
     const dateHabitsDone = mockProfile1.habits.filter(
-      (habit: HabitType) => habit.progress[date],
+      (habit: HabitType) => !habit.progress[date],
     );
     setHabits(() => dateHabitsDone);
     const dateHabitsNotDone = mockProfile1.habits.filter(
-      (habit: HabitType) => !habit.progress[date],
+      (habit: HabitType) => habit.progress[date],
     );
     setSwipedHabits(() => dateHabitsNotDone);
   }, [date]);
 
-  // TODO: Different colors?
   const renderHabits = (type: string, list: HabitType[]) => {
     const checkDate = currentDate === date;
     return list.map((habit: HabitType, index: number) =>
