@@ -30,7 +30,7 @@ const SwipeableItem = ({
   index,
 }: {
   type: string;
-  habits: {name: string; description: string; streak: number}[];
+  habits: HabitType[];
   swipedHabits: HabitType[];
   setSwipedHabits: React.Dispatch<React.SetStateAction<HabitType[]>>;
   setHabits: React.Dispatch<React.SetStateAction<HabitType[]>>;
@@ -110,9 +110,12 @@ const HomeScreen = () => {
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
   const [currentHabit, setCurrentHabit] = useState<number>(0);
   const [selectedList, setSelectedList] = useState<string>('');
+  const [date, setDate] = useState<string>('');
 
   // TODO: Different colors?
   const renderHabits = (type: string, list: HabitType[]) => {
+    const currentDate = new Date().toLocaleDateString('en-US');
+
     return list.map((habit: HabitType, index: number) => (
       <SwipeableItem
         type={type}
@@ -126,7 +129,7 @@ const HomeScreen = () => {
         setCurrentHabitIndex={setCurrentHabit}
         index={index}
       />
-    ));
+    ))
   };
   const addHabit = (habit: HabitType) => {
     setHabits([...habits, habit]);
@@ -136,9 +139,13 @@ const HomeScreen = () => {
     setHabits([...habits.slice(0, index), habit, ...habits.slice(index + 1)]);
   };
 
+  const dateChange = (newDate: string) => {
+    setDate(() => newDate);
+  };
+
   return (
     <View style={Styles.app}>
-      <Calendar />
+      <Calendar dateChange={dateChange} />
       <ScrollView style={Styles.habitList}>
         {renderHabits('current', habits)}
         <AddHabitScreen addHabit={addHabit} />

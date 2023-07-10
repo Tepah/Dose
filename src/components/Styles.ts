@@ -424,8 +424,8 @@ const styles = StyleSheet.create({
     paddingTop: 5,
   },
   postSquare: {
-    width: '32%',
-    margin: '.6%',
+    width: '33%',
+    margin: '.1%',
     aspectRatio: 1,
     justifyContent: 'center',
     alignContent: 'center',

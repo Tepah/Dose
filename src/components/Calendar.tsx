@@ -1,10 +1,21 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {View, Text, ScrollView, StyleSheet, Dimensions} from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  Dimensions,
+  Pressable,
+} from 'react-native';
 import styles from './Styles';
 import {useIsFocused} from '@react-navigation/native';
 
+interface Props {
+  dateChange: (date: string) => void;
+}
+
 /* TODO: Create a pull down calendar to change dates, maybe create a new color for dates that have completed tasks */
-const Calendar = () => {
+const Calendar = ({dateChange}: Props) => {
   const isFocused = useIsFocused();
   const scrollViewRef = useRef(null);
   const months = {
@@ -48,19 +59,39 @@ const Calendar = () => {
     {length: Object.values(months)[date.month]},
     (_, index) => index + 1,
   );
+  const onDatePress = (newDate: string) => {
+    const [month, day, year] = newDate.split('/');
+    if (
+      currentMonth < parseInt(month, 10) - 1 ||
+      currentYear < parseInt(year, 10) ||
+      currentDay < parseInt(day, 10)
+    ) {
+      return;
+    }
+    dateChange(newDate);
+    setDate({
+      day: parseInt(day, 10),
+      month: parseInt(month, 10) - 1,
+      year: parseInt(year, 10),
+    });
+  };
+
   const renderViews = () => {
     return daysArray.map(day => (
       <View key={day} style={innerStyles.item}>
-        <Text
-          style={[
-            styles.text,
-            day === date.day ? innerStyles.currentDay : innerStyles.day,
-            {
-              textAlign: 'center',
-            },
-          ]}>
-          {day}
-        </Text>
+        <Pressable
+          onPress={() => onDatePress(`${date.month + 1}/${day}/${date.year}`)}>
+          <Text
+            style={[
+              styles.text,
+              day === date.day ? innerStyles.currentDay : innerStyles.day,
+              {
+                textAlign: 'center',
+              },
+            ]}>
+            {day}
+          </Text>
+        </Pressable>
       </View>
     ));
   };

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   Modal,
@@ -51,6 +51,7 @@ const EditHabitScreen = ({
     habits[currentHabitIndex].description,
   );
   const [habitStreak, setHabitStreak] = useState(habits[currentHabitIndex].streak);
+  const [habitProgress, setHabitProgress] = useState(habits[currentHabitIndex].progress);
 
   const openCloseModal = () => {
     setVisible(() => !visible);
@@ -76,7 +77,12 @@ const EditHabitScreen = ({
       setHabitName(() => habits[currentHabitIndex].name);
       setHabitDesc(() => habits[currentHabitIndex].description);
       setHabitStreak(() => habits[currentHabitIndex].streak);
-      console.log('habit', habits[currentHabitIndex], 'index', currentHabitIndex);
+      console.log(
+        'habit',
+        habits[currentHabitIndex],
+        'index',
+        currentHabitIndex,
+      );
     }
   }, [habits, currentHabitIndex, visible]);
 
@@ -93,6 +99,7 @@ const EditHabitScreen = ({
     name: habitName,
     description: habitDesc,
     streak: habitStreak,
+    progress: habitProgress,
   });
   const editForm = () => {
     const onEditButtonPress = () => {
@@ -100,6 +107,7 @@ const EditHabitScreen = ({
         name: habitName,
         description: habitDesc,
         streak: habitStreak,
+        progress: habitProgress,
       });
       setEditModalVisible(true);
     };
@@ -140,7 +148,9 @@ const EditHabitScreen = ({
                       multiline
                       maxLength={120}
                       value={newHabit.description}
-                      onChangeText={(text) => setNewHabit({...newHabit, description: text})}
+                      onChangeText={text =>
+                        setNewHabit({...newHabit, description: text})
+                      }
                       style={Styles.input}
                     />
                     <Pressable

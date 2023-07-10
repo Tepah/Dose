@@ -1,19 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Image,
-  Modal,
-  Pressable,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import {Image, Modal, Pressable, Text, TextInput, View} from 'react-native';
 import Styles from '../../components/Styles';
+import {HabitType} from '../../components/types';
 
-type HabitType = {
-  name: string;
-  description: string;
-  streak: number;
-};
 interface Props {
   addHabit: (habit: HabitType) => void;
 }
@@ -34,7 +23,15 @@ const AddHabitScreen = ({addHabit}: Props) => {
       setErrorModal(true);
       return;
     }
-    addHabit({name: habitName, description: '', streak: 0});
+    const date = new Date().toDateString();
+    const progress: {[key: string]: boolean} = {};
+    progress[date] = false;
+    addHabit({
+      name: habitName,
+      description: habitDesc,
+      streak: 0,
+      progress: progress,
+    });
     setHabitName('');
     openCloseModal();
   };
@@ -110,7 +107,7 @@ const AddHabitScreen = ({addHabit}: Props) => {
   const showModalButton = () => {
     return (
       <View>
-        <Pressable style={Styles.addButton} onPress={openCloseModal}>
+        <Pressable style={Styles.addButton} onPress={() => openCloseModal}>
           <Image
             source={require('../../icons/add.png')}
             style={{

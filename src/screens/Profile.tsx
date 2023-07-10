@@ -9,11 +9,11 @@ const ProfileScreen = () => {
   const profileCounter = (type: string) => {
     return (
       <View style={Styles.followContainer}>
-        <Text style={[Styles.text, Styles.profileHeaderText]}>Habits</Text>
+        <Text style={[Styles.text, Styles.profileHeaderText]}>{type}</Text>
         <Text style={[Styles.text, Styles.followCount]}>
-          {type === 'habits'
+          {type === 'Habits'
             ? mockProfile1.habits.length
-            : type === 'following'
+            : type === 'Following'
             ? mockProfile1.following
             : mockProfile1.followers}
         </Text>
@@ -29,9 +29,9 @@ const ProfileScreen = () => {
           {mockProfile1.username}
         </Text>
       </View>
-      {profileCounter("habits")}
-      {profileCounter("following")}
-      {profileCounter("followers")}
+      {profileCounter('Habits')}
+      {profileCounter('Following')}
+      {profileCounter('Followers')}
     </View>
   );
 
@@ -44,24 +44,27 @@ const ProfileScreen = () => {
         setSelected(false);
       }
     };
+
+    const renderTab = (type: string) => {
+      return (
+        <Pressable
+          onPress={() => onTabPress(type)}
+          style={[
+            Styles.profileTabButton,
+            selected && type === 'Habits'
+              ? Styles.profileTabSelected
+              : !selected && type === 'Media'
+              ? Styles.profileTabSelected
+              : null,
+          ]}>
+          <Text style={[Styles.text, Styles.profileTabText]}>{type}</Text>
+        </Pressable>
+      );
+    };
     return (
       <View style={Styles.profileTabsContainer}>
-        <Pressable
-          onPress={() => onTabPress('Habits')}
-          style={[
-            Styles.profileTabButton,
-            selected ? Styles.profileTabSelected : null,
-          ]}>
-          <Text style={[Styles.text, Styles.profileTabText]}>Habits</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => onTabPress('Media')}
-          style={[
-            Styles.profileTabButton,
-            selected ? null : Styles.profileTabSelected,
-          ]}>
-          <Text style={[Styles.text, Styles.profileTabText]}>Media</Text>
-        </Pressable>
+        {renderTab('Habits')}
+        {renderTab('Media')}
       </View>
     );
   };

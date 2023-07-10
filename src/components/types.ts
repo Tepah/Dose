@@ -31,4 +31,5 @@ export type HabitType = {
   name: string;
   description: string;
   streak: number;
+  progress: {[key: string]: boolean};
 };

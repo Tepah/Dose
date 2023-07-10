@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Text, View} from 'react-native';
-import Styles from "../components/Styles";
+import Styles from '../components/Styles';
 
 const SearchScreen = () => {
   const [profiles, setProfiles] = useState<string[]>([
@@ -11,8 +11,10 @@ const SearchScreen = () => {
 
   return (
     <View style={Styles.app}>
-      {profiles.map(names => (
-        <Text style={Styles.text}>{names}</Text>
+      {profiles.map((names, index: number )=> (
+        <Text key={index} style={Styles.text}>
+          {names}
+        </Text>
       ))}
     </View>
   );
