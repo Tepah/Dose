@@ -100,8 +100,8 @@ const styles = StyleSheet.create({
   },
   habitList: {
     flexGrow: 1,
-    top: 110,
-    marginBottom: 160,
+    top: '14%',
+    marginBottom: 110,
     width: '90%',
     alignContent: 'center',
   },
@@ -110,18 +110,6 @@ const styles = StyleSheet.create({
   doneStreakText: {fontSize: 18, color: tertiary},
   //------------------------------------------------------------------------//
   // Social Page Styles
-  header: {
-    position: 'absolute',
-    flex: 1,
-    backgroundColor: menu,
-    padding: 5,
-    paddingTop: 30,
-    height: 80,
-    top: 0,
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   headerNav: {
     flex: 1,
     justifyContent: 'flex-end',
@@ -142,8 +130,8 @@ const styles = StyleSheet.create({
   },
   socialView: {
     width: '100%',
-    top: 80,
-    marginBottom: 130,
+    top: '12%',
+    marginBottom: 100,
   },
   challengePostContainer: {
     width: '100%',
@@ -206,6 +194,28 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   //------------------------------------------------------------------------//
+  // Stats Page Styles
+  statsContainer: {flexGrow: 1, top: '12%', marginBottom: 90, width: '100%'},
+  statsCardContainer: {
+    marginVertical: 10,
+    marginHorizontal: 10,
+    padding: 20,
+    borderRadius: 10,
+    backgroundColor: secondary,
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  profileStatsText: {
+    fontWeight: 'bold',
+  },
+  profileStatsImage: {
+    marginVertical: 10,
+    height: 120,
+    width: 120,
+    borderRadius: 60,
+  },
+  //------------------------------------------------------------------------//
   // Text Styles
   text: {
     fontFamily: 'Helvetica',
@@ -242,7 +252,6 @@ const styles = StyleSheet.create({
   // Navigator Styles
   navigator: {
     backgroundColor: menu,
-    position: 'absolute',
     height: '8%',
     left: 0,
     right: 0,
@@ -464,6 +473,18 @@ const styles = StyleSheet.create({
   errorText: {color: 'red', fontSize: 26},
   //------------------------------------------------------------------------//
   // Reusable Styles
+  header: {
+    position: 'absolute',
+    flex: 1,
+    backgroundColor: menu,
+    padding: 5,
+    paddingTop: 50,
+    height: '12%',
+    top: 0,
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   fullPageScroller: {
     height: '100%',
   },

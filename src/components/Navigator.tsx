@@ -9,7 +9,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {mockProfile1} from '../test/mockProfile1';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import NotificationsScreen from '../screens/Notifications';
-import SearchScreen from "../screens/Search";
+import SearchScreen from '../screens/Search';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
