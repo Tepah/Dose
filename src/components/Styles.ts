@@ -202,9 +202,6 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     backgroundColor: secondary,
-    justifyContent: 'center',
-    alignContent: 'center',
-    alignItems: 'center',
   },
   profileStatsText: {
     fontWeight: 'bold',
@@ -214,6 +211,20 @@ const styles = StyleSheet.create({
     height: 120,
     width: 120,
     borderRadius: 60,
+  },
+  indHabitContainer: {
+    marginTop: 5,
+    marginHorizontal: 5,
+    aspectRatio: 1,
+    borderRadius: 10,
+    height: 80,
+    padding: 10,
+    backgroundColor: menu,
+    justifyContent: 'center',
+  },
+  habitNameText: {
+    fontSize: 18,
+    textAlign: 'center',
   },
   //------------------------------------------------------------------------//
   // Text Styles
