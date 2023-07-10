@@ -55,6 +55,10 @@ const Calendar = ({dateChange}: Props) => {
     }
   }, [date.day, isFocused]);
 
+  useEffect(() => {
+    onDatePress(`${currentMonth + 1}/${currentDay}/${currentYear}`);
+  }, [isFocused]);
+
   const daysArray = Array.from(
     {length: Object.values(months)[date.month]},
     (_, index) => index + 1,

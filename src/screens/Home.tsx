@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import AddHabitScreen from './Modals/AddHabit';
 import {mockProfile1} from '../test/mockProfile1';
 import EditHabitScreen from './Modals/EditHabit';
 import {HabitType} from '../components/types';
+import {useIsFocused} from '@react-navigation/native';
 
 /* TODO: add past date rendering, */
 /*   add clickable past dates to track progress, but don't allow editing on past dates. */
@@ -24,9 +25,9 @@ const SwipeableItem = ({
   setSwipedHabits,
   setHabits,
   setEditModalVisible,
-  habit,
   setSelectedList,
   setCurrentHabitIndex,
+  habit,
   index,
 }: {
   type: string;
@@ -35,9 +36,9 @@ const SwipeableItem = ({
   setSwipedHabits: React.Dispatch<React.SetStateAction<HabitType[]>>;
   setHabits: React.Dispatch<React.SetStateAction<HabitType[]>>;
   setEditModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  habit: HabitType;
   setSelectedList: React.Dispatch<React.SetStateAction<string>>;
   setCurrentHabitIndex: React.Dispatch<React.SetStateAction<number>>;
+  habit: HabitType;
   index: number;
 }) => {
   const pan = useRef(new Animated.ValueXY()).current;
@@ -64,11 +65,6 @@ const SwipeableItem = ({
       }
     },
   });
-  const handleLongPress = () => {
-    setEditModalVisible(() => true);
-    setCurrentHabitIndex(index);
-    setSelectedList(type);
-  };
 
   return (
     <Animated.View
@@ -80,56 +76,167 @@ const SwipeableItem = ({
         {transform: [{translateX: pan.x}]},
       ]}
       {...panResponder.panHandlers}>
-      <Pressable
-        key={index}
-        style={Styles.habitButton}
-        onLongPress={() => handleLongPress()}>
-        <Text style={type === 'current' ? Styles.text : Styles.doneText}>
-          {habit.name}
-        </Text>
-        <Text
-          style={
-            type === 'current'
-              ? [Styles.text, Styles.streakText]
-              : [Styles.text, Styles.doneStreakText]
-          }>
-          {habit.streak > 0 ? (
-            <Text>Streak: {habit.streak} days</Text>
-          ) : (
-            <Text>Start this today!</Text>
-          )}
-        </Text>
-      </Pressable>
+      <RenderHabitButton
+        habit={habit}
+        index={index}
+        type={type}
+        setEditModalVisible={setEditModalVisible}
+        setCurrentHabitIndex={setCurrentHabitIndex}
+        setSelectedList={setSelectedList}
+      />
     </Animated.View>
   );
 };
 
+const NonSwipeableItem = ({
+  type,
+  habit,
+  index,
+  setEditModalVisible,
+  setSelectedList,
+  setCurrentHabitIndex,
+}: {
+  type: string;
+  habit: HabitType;
+  index: number;
+  setEditModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedList: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentHabitIndex: React.Dispatch<React.SetStateAction<number>>;
+}) => {
+  return (
+    <View
+      key={index}
+      style={[
+        type === 'current'
+          ? Styles.habitContainer
+          : Styles.habitContainerSwiped,
+      ]}>
+      <RenderHabitButton
+        habit={habit}
+        index={index}
+        type={type}
+        setEditModalVisible={setEditModalVisible}
+        setCurrentHabitIndex={setCurrentHabitIndex}
+        setSelectedList={setSelectedList}
+      />
+    </View>
+  );
+};
+
+const RenderHabitButton = ({
+  habit,
+  index,
+  type,
+  setEditModalVisible,
+  setCurrentHabitIndex,
+  setSelectedList,
+}: {
+  habit: HabitType;
+  index: number;
+  type: string;
+  setEditModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  setCurrentHabitIndex: React.Dispatch<React.SetStateAction<number>>;
+  setSelectedList: React.Dispatch<React.SetStateAction<string>>;
+}) => {
+  return (
+    <Pressable
+      key={index}
+      style={Styles.habitButton}
+      onLongPress={() =>
+        handleLongPress(
+          setEditModalVisible,
+          setCurrentHabitIndex,
+          setSelectedList,
+          index,
+          type,
+        )
+      }>
+      <Text style={type === 'current' ? Styles.text : Styles.doneText}>
+        {habit.name}
+      </Text>
+      <Text
+        style={
+          type === 'current'
+            ? [Styles.text, Styles.streakText]
+            : [Styles.text, Styles.doneStreakText]
+        }>
+        {habit.streak > 0 ? (
+          <Text>Streak: {habit.streak} days</Text>
+        ) : (
+          <Text>Start this today!</Text>
+        )}
+      </Text>
+    </Pressable>
+  );
+};
+
+const handleLongPress = (
+  setEditModalVisible: React.Dispatch<React.SetStateAction<boolean>>,
+  setCurrentHabitIndex: React.Dispatch<React.SetStateAction<number>>,
+  setSelectedList: React.Dispatch<React.SetStateAction<string>>,
+  index: number,
+  type: string,
+) => {
+  setEditModalVisible(() => true);
+  setCurrentHabitIndex(index);
+  setSelectedList(type);
+};
+
 const HomeScreen = () => {
+  const isFocused = useIsFocused();
   const [habits, setHabits] = useState<HabitType[]>(mockProfile1.habits);
   const [swipedHabits, setSwipedHabits] = useState<HabitType[]>([]);
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
   const [currentHabit, setCurrentHabit] = useState<number>(0);
   const [selectedList, setSelectedList] = useState<string>('');
   const [date, setDate] = useState<string>('');
+  const [currentDate, setCurrentDate] = useState<string>(
+    new Date().toLocaleDateString('en-US'),
+  );
+
+  useEffect(() => {
+    setDate(() => currentDate);
+  }, [isFocused]);
+
+  useEffect(() => {
+    const dateHabitsDone = mockProfile1.habits.filter(
+      (habit: HabitType) => habit.progress[date],
+    );
+    setHabits(() => dateHabitsDone);
+    const dateHabitsNotDone = mockProfile1.habits.filter(
+      (habit: HabitType) => !habit.progress[date],
+    );
+    setSwipedHabits(() => dateHabitsNotDone);
+  }, [date]);
 
   // TODO: Different colors?
   const renderHabits = (type: string, list: HabitType[]) => {
-    const currentDate = new Date().toLocaleDateString('en-US');
-
-    return list.map((habit: HabitType, index: number) => (
-      <SwipeableItem
-        type={type}
-        habits={habits}
-        swipedHabits={swipedHabits}
-        setSwipedHabits={setSwipedHabits}
-        setHabits={setHabits}
-        setEditModalVisible={setEditModalVisible}
-        habit={habit}
-        setSelectedList={setSelectedList}
-        setCurrentHabitIndex={setCurrentHabit}
-        index={index}
-      />
-    ))
+    const checkDate = currentDate === date;
+    return list.map((habit: HabitType, index: number) =>
+      checkDate ? (
+        <SwipeableItem
+          type={type}
+          habits={habits}
+          swipedHabits={swipedHabits}
+          setSwipedHabits={setSwipedHabits}
+          setHabits={setHabits}
+          setEditModalVisible={setEditModalVisible}
+          habit={habit}
+          setSelectedList={setSelectedList}
+          setCurrentHabitIndex={setCurrentHabit}
+          index={index}
+        />
+      ) : (
+        <NonSwipeableItem
+          type={type}
+          habit={habit}
+          index={index}
+          setEditModalVisible={setEditModalVisible}
+          setSelectedList={setSelectedList}
+          setCurrentHabitIndex={setCurrentHabit}
+        />
+      ),
+    );
   };
   const addHabit = (habit: HabitType) => {
     setHabits([...habits, habit]);
@@ -148,7 +255,7 @@ const HomeScreen = () => {
       <Calendar dateChange={dateChange} />
       <ScrollView style={Styles.habitList}>
         {renderHabits('current', habits)}
-        <AddHabitScreen addHabit={addHabit} />
+        {<AddHabitScreen addHabit={addHabit} />}
         {(currentHabit < habits.length && selectedList === 'current') ||
         (currentHabit < swipedHabits.length && selectedList === 'swiped') ? (
           <EditHabitScreen
