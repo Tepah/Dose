@@ -195,8 +195,14 @@ const HomeScreen = () => {
   );
 
   useEffect(() => {
-    setCurrentDate(() => new Date().toLocaleDateString('en-US'));
+    const newDay = new Date().toLocaleDateString('en-US');
+    setCurrentDate(() => newDay);
     setDate(() => currentDate);
+    habits.forEach((habit: HabitType) => {
+      if (habit.progress[newDay] === undefined) {
+        habit.progress[newDay] = false;
+      }
+    });
   }, [currentDate, isFocused]);
 
   useEffect(() => {
