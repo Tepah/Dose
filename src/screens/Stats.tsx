@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Dimensions, Image, ScrollView, Text, View} from 'react-native';
 import Styles from '../components/Styles';
 import {mockProfile1} from '../test/mockProfile1';
-import { ContributionGraph, LineChart } from "react-native-chart-kit";
+import {ContributionGraph, LineChart} from 'react-native-chart-kit';
 import {HabitType} from '../components/types';
 
 const StatsHeader = () => {
