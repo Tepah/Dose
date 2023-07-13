@@ -261,7 +261,7 @@ const HomeScreen = () => {
       <Calendar dateChange={dateChange} />
       <ScrollView style={Styles.habitList}>
         {renderHabits('current', habits)}
-        {<AddHabitScreen addHabit={addHabit} />}
+        <AddHabitScreen addHabit={addHabit} />
         {(currentHabit < habits.length && selectedList === 'current') ||
         (currentHabit < swipedHabits.length && selectedList === 'swiped') ? (
           <EditHabitScreen

@@ -106,19 +106,17 @@ const AddHabitScreen = ({addHabit}: Props) => {
 
   const showModalButton = () => {
     return (
-      <View>
-        <Pressable style={Styles.addButton} onPress={() => openCloseModal}>
-          <Image
-            source={require('../../icons/add.png')}
-            style={{
-              width: 60,
-              height: 60,
-              alignSelf: 'center',
-            }}
-            resizeMode="contain"
-          />
-        </Pressable>
-      </View>
+      <Pressable style={Styles.addButton} onPress={() => openCloseModal()}>
+        <Image
+          source={require('../../icons/add.png')}
+          style={{
+            width: 60,
+            height: 60,
+            alignSelf: 'center',
+          }}
+          resizeMode="contain"
+        />
+      </Pressable>
     );
   };
 
@@ -133,8 +131,8 @@ const AddHabitScreen = ({addHabit}: Props) => {
   }, [errorModal]);
   return (
     <View>
-      {showModalButton()}
       {addModal()}
+      {showModalButton()}
     </View>
   );
 };
