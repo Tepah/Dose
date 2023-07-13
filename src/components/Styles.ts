@@ -163,18 +163,28 @@ const styles = StyleSheet.create({
   },
   imagePostContainer: {
     width: '100%',
-    height: 550,
+    height: 530,
+    paddingVertical: 50,
   },
   imagePost: {
-    width: '100%',
-    height: 400,
+    alignSelf: 'center',
+    aspectRatio: 1,
+    height: 350,
+    borderRadius: 20,
+  },
+  postDetailMiniContainer: {
+    margin: 5,
+    marginTop: -15,
+    paddingVertical: 10,
+    borderRadius: 20,
+    opacity: 0.95,
   },
   reactBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 15,
-    height: 80,
+    height: 60,
   },
   userInfo: {
     flexDirection: 'row',
@@ -200,6 +210,12 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 50,
+  },
+  commentsContainer: {
+    paddingHorizontal: 15,
+  },
+  userComment: {
+    flexDirection: 'row',
   },
   //------------------------------------------------------------------------//
   // Stats Page Styles
@@ -276,7 +292,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   caption: {
-    fontSize: 22,
+    fontSize: 18,
   },
   title: {
     fontFamily: 'Helvetica',
@@ -547,6 +563,15 @@ const styles = StyleSheet.create({
   closeButton: {
     position: 'absolute',
     padding: 12,
+  },
+  commentSmallBold: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: fontColor,
+  },
+  commentText: {
+    fontSize: 16,
+    color: fontColor,
   },
 });
 

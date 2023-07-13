@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Styles from '../components/Styles';
 import {mockProfile1} from '../test/mockProfile1';
+import LinearGradient from 'react-native-linear-gradient';
 const SocialScreen = ({navigation}: any) => {
   const navButton = (type: string, link: ImageSourcePropType) => {
     // TODO: Make notification button and search button work
@@ -66,10 +67,12 @@ const SocialScreen = ({navigation}: any) => {
     );
   };
   const postCaption = () => {
+    // TODO: Make a more button that expands the caption and opens post modal
     return (
       <View style={Styles.postCaptionContainer}>
         <Text style={[Styles.text, Styles.caption]}>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
+          <Text style={[Styles.text, Styles.commentSmallBold]}>...more</Text>
         </Text>
       </View>
     );
@@ -81,8 +84,13 @@ const SocialScreen = ({navigation}: any) => {
           style={Styles.imagePost}
           source={require('../test/water.jpeg')}
         />
-        {reactBar()}
-        {postCaption()}
+        <LinearGradient
+          colors={['#1D2B3E', '#344966']}
+          style={Styles.postDetailMiniContainer}>
+          {reactBar()}
+          {postCaption()}
+          <MiniComments />
+        </LinearGradient>
       </View>
     );
   };
@@ -114,6 +122,7 @@ const SocialScreen = ({navigation}: any) => {
       </View>
     );
   };
+  // TODO: make a pressable that opens a modal with the post
   return (
     <View style={Styles.app}>
       {socialHeader()}
@@ -126,5 +135,18 @@ const SocialScreen = ({navigation}: any) => {
     </View>
   );
 };
+
+const MiniComments = () => {
+  return (
+    <View style={Styles.commentsContainer}>
+      <View style={Styles.userComment}>
+        <Text style={[Styles.commentSmallBold]}>@Tom</Text>
+        <Text> </Text>
+        <Text style={Styles.commentText}>i wish i drank..</Text>
+      </View>
+      <Text style={Styles.commentSmallBold}>more comments..</Text>
+    </View>
+  )
+}
 
 export default SocialScreen;
