@@ -106,3 +106,24 @@ export const mockProfile1: profile = {
     },
   ],
 };
+
+export const mockProfile2: profile = {
+  name: 'Dennis Turner',
+  username: '@dennisturner',
+  profilePic: require('../test/profile.png'),
+  description: 'I am a software engineer',
+  following: 20,
+  followers: 20,
+  startDate: '7/5/2023',
+  habits: [
+    {
+      name: 'Habit 1',
+      description: 'This is habit 1',
+      streak: 3,
+      progress: {
+        '7/3/2023': true,
+        '7/4/2023': true,
+        '7/5/2023': true,
+      }
+    };
+};
