@@ -24,13 +24,7 @@ interface Props {
 const closeModal = (closeFunction: () => void) => {
   return (
     // TODO: Change the damn button
-    <Pressable
-      style={{
-        position: 'absolute',
-        top: 15,
-        right: 15,
-      }}
-      onPress={closeFunction}>
+    <Pressable style={Styles.closeButton} onPress={closeFunction}>
       <Image
         style={{height: 30, width: 30}}
         source={require('../../icons/close.png')}
@@ -142,7 +136,7 @@ const EditHabitScreen = ({
                 onRequestClose={() => setEditModalVisible(false)}>
                 <View style={Styles.centeredView}>
                   <View style={Styles.editDescriptionModal}>
-                    <Text style={Styles.text}>Edit Description</Text>
+                    <Text style={[Styles.text, {textAlign: 'center',}]}>Edit Description</Text>
                     <TextInput
                       autoFocus={true}
                       multiline

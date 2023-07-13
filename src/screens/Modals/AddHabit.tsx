@@ -43,20 +43,15 @@ const AddHabitScreen = ({addHabit}: Props) => {
         visible={addScreenVisible}
         onRequestClose={openCloseModal}>
         <View style={Styles.addModal}>
-          {closeModal()}
           {addForm()}
+          {closeModal()}
         </View>
       </Modal>
     );
   };
   const closeModal = () => {
     return (
-      <View
-        style={{
-          alignSelf: 'flex-end',
-          top: 20,
-          right: 15,
-        }}>
+      <View style={Styles.closeButton}>
         <Pressable onPress={openCloseModal}>
           <Image
             style={{height: 30, width: 30}}

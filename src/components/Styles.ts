@@ -18,11 +18,14 @@ const styles = StyleSheet.create({
   // Modal Styles
   // Add Modal Styles
   addModal: {
+    position: 'absolute',
     flex: 1,
-    backgroundColor: menu,
-    marginTop: 120,
-    borderTopLeftRadius: 5,
-    borderTopRightRadius: 5,
+    bottom: 0,
+    backgroundColor: main,
+    width: '100%',
+    height: '80%',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
   addHabitForm: {
     padding: 20,
@@ -40,9 +43,14 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   editModalContainer: {
+    position: 'absolute',
     backgroundColor: main,
+    bottom: 0,
+    height: '90%',
     padding: 10,
     width: '100%',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
   editDescriptionContainer: {
     padding: 15,
@@ -76,7 +84,7 @@ const styles = StyleSheet.create({
   editDescriptionModal: {
     width: '100%',
     marginHorizontal: 20,
-    padding: 10,
+    padding: 15,
     borderRadius: 5,
     backgroundColor: main,
   },
@@ -100,8 +108,8 @@ const styles = StyleSheet.create({
   },
   habitList: {
     flexGrow: 1,
-    top: '14%',
-    marginBottom: 110,
+    top: '17%',
+    marginBottom: 135,
     width: '90%',
     alignContent: 'center',
   },
@@ -300,7 +308,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   submitButton: {
-    backgroundColor: '#b4cded',
+    backgroundColor: menu,
     padding: 10,
     borderRadius: 15,
     alignContent: 'center',
@@ -314,9 +322,9 @@ const styles = StyleSheet.create({
   calendarContainer: {
     position: 'absolute',
     paddingTop: 50,
-    paddingBottom: 30,
+    paddingBottom: 5,
     backgroundColor: menu,
-    height: 110,
+    height: '17%',
     top: 0,
     left: 0,
     right: 0,
@@ -535,6 +543,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  closeButton: {
+    position: 'absolute',
+    padding: 12,
   },
 });
 

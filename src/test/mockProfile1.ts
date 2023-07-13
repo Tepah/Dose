@@ -124,6 +124,7 @@ export const mockProfile2: profile = {
         '7/3/2023': true,
         '7/4/2023': true,
         '7/5/2023': true,
-      }
-    };
+      },
+    },
+  ],
 };
