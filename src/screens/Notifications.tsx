@@ -34,9 +34,11 @@ const NotificationsScreen = () => {
 
   return (
     <View style={Styles.app}>
-      <Text style={[Styles.text, Styles.notificationHeaderText]}>
-        Notifications
-      </Text>
+      <View style={Styles.header}>
+        <Text style={[Styles.text, Styles.notificationHeaderText]}>
+          Notifications
+        </Text>
+      </View>
       <ScrollView style={Styles.notificationScroll}>
         {renderNotifications}
       </ScrollView>

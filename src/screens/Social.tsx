@@ -33,39 +33,6 @@ const SocialScreen = ({navigation}: any) => {
       </View>
     </View>
   );
-
-  const [liked, setLiked] = useState(false);
-  const reactBar = () => {
-    return (
-      <View style={Styles.reactBar}>
-        <View style={Styles.userInfo}>
-          <Image
-            style={Styles.userPostImage}
-            source={mockProfile1.profilePic}
-          />
-          <Pressable>
-            <Text style={[Styles.text, Styles.userText]}>
-              {mockProfile1.username}
-            </Text>
-          </Pressable>
-        </View>
-        <View style={Styles.reactButtons}>
-          <Pressable
-            style={Styles.likeButton}
-            onPress={() => setLiked(prevState => !prevState)}>
-            <Image
-              style={Styles.likeButtonImage}
-              source={
-                liked
-                  ? require('../icons/heart-fill.png')
-                  : require('../icons/heart.png')
-              }
-            />
-          </Pressable>
-        </View>
-      </View>
-    );
-  };
   const postCaption = () => {
     // TODO: Make a more button that expands the caption and opens post modal
     return (
@@ -87,7 +54,7 @@ const SocialScreen = ({navigation}: any) => {
         <LinearGradient
           colors={['#1D2B3E', '#344966']}
           style={Styles.postDetailMiniContainer}>
-          {reactBar()}
+          <ReactBar />
           {postCaption()}
           <MiniComments />
         </LinearGradient>
@@ -117,8 +84,13 @@ const SocialScreen = ({navigation}: any) => {
             <Text style={[Styles.text, Styles.userText]}>@tom</Text>
           </View>
         </View>
-        {reactBar()}
-        {postCaption()}
+        <LinearGradient
+          colors={['#1D2B3E', '#344966']}
+          style={Styles.postDetailMiniContainer}>
+          <ReactBar />
+          {postCaption()}
+          <MiniComments />
+        </LinearGradient>
       </View>
     );
   };
@@ -146,7 +118,40 @@ const MiniComments = () => {
       </View>
       <Text style={Styles.commentSmallBold}>more comments..</Text>
     </View>
-  )
-}
+  );
+};
+
+const ReactBar = () => {
+  const [liked, setLiked] = useState(false);
+  return (
+    <View style={Styles.reactBar}>
+      <View style={Styles.userInfo}>
+        <Image
+          style={Styles.userPostImage}
+          source={mockProfile1.profilePic}
+        />
+        <Pressable>
+          <Text style={[Styles.text, Styles.userText]}>
+            {mockProfile1.username}
+          </Text>
+        </Pressable>
+      </View>
+      <View style={Styles.reactButtons}>
+        <Pressable
+          style={Styles.likeButton}
+          onPress={() => setLiked(prevState => !prevState)}>
+          <Image
+            style={Styles.likeButtonImage}
+            source={
+              liked
+                ? require('../icons/heart-fill.png')
+                : require('../icons/heart.png')
+            }
+          />
+        </Pressable>
+      </View>
+    </View>
+  );
+};
 
 export default SocialScreen;

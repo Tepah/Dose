@@ -121,32 +121,30 @@ const styles = StyleSheet.create({
   headerNav: {
     flex: 1,
     justifyContent: 'flex-end',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     flexDirection: 'row',
-    height: '100%',
   },
   headerText: {
     flex: 1,
     paddingLeft: 10,
   },
   navButtons: {
-    padding: 30,
     height: 40,
     width: '25%',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
   },
   socialView: {
     width: '100%',
-    top: '12%',
-    marginBottom: 100,
   },
   challengePostContainer: {
     width: '100%',
-    height: 300,
+    height: 340,
+    paddingTop: 25,
+    paddingBottom: 50,
   },
   challengePost: {
-    width: '95%',
+    width: '90%',
     height: 150,
     backgroundColor: secondary,
     borderRadius: 10,
@@ -164,7 +162,8 @@ const styles = StyleSheet.create({
   imagePostContainer: {
     width: '100%',
     height: 530,
-    paddingVertical: 50,
+    paddingTop: 25,
+    paddingBottom: 50,
   },
   imagePost: {
     alignSelf: 'center',
@@ -219,7 +218,7 @@ const styles = StyleSheet.create({
   },
   //------------------------------------------------------------------------//
   // Stats Page Styles
-  statsContainer: {flexGrow: 1, top: '12%', marginBottom: 90, width: '100%'},
+  statsContainer: {flexGrow: 1, width: '100%'},
   statsCardContainer: {
     marginVertical: 5,
     marginHorizontal: 10,
@@ -369,22 +368,19 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 100,
     padding: 10,
-    marginBottom: 1,
     borderRadius: 8,
+    marginBottom: 1,
   },
   notificationScroll: {
     flex: 1,
     width: '100%',
     marginTop: 20,
-    marginBottom: 55,
   },
   notificationText: {
     fontSize: 20,
   },
   notificationHeaderText: {
-    textAlign: 'left',
-    alignSelf: 'flex-start',
-    paddingTop: 30,
+    textAlign: 'center',
   },
   notificationTextContainer: {
     flex: 1,
@@ -396,14 +392,19 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: main,
     width: '100%',
-    marginBottom: 50,
+  },
+  profileOptionsContainer: {
+    padding: 20,
+    paddingTop: 30,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: menu,
   },
   profileHeader: {
     flex: 3,
     backgroundColor: menu,
-    marginTop: 30,
     width: '100%',
-    paddingTop: 5,
+    paddingVertical: 15,
     paddingHorizontal: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -527,16 +528,13 @@ const styles = StyleSheet.create({
   //------------------------------------------------------------------------//
   // Reusable Styles
   header: {
-    position: 'absolute',
-    flex: 1,
     backgroundColor: menu,
-    padding: 5,
-    paddingTop: 50,
-    height: '12%',
-    top: 0,
+    padding: 10,
+    height: '14%',
     width: '100%',
     flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
   },
   fullPageScroller: {
     height: '100%',

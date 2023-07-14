@@ -4,6 +4,7 @@ import Styles from '../components/Styles';
 import {mockProfile1} from '../test/mockProfile1';
 import {useState} from 'react';
 import {mockPosts} from '../test/mockPosts';
+import { HabitType } from "../components/types";
 
 const ProfileScreen = () => {
   const profileCounter = (type: string) => {
@@ -81,13 +82,7 @@ const ProfileScreen = () => {
     </View>
   );
 
-  type habitType = {
-    name: string;
-    description: string;
-    streak: number;
-  };
-
-  const mappedHabits = mockProfile1.habits.map((habit: habitType) => {
+  const mappedHabits = mockProfile1.habits.map((habit: HabitType) => {
     return (
       <View style={Styles.profileHabit}>
         <Text style={[Styles.text, Styles.proHabitText]}>{habit.name}</Text>
@@ -135,6 +130,7 @@ const ProfileScreen = () => {
   return (
     <View style={Styles.app}>
       <ScrollView style={Styles.profileContainer}>
+        <ProfileOptions />
         {profileInfo}
         {profileDescription}
         {profileTabs()}
@@ -144,6 +140,13 @@ const ProfileScreen = () => {
           <View style={Styles.profileHabitsContainer}>{mappedHabits}</View>
         )}
       </ScrollView>
+    </View>
+  );
+};
+
+const ProfileOptions = () => {
+  return (
+    <View style={Styles.profileOptionsContainer}>
     </View>
   );
 };
