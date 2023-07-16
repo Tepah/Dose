@@ -1,23 +1,45 @@
 import React, {useState} from 'react';
-import {Text, View} from 'react-native';
+import { Text, TextInput, View } from "react-native";
 import Styles from '../components/Styles';
 
 const SearchScreen = () => {
   const [profiles, setProfiles] = useState<string[]>([
-    'Name 1',
-    'Name 2',
-    'Name 3',
+    '@tom',
+    '@kim',
+    '@someoneelse64',
   ]);
-
+  const [searchText, setSearchText] = useState<string>('');
   return (
     <View style={Styles.app}>
-      {profiles.map((names, index: number )=> (
-        <Text key={index} style={Styles.text}>
-          {names}
-        </Text>
-      ))}
+      <SearchHeader />
+      <SearchBar />
+      <Text style={Styles.text}>
+        bobby
+      </Text>
     </View>
   );
 };
 
+const SearchHeader = () => {
+  return (
+    <View style={Styles.header}>
+      <Text style={[Styles.text, Styles.notificationHeaderText]}>Search</Text>
+    </View>
+  );
+};
+
+interface SearchBarProps {
+  setSearchText: React.Dispatch<React.SetStateAction<string>>;
+}
+const SearchBar = ({setSearchText}: SearchBarProps) => {
+  return (
+    <View style={Styles.searchBar}>
+      <TextInput
+        style={[Styles.input, Styles.searchInput]}
+        onChangeText={setSearchText}
+        placeholderTextColor={'grey'}
+        placeholder="Search..." />
+    </View>
+  );
+}
 export default SearchScreen;

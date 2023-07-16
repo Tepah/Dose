@@ -18,6 +18,19 @@ import {useIsFocused} from '@react-navigation/native';
 /* TODO: add past date rendering, */
 /*   add clickable past dates to track progress, but don't allow editing on past dates. */
 /*   make dates have completion status icons. */
+
+interface SwipeableItemProps {
+  type: string;
+  habits: HabitType[];
+  swipedHabits: HabitType[];
+  setSwipedHabits: React.Dispatch<React.SetStateAction<HabitType[]>>;
+  setHabits: React.Dispatch<React.SetStateAction<HabitType[]>>;
+  setEditModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedList: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentHabitIndex: React.Dispatch<React.SetStateAction<number>>;
+  habit: HabitType;
+  index: number;
+}
 const SwipeableItem = ({
   type,
   habits,
@@ -29,18 +42,7 @@ const SwipeableItem = ({
   setCurrentHabitIndex,
   habit,
   index,
-}: {
-  type: string;
-  habits: HabitType[];
-  swipedHabits: HabitType[];
-  setSwipedHabits: React.Dispatch<React.SetStateAction<HabitType[]>>;
-  setHabits: React.Dispatch<React.SetStateAction<HabitType[]>>;
-  setEditModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  setSelectedList: React.Dispatch<React.SetStateAction<string>>;
-  setCurrentHabitIndex: React.Dispatch<React.SetStateAction<number>>;
-  habit: HabitType;
-  index: number;
-}) => {
+}: SwipeableItemProps) => {
   const pan = useRef(new Animated.ValueXY()).current;
 
   const panResponder = PanResponder.create({

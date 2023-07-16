@@ -190,7 +190,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   reactButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'flex-end',
+  },
+  commentButton: {
+    justifyContent: 'center',
+    width: 40,
+    height: 40,
+  },
+  commentButtonImage: {
+    width: 25,
+    height: 25,
   },
   likeButton: {
     justifyContent: 'center',
@@ -198,7 +209,6 @@ const styles = StyleSheet.create({
     height: 40,
   },
   likeButtonImage: {
-    alignSelf: 'center',
     width: 30,
     height: 30,
   },
@@ -364,17 +374,16 @@ const styles = StyleSheet.create({
   // Notification Styles
   notificationContainer: {
     flex: 1,
-    backgroundColor: menu,
+    backgroundColor: tertiary,
     width: '100%',
     height: 100,
     padding: 10,
     borderRadius: 8,
-    marginBottom: 1,
+    marginVertical: 2,
   },
   notificationScroll: {
     flex: 1,
     width: '100%',
-    marginTop: 20,
   },
   notificationText: {
     fontSize: 20,
@@ -385,6 +394,12 @@ const styles = StyleSheet.create({
   notificationTextContainer: {
     flex: 1,
     width: '60%',
+  },
+  //------------------------------------------------------------------------//
+  // Search Styles
+  searchInput: {
+    width: '90%',
+    backgroundColor: 'white',
   },
   //------------------------------------------------------------------------//
   // Profile Styles

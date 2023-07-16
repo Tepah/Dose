@@ -7,6 +7,8 @@ import {
   Image,
   ScrollView,
   ImageSourcePropType,
+  Modal,
+  TextInput,
 } from 'react-native';
 import Styles from '../components/Styles';
 import {mockProfile1} from '../test/mockProfile1';
@@ -122,6 +124,8 @@ const MiniComments = () => {
 };
 
 const ReactBar = () => {
+  // TODO: make this a modal that pops up with a text input
+  const [commentField, setCommentField] = useState(false);
   const [liked, setLiked] = useState(false);
   return (
     <View style={Styles.reactBar}>
@@ -138,6 +142,15 @@ const ReactBar = () => {
       </View>
       <View style={Styles.reactButtons}>
         <Pressable
+          style={Styles.commentButton}
+          onPress={() => setCommentField(current => !current)}>
+          <Image
+            style={Styles.commentButtonImage}
+            source={require('../icons/comment.png')}
+          />
+        </Pressable>
+        <CommentField visible={commentField} setVisible={setCommentField} />
+        <Pressable
           style={Styles.likeButton}
           onPress={() => setLiked(prevState => !prevState)}>
           <Image
@@ -151,6 +164,23 @@ const ReactBar = () => {
         </Pressable>
       </View>
     </View>
+  );
+};
+
+interface CommentFieldProps {
+  visible: boolean;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const CommentField = ({visible, setVisible}: CommentFieldProps) => {
+  return (
+    <Modal visible={visible} transparent={true}>
+      <Pressable onPress={() => setVisible(current => !current)}>
+        <View style={{position: 'absolute', backgroundColor: 'white', height: 100, width: 100}}>
+          <TextInput placeholder="Comment" />
+        </View>
+      </Pressable>
+    </Modal>
   );
 };
 
