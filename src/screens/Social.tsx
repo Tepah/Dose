@@ -176,7 +176,13 @@ const CommentField = ({visible, setVisible}: CommentFieldProps) => {
   return (
     <Modal visible={visible} transparent={true}>
       <Pressable onPress={() => setVisible(current => !current)}>
-        <View style={{position: 'absolute', backgroundColor: 'white', height: 100, width: 100}}>
+        <View
+          style={{
+            position: 'absolute',
+            backgroundColor: 'white',
+            height: 100,
+            width: 100,
+          }}>
           <TextInput placeholder="Comment" />
         </View>
       </Pressable>

@@ -8,13 +8,6 @@ const NotificationsScreen = () => {
   const [notifications, setNotifications] = useState<string[]>([
     'Notification 1 I dont knowhow this looks blah blah blah',
     'Notification 2',
-    'Notification 3',
-    'Notification 4',
-    'Notification 5',
-    'Notification 6',
-    'Notification 7',
-    'Notification 8',
-    'Notification 9',
   ]);
 
   const renderNotifications = notifications.map(

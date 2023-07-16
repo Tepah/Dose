@@ -398,8 +398,31 @@ const styles = StyleSheet.create({
   //------------------------------------------------------------------------//
   // Search Styles
   searchInput: {
-    width: '90%',
+    alignSelf: 'center',
+    width: '95%',
     backgroundColor: 'white',
+  },
+  searchBar: {
+    backgroundColor: menu,
+    width: '100%',
+  },
+  searchResults: {
+    flex: 1,
+    width: '100%',
+  },
+  resultImage: {
+    height: 70,
+    width: 70,
+    borderRadius: 35,
+  },
+  searchResultContainer: {
+    flexDirection: 'row',
+    padding: 10,
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  searchResultText: {
+    paddingHorizontal: 10,
   },
   //------------------------------------------------------------------------//
   // Profile Styles
