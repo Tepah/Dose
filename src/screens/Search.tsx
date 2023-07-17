@@ -62,7 +62,6 @@ const SearchBar = ({setSearchText}: SearchBarProps) => {
 interface SearchResultsProps {
   profiles: profile[];
   navigation: any;
-  route?: any;
 }
 
 const SearchResults = ({profiles, navigation}: SearchResultsProps) => {
@@ -70,7 +69,7 @@ const SearchResults = ({profiles, navigation}: SearchResultsProps) => {
     <Pressable
       key={index}
       style={Styles.searchResultContainer}
-      onPress={() => navigation.navigate('Profile', user.username)}>
+      onPress={() => navigation.navigate('Profile', {user: user})}>
       <Image
         style={Styles.resultImage}
         source={require('../test/water.jpeg')}

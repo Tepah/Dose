@@ -78,7 +78,7 @@ const Navigator = () => {
           ),
           headerShown: false,
         }}
-        initialParams={{username: mockProfileList['@petah'].username}}
+        initialParams={{user: mockProfileList['@petah']}}
       />
     </Tab.Navigator>
   );

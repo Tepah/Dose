@@ -4,11 +4,11 @@ import Styles from '../components/Styles';
 import {useState} from 'react';
 import {mockPosts} from '../test/mockPosts';
 import {HabitType} from '../components/types';
-import { mockProfileList } from "../test/mockProfile1";
 
-const ProfileScreen = (route: any) => {
-  const params = route.route.params;
-  const user = mockProfileList[params.user];
+const ProfileScreen = ({route}: any) => {
+  console.log(route.params);
+  const {user} = route.params;
+  console.log(user);
 
   const profileCounter = (type: string) => {
     return (
