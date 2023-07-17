@@ -11,7 +11,7 @@ import {
   TextInput,
 } from 'react-native';
 import Styles from '../components/Styles';
-import {mockProfile1} from '../test/mockProfile1';
+import {mockProfileList} from '../test/mockProfile1';
 import LinearGradient from 'react-native-linear-gradient';
 
 // TODO: Make a friends page
@@ -76,17 +76,17 @@ const SocialScreen = ({navigation}: any) => {
           <View style={Styles.challengers}>
             <Image
               style={Styles.userPostImage}
-              source={mockProfile1.profilePic}
+              source={mockProfileList['@petah'].profilePic}
             />
             <Text style={[Styles.text, Styles.userText]}>
-              {mockProfile1.username}
+              {mockProfileList['@petah'].username}
             </Text>
           </View>
           <Text style={Styles.text}>challenged</Text>
           <View style={Styles.challengers}>
             <Image
               style={Styles.userPostImage}
-              source={mockProfile1.profilePic}
+              source={mockProfileList['@petah'].profilePic}
             />
             <Text style={[Styles.text, Styles.userText]}>@tom</Text>
           </View>
@@ -137,11 +137,11 @@ const ReactBar = () => {
       <View style={Styles.userInfo}>
         <Image
           style={Styles.userPostImage}
-          source={mockProfile1.profilePic}
+          source={mockProfileList['@petah'].profilePic}
         />
         <Pressable>
           <Text style={[Styles.text, Styles.userText]}>
-            {mockProfile1.username}
+            {mockProfileList['@petah'].username}
           </Text>
         </Pressable>
       </View>

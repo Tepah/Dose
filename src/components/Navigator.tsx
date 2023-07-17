@@ -6,7 +6,7 @@ import SocialScreen from '../screens/Social';
 import StatsScreen from '../screens/Stats';
 import ProfileScreen from '../screens/Profile';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {mockProfile1} from '../test/mockProfile1';
+import {mockProfileList} from '../test/mockProfile1';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import NotificationsScreen from '../screens/Notifications';
 import SearchScreen from '../screens/Search';
@@ -71,13 +71,14 @@ const Navigator = () => {
           // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: () => (
             <Image
-              source={mockProfile1.profilePic}
+              source={mockProfileList['@petah'].profilePic}
               style={[styles.icons, styles.userPostImage]}
               resizeMode="contain"
             />
           ),
           headerShown: false,
         }}
+        initialParams={{username: mockProfileList['@petah'].username}}
       />
     </Tab.Navigator>
   );

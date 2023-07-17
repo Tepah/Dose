@@ -1,22 +1,25 @@
 import React from 'react';
 import {View, Text, ScrollView, Image, Pressable} from 'react-native';
 import Styles from '../components/Styles';
-import {mockProfile1} from '../test/mockProfile1';
 import {useState} from 'react';
 import {mockPosts} from '../test/mockPosts';
 import {HabitType} from '../components/types';
+import { mockProfileList } from "../test/mockProfile1";
 
-const ProfileScreen = () => {
+const ProfileScreen = (route: any) => {
+  const params = route.route.params;
+  const user = mockProfileList[params.user];
+
   const profileCounter = (type: string) => {
     return (
       <View style={Styles.followContainer}>
         <Text style={[Styles.text, Styles.profileHeaderText]}>{type}</Text>
         <Text style={[Styles.text, Styles.followCount]}>
           {type === 'Habits'
-            ? mockProfile1.habits.length
+            ? user.habits.length
             : type === 'Following'
-            ? mockProfile1.following
-            : mockProfile1.followers}
+            ? user.following
+            : user.followers}
         </Text>
       </View>
     );
@@ -25,9 +28,9 @@ const ProfileScreen = () => {
   const profileInfo = (
     <View style={Styles.profileHeader}>
       <View style={Styles.profileHeaderUser}>
-        <Image source={mockProfile1.profilePic} style={Styles.profilePicture} />
+        <Image source={user.profilePic} style={Styles.profilePicture} />
         <Text style={[Styles.text, Styles.profileNameText]}>
-          {mockProfile1.username}
+          {user.username}
         </Text>
       </View>
       {profileCounter('Habits')}
@@ -77,12 +80,12 @@ const ProfileScreen = () => {
           Styles.paragraphText,
           {fontStyle: 'italic', textAlign: 'center'},
         ]}>
-        {mockProfile1.description}
+        {user.description}
       </Text>
     </View>
   );
 
-  const mappedHabits = mockProfile1.habits.map((habit: HabitType) => {
+  const mappedHabits = user.habits.map((habit: HabitType) => {
     return (
       <View style={Styles.profileHabit}>
         <Text style={[Styles.text, Styles.proHabitText]}>{habit.name}</Text>

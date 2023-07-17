@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Pressable, ScrollView, Text, View} from 'react-native';
 import Styles from '../components/Styles';
-import {mockProfile1} from '../test/mockProfile1';
+import {mockProfileList} from '../test/mockProfile1';
 
 /* TODO: Implement different types of pressables so */
 const NotificationsScreen = () => {
@@ -14,7 +14,7 @@ const NotificationsScreen = () => {
     (notification: string, index: number) => (
       <Pressable key={index} style={Styles.notificationContainer}>
         <Text style={[Styles.text, Styles.userText]}>
-          {mockProfile1.username}
+          {mockProfileList['@petah'].username}
         </Text>
         <View style={Styles.notificationTextContainer}>
           <Text style={[Styles.text, Styles.notificationText]}>

@@ -10,7 +10,7 @@ import {
 import Calendar from '../components/Calendar';
 import Styles from '../components/Styles';
 import AddHabitScreen from './Modals/AddHabit';
-import {mockProfile1} from '../test/mockProfile1';
+import {mockProfileList} from '../test/mockProfile1';
 import EditHabitScreen from './Modals/EditHabit';
 import {HabitType} from '../components/types';
 import {useIsFocused} from '@react-navigation/native';
@@ -186,7 +186,9 @@ const handleLongPress = (
 
 const HomeScreen = () => {
   const isFocused = useIsFocused();
-  const [habits, setHabits] = useState<HabitType[]>(mockProfile1.habits);
+  const [habits, setHabits] = useState<HabitType[]>(
+    mockProfileList['@petah'].habits,
+  );
   const [swipedHabits, setSwipedHabits] = useState<HabitType[]>([]);
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
   const [currentHabit, setCurrentHabit] = useState<number>(0);
@@ -208,11 +210,11 @@ const HomeScreen = () => {
   }, [currentDate, isFocused]);
 
   useEffect(() => {
-    const dateHabitsDone = mockProfile1.habits.filter(
+    const dateHabitsDone = mockProfileList['@petah'].habits.filter(
       (habit: HabitType) => !habit.progress[date],
     );
     setHabits(() => dateHabitsDone);
-    const dateHabitsNotDone = mockProfile1.habits.filter(
+    const dateHabitsNotDone = mockProfileList['@petah'].habits.filter(
       (habit: HabitType) => habit.progress[date],
     );
     setSwipedHabits(() => dateHabitsNotDone);
