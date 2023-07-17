@@ -1,13 +1,5 @@
-type profile = {
-  followers: any;
-  following: any;
-  habits: any;
-  description: any;
-  name: string;
-  username: string;
-  startDate: string;
-  profilePic: any;
-};
+import {profile} from '../components/types';
+
 export const mockProfile1: profile = {
   name: 'Pete Potipitak',
   username: '@petah',
@@ -107,24 +99,110 @@ export const mockProfile1: profile = {
   ],
 };
 
-export const mockProfile2: profile = {
-  name: 'Dennis Turner',
-  username: '@dennisturner',
-  profilePic: require('../test/profile.png'),
-  description: 'I am a software engineer',
-  following: 20,
-  followers: 20,
-  startDate: '7/5/2023',
-  habits: [
-    {
-      name: 'Habit 1',
-      description: 'This is habit 1',
-      streak: 3,
-      progress: {
-        '7/3/2023': true,
-        '7/4/2023': true,
-        '7/5/2023': true,
+export const mockProfileList: {[key: string]: profile} = {
+  '@dennisturner': {
+    name: 'Dennis Turner',
+    username: '@dennisturner',
+    profilePic: require('../test/profile.png'),
+    description: 'I am a software engineer',
+    following: 20,
+    followers: 20,
+    startDate: '7/5/2023',
+    habits: [
+      {
+        name: 'Habit 1',
+        description: 'This is habit 1',
+        streak: 3,
+        progress: {
+          '7/3/2023': true,
+          '7/4/2023': true,
+          '7/5/2023': true,
+        },
       },
-    },
-  ],
+    ],
+  },
+  '@petah': {
+    name: 'Pete Potipitak',
+    username: '@petah',
+    profilePic: require('../test/profile.png'),
+    description: 'I am a software engineer',
+    following: 20,
+    followers: 20,
+    startDate: '7/5/2023',
+    habits: [
+      {
+        name: 'Habit 1',
+        description: 'This is habit 1',
+        streak: 3,
+        progress: {
+          '7/3/2023': true,
+          '7/4/2023': true,
+          '7/5/2023': true,
+        },
+      },
+    ],
+  },
+  '@tommyboy': {
+    name: 'Tom Smith',
+    username: '@tommyboy',
+    profilePic: require('../test/profile.png'),
+    description: 'I am a software engineer',
+    following: 23,
+    followers: 20,
+    startDate: '7/5/2023',
+    habits: [
+      {
+        name: 'Habit 1',
+        description: 'This is habit 1',
+        streak: 3,
+        progress: {
+          '7/3/2023': true,
+          '7/4/2023': true,
+          '7/5/2023': true,
+        },
+      },
+    ],
+  },
+  '@headturner': {
+    name: 'Kim Turner',
+    username: '@headturner',
+    profilePic: require('../test/profile.png'),
+    description: 'I am a software engineer',
+    following: 20,
+    followers: 20,
+    startDate: '7/5/2023',
+    habits: [
+      {
+        name: 'Habit 1',
+        description: 'This is habit 1',
+        streak: 3,
+        progress: {
+          '7/3/2023': true,
+          '7/4/2023': true,
+          '7/5/2023': true,
+        },
+      },
+    ],
+  },
+  '@awesomeus': {
+    name: 'Hot Mess',
+    username: '@awesomeus',
+    profilePic: require('../test/profile.png'),
+    description: 'I am a software engineer',
+    following: 20,
+    followers: 20,
+    startDate: '7/5/2023',
+    habits: [
+      {
+        name: 'Habit 1',
+        description: 'This is habit 1',
+        streak: 3,
+        progress: {
+          '7/3/2023': true,
+          '7/4/2023': true,
+          '7/5/2023': true,
+        },
+      },
+    ],
+  },
 };

@@ -13,8 +13,13 @@ import {
 import Styles from '../components/Styles';
 import {mockProfile1} from '../test/mockProfile1';
 import LinearGradient from 'react-native-linear-gradient';
+
+// TODO: Make a friends page
 const SocialScreen = ({navigation}: any) => {
-  const navButton = (type: string, link: ImageSourcePropType) => {
+  const navButton = (
+    type: string,
+    link: ImageSourcePropType,
+  ) => {
     // TODO: Make notification button and search button work
     return (
       <View style={Styles.navButtons}>

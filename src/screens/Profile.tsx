@@ -4,7 +4,7 @@ import Styles from '../components/Styles';
 import {mockProfile1} from '../test/mockProfile1';
 import {useState} from 'react';
 import {mockPosts} from '../test/mockPosts';
-import { HabitType } from "../components/types";
+import {HabitType} from '../components/types';
 
 const ProfileScreen = () => {
   const profileCounter = (type: string) => {
