@@ -1,5 +1,7 @@
 import {profile} from '../components/types';
 
+export const currentUser: string = '@petah';
+
 export const mockProfileList: {[key: string]: profile} = {
   '@dennisturner': {
     name: 'Dennis Turner',

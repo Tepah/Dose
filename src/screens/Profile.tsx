@@ -6,9 +6,7 @@ import {mockPosts} from '../test/mockPosts';
 import {HabitType} from '../components/types';
 
 const ProfileScreen = ({route}: any) => {
-  console.log(route.params);
   const {user} = route.params;
-  console.log(user);
 
   const profileCounter = (type: string) => {
     return (

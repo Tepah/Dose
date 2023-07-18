@@ -226,6 +226,16 @@ const styles = StyleSheet.create({
   userComment: {
     flexDirection: 'row',
   },
+  commentFieldContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    opacity: 0.95,
+    width: '100%',
+  },
+  commentFieldBackground: {
+    flex: 1,
+    opacity: 0,
+  },
   //------------------------------------------------------------------------//
   // Stats Page Styles
   statsContainer: {flexGrow: 1, width: '100%'},
@@ -364,7 +374,7 @@ const styles = StyleSheet.create({
   input: {
     fontFamily: 'Helvetica',
     fontSize: 20,
-    color: fontColor,
+    color: 'black',
     backgroundColor: secondary,
     marginVertical: 10,
     padding: 5,
@@ -397,11 +407,6 @@ const styles = StyleSheet.create({
   },
   //------------------------------------------------------------------------//
   // Search Styles
-  searchInput: {
-    alignSelf: 'center',
-    width: '95%',
-    backgroundColor: 'white',
-  },
   searchBar: {
     backgroundColor: menu,
     width: '100%',
@@ -608,6 +613,21 @@ const styles = StyleSheet.create({
   commentText: {
     fontSize: 16,
     color: fontColor,
+  },
+  inputBarContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  inputBar: {
+    flex: 1,
+    marginHorizontal: 10,
+    justifyContent: 'center',
+    backgroundColor: 'white',
+  },
+  inputBarButton: {
+    paddingHorizontal: 10,
+    justifyContent: 'center',
   },
 });
 

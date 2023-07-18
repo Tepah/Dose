@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -9,7 +9,10 @@ import {
   ImageSourcePropType,
   Modal,
   TextInput,
-} from 'react-native';
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback, Keyboard, TouchableOpacity
+} from "react-native";
 import Styles from '../components/Styles';
 import {mockProfileList} from '../test/mockProfile1';
 import LinearGradient from 'react-native-linear-gradient';
@@ -178,19 +181,49 @@ interface CommentFieldProps {
 }
 
 const CommentField = ({visible, setVisible}: CommentFieldProps) => {
+  const handleModalToggle = () => {
+    setVisible(false);
+    Keyboard.dismiss();
+  };
+  useEffect(() => {
+    // Add a listener for the 'keyboardDidHide' event to dismiss the modal when the keyboard is hidden
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      handleModalToggle,
+    );
+
+    return () => {
+      // Clean up the listener when the component unmounts
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+  const handleEmptyPress = () => {
+    console.log('empty press');
+    setVisible(false);
+  };
   return (
     <Modal visible={visible} transparent={true}>
-      <Pressable onPress={() => setVisible(current => !current)}>
-        <View
-          style={{
-            position: 'absolute',
-            backgroundColor: 'white',
-            height: 100,
-            width: 100,
-          }}>
-          <TextInput placeholder="Comment" />
-        </View>
-      </Pressable>
+      <TouchableWithoutFeedback onPress={handleModalToggle}>
+        <View style={Styles.commentFieldBackground}></View>
+      </TouchableWithoutFeedback>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={Styles.commentFieldContainer}>
+        <TouchableWithoutFeedback>
+          <LinearGradient colors={['#1D2B3E', '#344966']} style={Styles.inputBarContainer}>
+            <TextInput
+              style={[Styles.input, Styles.inputBar]}
+              autoFocus={true}
+              placeholder="Comment.."
+            />
+            <Pressable
+              onPress={() => handleEmptyPress()}
+              style={Styles.inputBarButton}>
+              <Image source={require('../icons/send.png')} />
+            </Pressable>
+          </LinearGradient>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </Modal>
   );
 };
