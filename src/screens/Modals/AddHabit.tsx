@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Image, Modal, Pressable, Text, TextInput, View} from 'react-native';
+import { Image, Modal, Pressable, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
 import Styles from '../../components/Styles';
 import {HabitType} from '../../components/types';
 
@@ -42,6 +42,9 @@ const AddHabitScreen = ({addHabit}: Props) => {
         transparent={true}
         visible={addScreenVisible}
         onRequestClose={openCloseModal}>
+        <TouchableWithoutFeedback onPress={() => openCloseModal()}>
+          <View style={Styles.inputFieldBackground}></View>
+        </TouchableWithoutFeedback>
         <View style={Styles.addModal}>
           {addForm()}
           {closeModal()}

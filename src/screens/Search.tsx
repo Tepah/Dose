@@ -48,13 +48,18 @@ interface SearchBarProps {
 }
 const SearchBar = ({setSearchText}: SearchBarProps) => {
   return (
-    <View style={Styles.searchBar}>
+    <View style={Styles.inputBarContainer}>
       <TextInput
-        style={[Styles.input, Styles.searchInput]}
+        style={[Styles.input, Styles.inputBar]}
         onChangeText={setSearchText}
         placeholderTextColor={'grey'}
         placeholder="Search..."
       />
+      <Pressable
+        style={Styles.inputBarButton}
+        onPress={() => console.log('Search!')}>
+        <Image source={require('../icons/search.png')} />
+      </Pressable>
     </View>
   );
 };
@@ -82,7 +87,7 @@ const SearchResults = ({profiles, navigation}: SearchResultsProps) => {
   ));
 
   return (
-    <ScrollView style={Styles.searchResults}>
+    <ScrollView style={Styles.searchResults} keyboardShouldPersistTaps="always">
       {renderProfiles}
     </ScrollView>
   );

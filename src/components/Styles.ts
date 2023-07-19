@@ -42,6 +42,8 @@ const styles = StyleSheet.create({
   pageHeader: {
     padding: 10,
   },
+  habitDescContainer: {
+  },
   editModalContainer: {
     position: 'absolute',
     backgroundColor: main,
@@ -53,9 +55,8 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
   },
   editDescriptionContainer: {
-    padding: 15,
-    borderRadius: 10,
-    marginVertical: 5,
+    flex: 1,
+    borderRadius: 20,
   },
   editModalStreaks: {
     padding: 15,
@@ -82,9 +83,9 @@ const styles = StyleSheet.create({
     alignContent: 'center',
   },
   editDescriptionModal: {
-    width: '100%',
-    marginHorizontal: 20,
-    padding: 15,
+    marginHorizontal: 5,
+    paddingHorizontal: 15,
+    paddingVertical: 20,
     borderRadius: 5,
     backgroundColor: main,
   },
@@ -227,14 +228,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   commentFieldContainer: {
-    flex: 1,
     justifyContent: 'flex-end',
     opacity: 0.95,
     width: '100%',
-  },
-  commentFieldBackground: {
-    flex: 1,
-    opacity: 0,
   },
   //------------------------------------------------------------------------//
   // Stats Page Styles
@@ -628,6 +624,11 @@ const styles = StyleSheet.create({
   inputBarButton: {
     paddingHorizontal: 10,
     justifyContent: 'center',
+  },
+  inputFieldBackground: {
+    flex: 1,
+    opacity: 0.8,
+    backgroundColor: main,
   },
 });
 

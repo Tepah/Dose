@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {
   Image,
-  Modal,
+  KeyboardAvoidingView,
+  Modal, Platform,
   Pressable,
   ScrollView,
   Text,
-  TextInput,
-  View,
-} from 'react-native';
+  TextInput, TouchableWithoutFeedback,
+  View
+} from "react-native";
 import Styles from '../../components/Styles';
 import {HabitType} from '../../components/types';
 import {mockFriends} from '../../test/mockFriends';
@@ -23,7 +24,6 @@ interface Props {
 
 const closeModal = (closeFunction: () => void) => {
   return (
-    // TODO: Change the damn button
     <Pressable style={Styles.closeButton} onPress={closeFunction}>
       <Image
         style={{height: 30, width: 30}}
@@ -58,6 +58,9 @@ const EditHabitScreen = ({
         transparent={true}
         visible={visible}
         onRequestClose={openCloseModal}>
+        <TouchableWithoutFeedback onPress={() => openCloseModal()}>
+          <View style={Styles.inputFieldBackground}></View>
+        </TouchableWithoutFeedback>
         <View style={Styles.editModalContainer}>
           {editForm()}
           {closeModal(openCloseModal)}
@@ -116,7 +119,9 @@ const EditHabitScreen = ({
         <View style={Styles.pageHeader}>
           <Text style={Styles.title}>{habitName}</Text>
         </View>
-        <ScrollView style={Styles.fullPageScroller}>
+        <ScrollView
+          style={Styles.fullPageScroller}
+          keyboardShouldPersistTaps="always">
           <View style={Styles.editDescriptionContainer}>
             <View>
               <Text style={[Styles.text]}>Description: </Text>
@@ -134,29 +139,35 @@ const EditHabitScreen = ({
                 transparent={true}
                 visible={editModalVisible}
                 onRequestClose={() => setEditModalVisible(false)}>
-                <View style={Styles.centeredView}>
-                  <View style={Styles.editDescriptionModal}>
-                    <Text style={[Styles.text, {textAlign: 'center',}]}>Edit Description</Text>
-                    <TextInput
-                      autoFocus={true}
-                      multiline
-                      maxLength={120}
-                      value={newHabit.description}
-                      onChangeText={text =>
-                        setNewHabit({...newHabit, description: text})
-                      }
-                      style={Styles.input}
-                    />
-                    <Pressable
-                      style={Styles.submitButton}
-                      onPress={() => onEditDescriptionSave()}>
-                      <Text style={[Styles.text, {textAlign: 'center'}]}>
-                        Submit
-                      </Text>
-                    </Pressable>
-                    {closeModal(() => setEditModalVisible(false))}
-                  </View>
-                </View>
+                <TouchableWithoutFeedback
+                  onPress={() => setEditModalVisible(false)}>
+                  <View style={Styles.inputFieldBackground}></View>
+                </TouchableWithoutFeedback>
+                <KeyboardAvoidingView
+                  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                  style={Styles.editDescriptionModal}>
+                  <Text style={[Styles.text, {textAlign: 'center'}]}>
+                    Edit Description
+                  </Text>
+                  <TextInput
+                    autoFocus={true}
+                    multiline
+                    maxLength={120}
+                    value={newHabit.description}
+                    onChangeText={text =>
+                      setNewHabit({...newHabit, description: text})
+                    }
+                    style={Styles.input}
+                  />
+                  <Pressable
+                    style={Styles.submitButton}
+                    onPress={() => onEditDescriptionSave()}>
+                    <Text style={[Styles.text, {textAlign: 'center'}]}>
+                      Submit
+                    </Text>
+                  </Pressable>
+                  {closeModal(() => setEditModalVisible(false))}
+                </KeyboardAvoidingView>
               </Modal>
             </View>
           </View>

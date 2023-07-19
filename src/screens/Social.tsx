@@ -1,5 +1,5 @@
-import * as React from 'react';
-import {useEffect, useState} from 'react';
+import React from 'react';
+import {useState} from 'react';
 import {
   View,
   Text,
@@ -11,19 +11,15 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
-  TouchableWithoutFeedback, Keyboard, TouchableOpacity
-} from "react-native";
+  TouchableWithoutFeedback,
+} from 'react-native';
 import Styles from '../components/Styles';
 import {mockProfileList} from '../test/mockProfile1';
 import LinearGradient from 'react-native-linear-gradient';
 
 // TODO: Make a friends page
 const SocialScreen = ({navigation}: any) => {
-  const navButton = (
-    type: string,
-    link: ImageSourcePropType,
-  ) => {
-    // TODO: Make notification button and search button work
+  const navButton = (type: string, link: ImageSourcePropType) => {
     return (
       <View style={Styles.navButtons}>
         <Pressable
@@ -108,7 +104,7 @@ const SocialScreen = ({navigation}: any) => {
   return (
     <View style={Styles.app}>
       {socialHeader()}
-      <ScrollView style={Styles.socialView}>
+      <ScrollView style={Styles.socialView} keyboardShouldPersistTaps="always">
         {imagePost()}
         {imagePost()}
         {challengePost()}
@@ -181,48 +177,36 @@ interface CommentFieldProps {
 }
 
 const CommentField = ({visible, setVisible}: CommentFieldProps) => {
-  const handleModalToggle = () => {
+  const closeModalPress = () => {
     setVisible(false);
-    Keyboard.dismiss();
   };
-  useEffect(() => {
-    // Add a listener for the 'keyboardDidHide' event to dismiss the modal when the keyboard is hidden
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      handleModalToggle,
-    );
 
-    return () => {
-      // Clean up the listener when the component unmounts
-      keyboardDidHideListener.remove();
-    };
-  }, []);
-  const handleEmptyPress = () => {
-    console.log('empty press');
+  // TODO: make this send the comment to the backend
+  const sendCommentPress = () => {
     setVisible(false);
   };
   return (
     <Modal visible={visible} transparent={true}>
-      <TouchableWithoutFeedback onPress={handleModalToggle}>
-        <View style={Styles.commentFieldBackground}></View>
+      <TouchableWithoutFeedback onPress={() => closeModalPress()}>
+        <View style={Styles.inputFieldBackground}></View>
       </TouchableWithoutFeedback>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={Styles.commentFieldContainer}>
-        <TouchableWithoutFeedback>
-          <LinearGradient colors={['#1D2B3E', '#344966']} style={Styles.inputBarContainer}>
-            <TextInput
-              style={[Styles.input, Styles.inputBar]}
-              autoFocus={true}
-              placeholder="Comment.."
-            />
-            <Pressable
-              onPress={() => handleEmptyPress()}
-              style={Styles.inputBarButton}>
-              <Image source={require('../icons/send.png')} />
-            </Pressable>
-          </LinearGradient>
-        </TouchableWithoutFeedback>
+        <LinearGradient
+          colors={['#1D2B3E', '#344966']}
+          style={Styles.inputBarContainer}>
+          <TextInput
+            style={[Styles.input, Styles.inputBar]}
+            autoFocus={true}
+            placeholder="Comment.."
+          />
+          <Pressable
+            onPress={() => sendCommentPress()}
+            style={Styles.inputBarButton}>
+            <Image source={require('../icons/send.png')} />
+          </Pressable>
+        </LinearGradient>
       </KeyboardAvoidingView>
     </Modal>
   );

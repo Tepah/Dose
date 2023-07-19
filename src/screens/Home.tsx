@@ -263,7 +263,7 @@ const HomeScreen = () => {
   return (
     <View style={Styles.app}>
       <Calendar dateChange={dateChange} />
-      <ScrollView style={Styles.habitList}>
+      <ScrollView style={Styles.habitList} keyboardShouldPersistTaps="always">
         {renderHabits('current', habits)}
         <AddHabitScreen addHabit={addHabit} />
         {(currentHabit < habits.length && selectedList === 'current') ||
