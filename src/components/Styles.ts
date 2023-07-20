@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   habitList: {
     flexGrow: 1,
     top: '17%',
-    marginBottom: 135,
+    marginBottom: 130,
     width: '90%',
     alignContent: 'center',
   },
@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
   // Navigator Styles
   navigator: {
     backgroundColor: menu,
-    height: '8%',
+    height: '9%',
     left: 0,
     right: 0,
     bottom: 0,
@@ -351,8 +351,8 @@ const styles = StyleSheet.create({
   },
   iconFocused: {
     backgroundColor: secondary,
-    padding: 15,
-    borderRadius: 9,
+    padding: 5,
+    borderRadius: 20,
   },
   //------------------------------------------------------------------------//
   // Calendar Styles

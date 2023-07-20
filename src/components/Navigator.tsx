@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Image} from 'react-native';
+import { Image, View } from "react-native";
 import styles from '../components/Styles';
 import HomeScreen from '../screens/Home';
 import SocialScreen from '../screens/Social';
@@ -27,11 +27,13 @@ const Navigator = () => {
         component={HomeScreen}
         options={{
           tabBarIcon: ({focused}) => (
-            <Image
-              source={require('../icons/home.png')}
-              style={[styles.icons, focused ? styles.iconFocused : null]}
-              resizeMode="contain"
-            />
+            <View style={focused ? styles.iconFocused : null}>
+              <Image
+                source={require('../icons/home.png')}
+                style={styles.icons}
+                resizeMode="contain"
+              />
+            </View>
           ),
           headerShown: false,
         }}
@@ -41,11 +43,13 @@ const Navigator = () => {
         component={SocialStackNavigator}
         options={{
           tabBarIcon: ({focused}) => (
-            <Image
-              source={require('../icons/social.png')}
-              style={[styles.icons, focused ? styles.iconFocused : null]}
-              resizeMode="contain"
-            />
+            <View style={focused ? styles.iconFocused : null}>
+              <Image
+                source={require('../icons/social.png')}
+                style={styles.icons}
+                resizeMode="contain"
+              />
+            </View>
           ),
           headerShown: false,
         }}
@@ -55,11 +59,13 @@ const Navigator = () => {
         component={StatsScreen}
         options={{
           tabBarIcon: ({focused}) => (
-            <Image
-              source={require('../icons/stats.png')}
-              style={[styles.icons, focused ? styles.iconFocused : null]}
-              resizeMode="contain"
-            />
+            <View style={focused ? styles.iconFocused : null}>
+              <Image
+                source={require('../icons/stats.png')}
+                style={[styles.icons]}
+                resizeMode="contain"
+              />
+            </View>
           ),
           headerShown: false,
         }}
@@ -69,15 +75,13 @@ const Navigator = () => {
         component={ProfileScreen}
         options={{
           tabBarIcon: ({focused}) => (
-            <Image
-              source={mockProfileList['@petah'].profilePic}
-              style={[
-                styles.icons,
-                styles.userPostImage,
-                focused ? styles.iconFocused : null,
-              ]}
-              resizeMode="contain"
-            />
+            <View style={focused ? styles.iconFocused : null}>
+              <Image
+                source={mockProfileList['@petah'].profilePic}
+                style={[styles.icons, styles.userPostImage]}
+                resizeMode="contain"
+              />
+            </View>
           ),
           headerShown: false,
         }}
