@@ -14,6 +14,7 @@ import SearchScreen from '../screens/Search';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
+
 const Navigator = () => {
   return (
     <Tab.Navigator
@@ -25,10 +26,10 @@ const Navigator = () => {
         name="Home"
         component={HomeScreen}
         options={{
-          tabBarIcon: () => (
+          tabBarIcon: ({focused}) => (
             <Image
               source={require('../icons/home.png')}
-              style={styles.icons}
+              style={[styles.icons, focused ? styles.iconFocused : null]}
               resizeMode="contain"
             />
           ),
@@ -39,11 +40,10 @@ const Navigator = () => {
         name="Social"
         component={SocialStackNavigator}
         options={{
-          // eslint-disable-next-line react/no-unstable-nested-components
-          tabBarIcon: () => (
+          tabBarIcon: ({focused}) => (
             <Image
               source={require('../icons/social.png')}
-              style={styles.icons}
+              style={[styles.icons, focused ? styles.iconFocused : null]}
               resizeMode="contain"
             />
           ),
@@ -54,10 +54,10 @@ const Navigator = () => {
         name="Stats"
         component={StatsScreen}
         options={{
-          tabBarIcon: () => (
+          tabBarIcon: ({focused}) => (
             <Image
               source={require('../icons/stats.png')}
-              style={styles.icons}
+              style={[styles.icons, focused ? styles.iconFocused : null]}
               resizeMode="contain"
             />
           ),
@@ -68,11 +68,14 @@ const Navigator = () => {
         name="Profile"
         component={ProfileScreen}
         options={{
-          // eslint-disable-next-line react/no-unstable-nested-components
-          tabBarIcon: () => (
+          tabBarIcon: ({focused}) => (
             <Image
               source={mockProfileList['@petah'].profilePic}
-              style={[styles.icons, styles.userPostImage]}
+              style={[
+                styles.icons,
+                styles.userPostImage,
+                focused ? styles.iconFocused : null,
+              ]}
               resizeMode="contain"
             />
           ),

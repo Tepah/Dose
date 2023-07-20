@@ -347,6 +347,12 @@ const styles = StyleSheet.create({
   icons: {
     maxHeight: 30,
     maxWidth: 30,
+    padding: 15,
+  },
+  iconFocused: {
+    backgroundColor: secondary,
+    padding: 15,
+    borderRadius: 9,
   },
   //------------------------------------------------------------------------//
   // Calendar Styles
