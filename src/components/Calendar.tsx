@@ -42,7 +42,6 @@ const Calendar = ({dateChange}: Props) => {
     year: currentYear,
   });
 
-  // @ts-ignore
   useEffect(() => {
     if (scrollViewRef.current && date.day - 1 >= 0) {
       const itemWidth = Dimensions.get('window').width / 6;
@@ -81,14 +80,15 @@ const Calendar = ({dateChange}: Props) => {
   };
 
   const renderViews = () => {
-    return daysArray.map(day => (
-      <View key={day} style={innerStyles.item}>
+    return daysArray.map((day, index) => (
+      <View key={index} style={innerStyles.item}>
         <Pressable
+          style={day === date.day ? innerStyles.selected : innerStyles.notSelected}
           onPress={() => onDatePress(`${date.month + 1}/${day}/${date.year}`)}>
           <Text
             style={[
               styles.text,
-              day === date.day ? innerStyles.currentDay : innerStyles.day,
+              day === currentDay ? innerStyles.currentDay : innerStyles.day,
               {
                 textAlign: 'center',
               },
@@ -138,9 +138,18 @@ const innerStyles = StyleSheet.create({
   currentDay: {
     fontSize: 20,
   },
+  notSelected: {
+    aspectRatio: 1,
+    padding: 8,
+  },
+  selected: {
+    backgroundColor: '#F2F2F2',
+    aspectRatio: 1,
+    padding: 8,
+    borderRadius: 100,
+  },
   item: {
     width: Dimensions.get('window').width / 6,
-    paddingVertical: 5,
     justifyContent: 'center',
     alignItems: 'flex-end',
   },
