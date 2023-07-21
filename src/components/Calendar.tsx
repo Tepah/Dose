@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import styles from './Styles';
 import {useIsFocused} from '@react-navigation/native';
-import { mockProfileList } from "../test/mockProfile1";
-import { HabitType } from "./types";
+import {mockProfileList} from '../test/mockProfile1';
+import {HabitType} from './types';
 
 interface Props {
   dateChange: (date: string) => void;
@@ -82,13 +82,15 @@ const Calendar = ({dateChange}: Props) => {
   };
 
   const renderViews = () => {
-    let habits: HabitType[] = [];
+    let habits = 0;
     let totalHabits = mockProfileList['@petah'].habits.length;
     return daysArray.map((day, index) => {
-      habits = mockProfileList['@petah'].habits.filter(
-        (habit: HabitType) =>
-          habit.progress[`${date.month + 1}/${day}/${date.year}`],
-      );
+      habits = 0;
+      mockProfileList['@petah'].habits.forEach((habit: HabitType) => {
+        if (habit.progress[`${date.month + 1}/${day}/${date.year}`]) {
+          habits += 1;
+        }
+      });
       return (
         <View key={index} style={innerStyles.item}>
           <Pressable
@@ -115,12 +117,12 @@ const Calendar = ({dateChange}: Props) => {
             <View
               style={[
                 innerStyles.completed,
-                totalHabits === habits.length
+                totalHabits === habits
                   ? innerStyles.fullyCompleted
-                  : habits.length > 0
+                  : habits > 0
                   ? innerStyles.partiallyCompleted
-                  : null]
-              }
+                  : null,
+              ]}
             />
           </Pressable>
         </View>
