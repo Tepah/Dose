@@ -83,9 +83,9 @@ const ProfileScreen = ({route}: any) => {
     </View>
   );
 
-  const mappedHabits = user.habits.map((habit: HabitType) => {
+  const mappedHabits = user.habits.map((habit: HabitType, index: number) => {
     return (
-      <View style={Styles.profileHabit}>
+      <View key={index} style={Styles.profileHabit}>
         <Text style={[Styles.text, Styles.proHabitText]}>{habit.name}</Text>
         <Text style={[Styles.text, Styles.proHabitDescriptionText]}>
           {habit.description}
@@ -98,7 +98,7 @@ const ProfileScreen = ({route}: any) => {
   });
 
   const mediaTab = () => {
-    const mapPosts = mockPosts.map(post => {
+    const mapPosts = mockPosts.map((post, index: number) => {
       let postContent = null;
       if (post.postType === 'image') {
         postContent = (
@@ -118,6 +118,7 @@ const ProfileScreen = ({route}: any) => {
 
       return (
         <Pressable
+          key={index}
           style={Styles.postSquare}
           onPress={() => console.log(post.postType)}>
           {postContent}

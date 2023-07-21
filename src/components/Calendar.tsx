@@ -6,17 +6,23 @@ import {
   StyleSheet,
   Dimensions,
   Pressable,
-} from 'react-native';
+  Modal, TouchableWithoutFeedback
+} from "react-native";
 import styles from './Styles';
 import {useIsFocused} from '@react-navigation/native';
 import {mockProfileList} from '../test/mockProfile1';
 import {HabitType} from './types';
+import Styles from "./Styles";
 
 interface Props {
   dateChange: (date: string) => void;
 }
 
-/* TODO: Create a pull down calendar to change dates, maybe create a new color for dates that have completed tasks */
+type DateType = {
+  day: number;
+  month: number;
+  year: number;
+};
 const Calendar = ({dateChange}: Props) => {
   const isFocused = useIsFocused();
   const scrollViewRef = useRef(null);
@@ -38,11 +44,12 @@ const Calendar = ({dateChange}: Props) => {
   const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
   const currentDay = currentDate.getDate();
-  const [date, setDate] = useState({
+  const [date, setDate] = useState<DateType>({
     day: currentDay,
     month: currentMonth,
     year: currentYear,
   });
+  const [monthYearModal, setMonthYearModal] = useState(false);
 
   useEffect(() => {
     if (scrollViewRef.current && date.day - 1 >= 0) {
@@ -132,9 +139,9 @@ const Calendar = ({dateChange}: Props) => {
 
   return (
     <View style={styles.calendarContainer}>
-      <View>
+      <Pressable onPress={() => setMonthYearModal(true)}>
         <Text style={styles.text}>{Object.keys(months)[date.month]}</Text>
-      </View>
+      </Pressable>
       <View style={innerStyles.scroll}>
         <ScrollView
           horizontal
@@ -151,7 +158,94 @@ const Calendar = ({dateChange}: Props) => {
           </View>
         </ScrollView>
       </View>
+      <DatePicker
+        months={Object.keys(months)}
+        visible={monthYearModal}
+        setVisible={setMonthYearModal}
+        date={date}
+        dateChange={onDatePress}
+      />
     </View>
+  );
+};
+
+interface datePickerProps {
+  months: string[];
+  visible: boolean;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  date: DateType;
+  dateChange: (date: string) => void;
+}
+
+const DatePicker = (props: datePickerProps) => {
+  const [startMonth, startDay, startYear] =
+    mockProfileList['@petah'].startDate.split('/');
+  const [selectedYear, setSelectedYear] = useState(props.date.year);
+  const years = [];
+  for (
+    let year = parseInt(startYear, 10);
+    year <= new Date().getFullYear();
+    year++
+  ) {
+    years.push(year);
+  }
+
+  useEffect(() => {
+    setSelectedYear(props.date.year);
+  }, [props.visible]);
+
+  const renderMonths = props.months.map((month, index) => {
+    return (
+      <Pressable
+        key={index}
+        style={styles.monthContainer}
+        onPress={() => changeDate(index)}>
+        {/* eslint-disable-next-line react-native/no-inline-styles */}
+        <Text style={[styles.paragraphText, {textAlign: 'center'}]}>
+          {month}
+        </Text>
+      </Pressable>
+    );
+  });
+  const renderYears = years.map((year, index) => {
+    return (
+      <Pressable
+        key={index}
+        style={styles.yearContainer}
+        onPress={() => setSelectedYear(year)}>
+        <Text
+          style={[
+            styles.text,
+            selectedYear !== year ? innerStyles.notSelectedYear : null,
+          ]}>
+          {year}
+        </Text>
+      </Pressable>
+    );
+  });
+  const changeDate = (month: number) => {
+    props.dateChange(`${month + 1}/1/${selectedYear}`);
+    if (
+      new Date().getMonth() < month ||
+      new Date().getFullYear() < selectedYear
+    ) {
+      return;
+    }
+
+    props.setVisible(false);
+  };
+  return (
+    <Modal visible={props.visible} transparent={true}>
+      <View style={styles.datePickerContainer}>
+        <ScrollView horizontal style={styles.yearPicker}>
+          {renderYears}
+        </ScrollView>
+        <View style={styles.monthPicker}>{renderMonths}</View>
+      </View>
+      <TouchableWithoutFeedback onPress={() => props.setVisible(false)}>
+        <View style={Styles.inputFieldBackground}></View>
+      </TouchableWithoutFeedback>
+    </Modal>
   );
 };
 
@@ -203,6 +297,10 @@ const innerStyles = StyleSheet.create({
     padding: 3,
     aspectRatio: 1,
     alignSelf: 'center',
+  },
+  notSelectedYear: {
+    fontSize: 24,
+    color: 'grey',
   },
 });
 

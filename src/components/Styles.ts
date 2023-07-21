@@ -109,8 +109,8 @@ const styles = StyleSheet.create({
   },
   habitList: {
     flexGrow: 1,
-    top: '17%',
-    marginBottom: 130,
+    top: '20%',
+    marginBottom: 155,
     width: '90%',
     alignContent: 'center',
   },
@@ -358,17 +358,17 @@ const styles = StyleSheet.create({
   // Calendar Styles
   calendarContainer: {
     position: 'absolute',
-    paddingTop: 50,
+    paddingTop: 60,
     paddingBottom: 5,
     backgroundColor: menu,
-    height: '17%',
+    height: '20%',
     top: 0,
     left: 0,
     right: 0,
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
   },
   test: {
     backgroundColor: 'black',
@@ -381,6 +381,32 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     padding: 5,
     borderRadius: 5,
+  },
+  datePickerContainer: {
+    height: '45%',
+    paddingTop: 75,
+    backgroundColor: menu,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+  yearPicker: {
+    flex: 1,
+    alignSelf: 'center',
+  },
+  yearContainer: {
+    paddingHorizontal: 10,
+  },
+  monthPicker: {
+    flex: 5,
+    padding: 10,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  monthContainer: {
+    width: '33%',
+    height: '25%',
+    justifyContent: 'center',
+    alignContent: 'center',
   },
   //------------------------------------------------------------------------//
   // Notification Styles

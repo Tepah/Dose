@@ -76,7 +76,10 @@ const createChartData = () => {
           found = true;
         }
       }
-      if (!found && mockProfileList['@petah'].habits[i].progress[date] === true) {
+      if (
+        !found &&
+        mockProfileList['@petah'].habits[i].progress[date] === true
+      ) {
         chartData.push({date: formattedDate, count: 1});
       }
     });
@@ -96,9 +99,9 @@ const calculatePercentage = (habit: HabitType) => {
 };
 
 const renderHabits = mockProfileList['@petah'].habits.map(
-  (habit: HabitType) => {
+  (habit: HabitType, index: number) => {
     return (
-      <View style={Styles.indHabitContainer}>
+      <View key={index} style={Styles.indHabitContainer}>
         <Text style={[Styles.text]}>{calculatePercentage(habit)}</Text>
         <Text style={[Styles.text, Styles.habitNameText]}>{habit.name}</Text>
       </View>

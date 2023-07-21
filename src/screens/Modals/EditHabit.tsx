@@ -2,13 +2,15 @@ import React, {useEffect, useState} from 'react';
 import {
   Image,
   KeyboardAvoidingView,
-  Modal, Platform,
+  Modal,
+  Platform,
   Pressable,
   ScrollView,
   Text,
-  TextInput, TouchableWithoutFeedback,
-  View
-} from "react-native";
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import Styles from '../../components/Styles';
 import {HabitType} from '../../components/types';
 import {mockFriends} from '../../test/mockFriends';

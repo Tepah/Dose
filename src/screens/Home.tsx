@@ -70,7 +70,6 @@ const SwipeableItem = ({
 
   return (
     <Animated.View
-      key={index}
       style={[
         type === 'current'
           ? Styles.habitContainer
@@ -107,7 +106,6 @@ const NonSwipeableItem = ({
 }) => {
   return (
     <View
-      key={index}
       style={[
         type === 'current'
           ? Styles.habitContainer
@@ -225,6 +223,7 @@ const HomeScreen = () => {
     return list.map((habit: HabitType, index: number) =>
       checkDate ? (
         <SwipeableItem
+          key={index}
           type={type}
           habits={habits}
           swipedHabits={swipedHabits}
@@ -238,6 +237,7 @@ const HomeScreen = () => {
         />
       ) : (
         <NonSwipeableItem
+          key={index}
           type={type}
           habit={habit}
           index={index}
