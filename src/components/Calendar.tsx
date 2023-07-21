@@ -6,13 +6,14 @@ import {
   StyleSheet,
   Dimensions,
   Pressable,
-  Modal, TouchableWithoutFeedback
-} from "react-native";
+  Modal,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import styles from './Styles';
 import {useIsFocused} from '@react-navigation/native';
 import {mockProfileList} from '../test/mockProfile1';
 import {HabitType} from './types';
-import Styles from "./Styles";
+import Styles from './Styles';
 
 interface Props {
   dateChange: (date: string) => void;
@@ -73,12 +74,10 @@ const Calendar = ({dateChange}: Props) => {
   );
   const onDatePress = (newDate: string) => {
     const [month, day, year] = newDate.split('/');
-    if (
-      currentMonth < parseInt(month, 10) - 1 ||
-      currentYear < parseInt(year, 10) ||
-      currentDay < parseInt(day, 10)
-    ) {
-      return;
+    if (currentMonth === parseInt(month, 10) - 1) {
+      if (currentYear < parseInt(year, 10) || currentDay < parseInt(day, 10)) {
+        return;
+      }
     }
     dateChange(newDate);
     setDate({
@@ -110,7 +109,9 @@ const Calendar = ({dateChange}: Props) => {
             <Text
               style={[
                 styles.text,
-                day !== currentDay
+                day !== currentDay ||
+                date.month !== currentMonth ||
+                date.year !== currentYear
                   ? innerStyles.day
                   : day === date.day
                   ? innerStyles.currentDaySelected
@@ -225,11 +226,10 @@ const DatePicker = (props: datePickerProps) => {
   });
   const changeDate = (month: number) => {
     props.dateChange(`${month + 1}/1/${selectedYear}`);
-    if (
-      new Date().getMonth() < month ||
-      new Date().getFullYear() < selectedYear
-    ) {
-      return;
+    if (new Date().getFullYear() === selectedYear) {
+      if (new Date().getMonth() < month) {
+        return;
+      }
     }
 
     props.setVisible(false);
