@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import styles from './Styles';
 import {useIsFocused} from '@react-navigation/native';
+import { mockProfileList } from "../test/mockProfile1";
+import { HabitType } from "./types";
 
 interface Props {
   dateChange: (date: string) => void;
@@ -52,7 +54,7 @@ const Calendar = ({dateChange}: Props) => {
       // @ts-ignore
       scrollViewRef.current.scrollTo({x: itemPosition, animated: false});
     }
-  }, [date.day, isFocused]);
+  }, [isFocused]);
 
   useEffect(() => {
     onDatePress(`${currentMonth + 1}/${currentDay}/${currentYear}`);
@@ -80,24 +82,50 @@ const Calendar = ({dateChange}: Props) => {
   };
 
   const renderViews = () => {
-    return daysArray.map((day, index) => (
-      <View key={index} style={innerStyles.item}>
-        <Pressable
-          style={day === date.day ? innerStyles.selected : innerStyles.notSelected}
-          onPress={() => onDatePress(`${date.month + 1}/${day}/${date.year}`)}>
-          <Text
-            style={[
-              styles.text,
-              day === currentDay ? innerStyles.currentDay : innerStyles.day,
-              {
-                textAlign: 'center',
-              },
-            ]}>
-            {day}
-          </Text>
-        </Pressable>
-      </View>
-    ));
+    let habits: HabitType[] = [];
+    let totalHabits = mockProfileList['@petah'].habits.length;
+    return daysArray.map((day, index) => {
+      habits = mockProfileList['@petah'].habits.filter(
+        (habit: HabitType) =>
+          habit.progress[`${date.month + 1}/${day}/${date.year}`],
+      );
+      return (
+        <View key={index} style={innerStyles.item}>
+          <Pressable
+            style={
+              day === date.day ? innerStyles.selected : innerStyles.notSelected
+            }
+            onPress={() =>
+              onDatePress(`${date.month + 1}/${day}/${date.year}`)
+            }>
+            <Text
+              style={[
+                styles.text,
+                day !== currentDay
+                  ? innerStyles.day
+                  : day === date.day
+                  ? innerStyles.currentDaySelected
+                  : innerStyles.currentDay,
+                {
+                  textAlign: 'center',
+                },
+              ]}>
+              {day}
+            </Text>
+            <View
+              style={[
+                innerStyles.completed,
+                totalHabits === habits.length
+                  ? innerStyles.fullyCompleted
+                  : habits.length > 0
+                  ? innerStyles.partiallyCompleted
+                  : null]
+              }
+            />
+          </Pressable>
+        </View>
+      );
+    });
   };
 
   return (
@@ -135,6 +163,10 @@ const innerStyles = StyleSheet.create({
     fontSize: 20,
     color: 'grey',
   },
+  currentDaySelected: {
+    fontSize: 20,
+    color: 'black',
+  },
   currentDay: {
     fontSize: 20,
   },
@@ -145,13 +177,30 @@ const innerStyles = StyleSheet.create({
   selected: {
     backgroundColor: '#F2F2F2',
     aspectRatio: 1,
-    padding: 8,
+    padding: 5,
     borderRadius: 100,
   },
   item: {
     width: Dimensions.get('window').width / 6,
     justifyContent: 'center',
     alignItems: 'flex-end',
+    alignSelf: 'center',
+  },
+  fullyCompleted: {
+    backgroundColor: '#00FF00',
+    aspectRatio: 1,
+    borderRadius: 100,
+  },
+  partiallyCompleted: {
+    backgroundColor: '#FF0000',
+    aspectRatio: 1,
+    borderRadius: 100,
+  },
+  completed: {
+    margin: 3,
+    padding: 3,
+    aspectRatio: 1,
+    alignSelf: 'center',
   },
 });
 
