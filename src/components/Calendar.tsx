@@ -68,6 +68,18 @@ const Calendar = ({dateChange}: Props) => {
     onDatePress(`${currentMonth + 1}/${currentDay}/${currentYear}`);
   }, [isFocused]);
 
+  useEffect(() => {
+    if (scrollViewRef.current && date.day - 1 >= 0) {
+      const itemWidth = Dimensions.get('window').width / 6;
+      const scrollViewWidth = 6 * itemWidth;
+      const itemPosition =
+        (date.day - 1) * itemWidth - scrollViewWidth / 2 + itemWidth;
+
+      // @ts-ignore
+      scrollViewRef.current.scrollTo({x: itemPosition, animated: false});
+    }
+  }, []);
+
   const daysArray = Array.from(
     {length: Object.values(months)[date.month]},
     (_, index) => index + 1,

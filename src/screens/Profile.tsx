@@ -4,8 +4,10 @@ import Styles from '../components/Styles';
 import {useState} from 'react';
 import {mockPosts} from '../test/mockPosts';
 import {HabitType} from '../components/types';
+import {currentUser} from '../test/mockProfile1';
+import {CloseButton} from '../components/Close';
 
-const ProfileScreen = ({route}: any) => {
+const ProfileScreen = ({navigation, route}: any) => {
   const {user} = route.params;
 
   const profileCounter = (type: string) => {
@@ -131,8 +133,12 @@ const ProfileScreen = ({route}: any) => {
 
   return (
     <View style={Styles.app}>
-      <ScrollView style={Styles.profileContainer}>
+      {currentUser === user.username ? (
         <ProfileOptions />
+      ) : (
+        <Header navigation={navigation} />
+      )}
+      <ScrollView style={Styles.profileContainer}>
         {profileInfo}
         {profileDescription}
         {profileTabs()}
@@ -148,7 +154,14 @@ const ProfileScreen = ({route}: any) => {
 
 const ProfileOptions = () => {
   return (
-    <View style={Styles.profileOptionsContainer}>
+    <View style={Styles.profileSpacing}>
+    </View>
+  );
+};
+const Header = ({navigation}: any) => {
+  return (
+    <View style={Styles.profileSpacing}>
+      <CloseButton type={'back'} closeFunction={() => navigation.goBack()} />
     </View>
   );
 };

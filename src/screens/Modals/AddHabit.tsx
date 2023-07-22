@@ -1,7 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import { Image, Modal, Pressable, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
+import {
+  Image,
+  Modal,
+  Pressable,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import Styles from '../../components/Styles';
 import {HabitType} from '../../components/types';
+import {CloseButton} from '../../components/Close';
 
 interface Props {
   addHabit: (habit: HabitType) => void;
@@ -47,27 +56,17 @@ const AddHabitScreen = ({addHabit}: Props) => {
         </TouchableWithoutFeedback>
         <View style={Styles.addModal}>
           {addForm()}
-          {closeModal()}
         </View>
       </Modal>
-    );
-  };
-  const closeModal = () => {
-    return (
-      <View style={Styles.closeButton}>
-        <Pressable onPress={openCloseModal}>
-          <Image
-            style={{height: 30, width: 30}}
-            source={require('../../icons/close.png')}
-          />
-        </Pressable>
-      </View>
     );
   };
   const addForm = () => {
     return (
       <View style={Styles.addHabitForm}>
-        <Text style={[Styles.text, {alignSelf: 'center'}]}>Add Habit</Text>
+        <View style={Styles.pageHeader}>
+          <Text style={[Styles.text, {alignSelf: 'center'}]}>Add Habit</Text>
+          <CloseButton type={'close'} closeFunction={() => openCloseModal()} />
+        </View>
         <Text style={Styles.paragraphText}>Name</Text>
         <TextInput
           value={habitName}

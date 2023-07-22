@@ -2,9 +2,10 @@ import React, {useState} from 'react';
 import {Pressable, ScrollView, Text, View} from 'react-native';
 import Styles from '../components/Styles';
 import {mockProfileList} from '../test/mockProfile1';
+import {CloseButton} from '../components/Close';
 
 /* TODO: Implement different types of pressables so */
-const NotificationsScreen = () => {
+const NotificationsScreen = ({navigation}: any) => {
   const [notifications, setNotifications] = useState<string[]>([
     'Notification 1 I dont knowhow this looks blah blah blah',
     'Notification 2',
@@ -31,6 +32,7 @@ const NotificationsScreen = () => {
         <Text style={[Styles.text, Styles.notificationHeaderText]}>
           Notifications
         </Text>
+        <CloseButton type={'back'} closeFunction={() => navigation.goBack()} />
       </View>
       <ScrollView style={Styles.notificationScroll}>
         {renderNotifications}

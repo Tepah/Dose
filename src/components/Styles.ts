@@ -464,11 +464,11 @@ const styles = StyleSheet.create({
     backgroundColor: main,
     width: '100%',
   },
-  profileOptionsContainer: {
-    padding: 20,
-    paddingTop: 30,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  profileSpacing: {
+    width: '100%',
+    padding: 10,
+    height: '6%',
+    marginTop: 50,
     backgroundColor: menu,
   },
   profileHeader: {
@@ -631,7 +631,8 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    padding: 12,
+    left: 0,
+    padding: 10,
   },
   commentSmallBold: {
     fontWeight: 'bold',

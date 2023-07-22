@@ -84,7 +84,6 @@ const createChartData = () => {
       }
     });
   }
-  console.log(chartData);
   return chartData;
 };
 
@@ -132,7 +131,6 @@ const WeeklyStats = () => {
       }
     }
   }
-  console.log(weekLabels, weekData);
   return (
     <View style={Styles.statsCardContainer}>
       <Text style={[Styles.text]}>Weekly Stats</Text>

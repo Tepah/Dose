@@ -14,6 +14,7 @@ import {
 import Styles from '../../components/Styles';
 import {HabitType} from '../../components/types';
 import {mockFriends} from '../../test/mockFriends';
+import {CloseButton} from '../../components/Close';
 
 interface Props {
   editHabit: (habit: HabitType, index: number) => void;
@@ -23,17 +24,6 @@ interface Props {
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   selectedList: string;
 }
-
-const closeModal = (closeFunction: () => void) => {
-  return (
-    <Pressable style={Styles.closeButton} onPress={closeFunction}>
-      <Image
-        style={{height: 30, width: 30}}
-        source={require('../../icons/close.png')}
-      />
-    </Pressable>
-  );
-};
 
 const EditHabitScreen = ({
   editHabit,
@@ -65,7 +55,6 @@ const EditHabitScreen = ({
         </TouchableWithoutFeedback>
         <View style={Styles.editModalContainer}>
           {editForm()}
-          {closeModal(openCloseModal)}
         </View>
       </Modal>
     );
@@ -76,12 +65,6 @@ const EditHabitScreen = ({
       setHabitName(() => habits[currentHabitIndex].name);
       setHabitDesc(() => habits[currentHabitIndex].description);
       setHabitStreak(() => habits[currentHabitIndex].streak);
-      console.log(
-        'habit',
-        habits[currentHabitIndex],
-        'index',
-        currentHabitIndex,
-      );
     }
   }, [habits, currentHabitIndex, visible]);
 
@@ -120,6 +103,7 @@ const EditHabitScreen = ({
       <View>
         <View style={Styles.pageHeader}>
           <Text style={Styles.title}>{habitName}</Text>
+          <CloseButton type={'close'} closeFunction={() => openCloseModal()} />
         </View>
         <ScrollView
           style={Styles.fullPageScroller}
@@ -148,9 +132,15 @@ const EditHabitScreen = ({
                 <KeyboardAvoidingView
                   behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                   style={Styles.editDescriptionModal}>
-                  <Text style={[Styles.text, {textAlign: 'center'}]}>
-                    Edit Description
-                  </Text>
+                  <View style={Styles.pageHeader}>
+                    <Text style={[Styles.text, {textAlign: 'center'}]}>
+                      Edit Description
+                    </Text>
+                    <CloseButton
+                      type={'close'}
+                      closeFunction={() => setEditModalVisible(false)}
+                    />
+                  </View>
                   <TextInput
                     autoFocus={true}
                     multiline
@@ -168,7 +158,6 @@ const EditHabitScreen = ({
                       Submit
                     </Text>
                   </Pressable>
-                  {closeModal(() => setEditModalVisible(false))}
                 </KeyboardAvoidingView>
               </Modal>
             </View>

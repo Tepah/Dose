@@ -3,6 +3,7 @@ import {Image, Pressable, ScrollView, Text, TextInput, View} from 'react-native'
 import Styles from '../components/Styles';
 import {profile} from '../components/types';
 import {mockProfileList} from '../test/mockProfile1';
+import {CloseButton} from '../components/Close';
 
 const SearchScreen = ({navigation}: any) => {
   const [profiles, setProfiles] = useState<{[key: string]: profile}>(
@@ -28,17 +29,18 @@ const SearchScreen = ({navigation}: any) => {
 
   return (
     <View style={Styles.app}>
-      <SearchHeader />
+      <SearchHeader navigation={navigation} />
       <SearchBar setSearchText={setSearchText} />
       <SearchResults profiles={searchResults} navigation={navigation} />
     </View>
   );
 };
 
-const SearchHeader = () => {
+const SearchHeader = ({navigation}: any) => {
   return (
     <View style={Styles.header}>
       <Text style={[Styles.text, Styles.notificationHeaderText]}>Search</Text>
+      <CloseButton type={'back'} closeFunction={() => navigation.goBack()} />
     </View>
   );
 };
@@ -87,7 +89,7 @@ const SearchResults = ({profiles, navigation}: SearchResultsProps) => {
   ));
 
   return (
-    <ScrollView style={Styles.searchResults} keyboardShouldPersistTaps="always">
+    <ScrollView style={Styles.searchResults}>
       {renderProfiles}
     </ScrollView>
   );
