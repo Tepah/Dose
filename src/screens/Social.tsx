@@ -16,6 +16,10 @@ import {
 import Styles from '../components/Styles';
 import {mockProfileList} from '../test/mockProfile1';
 import LinearGradient from 'react-native-linear-gradient';
+import {mockPosts} from '../test/mockPosts';
+import {post} from '../components/types';
+
+const stringSize: number = 65;
 
 // TODO: Make a friends page
 const SocialScreen = ({navigation}: any) => {
@@ -39,76 +43,58 @@ const SocialScreen = ({navigation}: any) => {
       </View>
     </View>
   );
-  const postCaption = () => {
-    // TODO: Make a more button that expands the caption and opens post modal
+  const imagePost = (post: post, index: number) => {
     return (
-      <View style={Styles.postCaptionContainer}>
-        <Text style={[Styles.text, Styles.caption]}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-          <Text style={[Styles.text, Styles.commentSmallBold]}>...more</Text>
-        </Text>
-      </View>
-    );
-  };
-  const imagePost = () => {
-    return (
-      <View style={Styles.imagePostContainer}>
+      <View key={index} style={Styles.imagePostContainer}>
         <Image
           style={Styles.imagePost}
-          source={require('../test/water.jpeg')}
+          source={post.image}
         />
-        <LinearGradient
-          colors={['#1D2B3E', '#344966']}
-          style={Styles.postDetailMiniContainer}>
-          <ReactBar />
-          {postCaption()}
-          <MiniComments />
-        </LinearGradient>
+        <PostDetailContainer post={post} />
       </View>
     );
   };
 
-  const challengePost = () => {
+  const challengePost = (post: post, index: number) => {
     return (
-      <View style={Styles.challengePostContainer}>
+      <View key={index} style={Styles.challengePostContainer}>
         <View style={Styles.challengePost}>
           <View style={Styles.challengers}>
             <Image
               style={Styles.userPostImage}
-              source={mockProfileList['@petah'].profilePic}
+              source={mockProfileList[post.username].profilePic}
             />
             <Text style={[Styles.text, Styles.userText]}>
-              {mockProfileList['@petah'].username}
+              {mockProfileList[post.username].username}
             </Text>
           </View>
           <Text style={Styles.text}>challenged</Text>
           <View style={Styles.challengers}>
             <Image
               style={Styles.userPostImage}
-              source={mockProfileList['@petah'].profilePic}
+              source={mockProfileList[post.challenger].profilePic}
             />
-            <Text style={[Styles.text, Styles.userText]}>@tom</Text>
+            <Text style={[Styles.text, Styles.userText]}>{post.challenger}</Text>
           </View>
         </View>
-        <LinearGradient
-          colors={['#1D2B3E', '#344966']}
-          style={Styles.postDetailMiniContainer}>
-          <ReactBar />
-          {postCaption()}
-          <MiniComments />
-        </LinearGradient>
+        <PostDetailContainer post={post} />
       </View>
     );
   };
-  // TODO: make a pressable that opens a modal with the post
+
+  const renderPosts = mockPosts.map((post, index) => {
+    if (post.postType === 'image') {
+      return imagePost(post, index);
+    } else if (post.postType === 'challenge') {
+      return challengePost(post, index);
+    }
+  });
+
   return (
     <View style={Styles.app}>
       {socialHeader()}
       <ScrollView style={Styles.socialView} keyboardShouldPersistTaps="always">
-        {imagePost()}
-        {imagePost()}
-        {challengePost()}
-        {imagePost()}
+        {renderPosts}
       </ScrollView>
     </View>
   );
@@ -168,6 +154,33 @@ const ReactBar = () => {
         </Pressable>
       </View>
     </View>
+  );
+};
+
+const PostDetailContainer = (prop: {post: post}) => {
+  const postCaption = () => {
+    // TODO: Make a more button that expands the caption and opens post modal
+    return (
+      <View style={Styles.postCaptionContainer}>
+        <Text style={[Styles.text, Styles.caption]}>
+          {prop.post.postContent.slice(0, stringSize)}
+          {prop.post.postContent.length <= stringSize ? null : (
+            <Text style={[Styles.text, Styles.commentSmallBold]}>...more</Text>
+          )}
+        </Text>
+      </View>
+    );
+  };
+  return (
+    <Pressable onPress={() => console.log('hello')}>
+      <LinearGradient
+        colors={['#1D2B3E', '#344966']}
+        style={Styles.postDetailMiniContainer}>
+        <ReactBar />
+        {postCaption()}
+        <MiniComments />
+      </LinearGradient>
+    </Pressable>
   );
 };
 

@@ -23,7 +23,7 @@ export type post = {
   postContent: string;
   postDate: string;
   postLikes: number;
-  postComments: number;
+  postComments: {[key: string]: string}[];
   image?: any;
   challenger?: string;
 };
