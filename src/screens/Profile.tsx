@@ -3,41 +3,13 @@ import {View, Text, ScrollView, Image, Pressable} from 'react-native';
 import Styles from '../components/Styles';
 import {useState} from 'react';
 import {mockPosts} from '../test/mockPosts';
-import {HabitType} from '../components/types';
+import { HabitType, profile } from "../components/types";
 import {currentUser} from '../test/mockProfile1';
 import {CloseButton} from '../components/Close';
+import { SettingsModal } from "./Modals/Settings";
 
 const ProfileScreen = ({navigation, route}: any) => {
   const {user} = route.params;
-
-  const profileCounter = (type: string) => {
-    return (
-      <View style={Styles.followContainer}>
-        <Text style={[Styles.text, Styles.profileHeaderText]}>{type}</Text>
-        <Text style={[Styles.text, Styles.followCount]}>
-          {type === 'Habits'
-            ? user.habits.length
-            : type === 'Following'
-            ? user.following
-            : user.followers}
-        </Text>
-      </View>
-    );
-  };
-
-  const profileInfo = (
-    <View style={Styles.profileHeader}>
-      <View style={Styles.profileHeaderUser}>
-        <Image source={user.profilePic} style={Styles.profilePicture} />
-        <Text style={[Styles.text, Styles.profileNameText]}>
-          {user.username}
-        </Text>
-      </View>
-      {profileCounter('Habits')}
-      {profileCounter('Following')}
-      {profileCounter('Followers')}
-    </View>
-  );
 
   const [selected, setSelected] = useState(true);
   const profileTabs = () => {
@@ -73,18 +45,6 @@ const ProfileScreen = ({navigation, route}: any) => {
     );
   };
 
-  const profileDescription = (
-    <View style={Styles.profileDescriptionContainer}>
-      <Text
-        style={[
-          Styles.paragraphText,
-          {fontStyle: 'italic', textAlign: 'center'},
-        ]}>
-        {user.description}
-      </Text>
-    </View>
-  );
-
   const mappedHabits = user.habits.map((habit: HabitType, index: number) => {
     return (
       <View key={index} style={Styles.profileHabit}>
@@ -99,51 +59,19 @@ const ProfileScreen = ({navigation, route}: any) => {
     );
   });
 
-  const mediaTab = () => {
-    const mapPosts = mockPosts.map((post, index: number) => {
-      let postContent = null;
-      if (post.postType === 'image') {
-        postContent = (
-          <Image source={post.image} style={Styles.postSquareImage} />
-        );
-      } else if (post.postType === 'challenge') {
-        // TODO: Add challenge image
-        postContent = (
-          <View style={Styles.postSquareChallenge}>
-            <Text style={[Styles.text, Styles.challengeSquareText]}>VS</Text>
-            <Text style={[Styles.text, Styles.challengeSquareChallenger]}>
-              {post.challenger}
-            </Text>
-          </View>
-        );
-      }
-
-      return (
-        <Pressable
-          key={index}
-          style={Styles.postSquare}
-          onPress={() => console.log(post.postType)}>
-          {postContent}
-        </Pressable>
-      );
-    });
-
-    return <View style={Styles.mediaTabContainer}>{mapPosts}</View>;
-  };
-
   return (
     <View style={Styles.app}>
       {currentUser === user.username ? (
-        <ProfileOptions />
+        <ProfileOptions user={user} />
       ) : (
         <Header navigation={navigation} />
       )}
       <ScrollView style={Styles.profileContainer}>
-        {profileInfo}
-        {profileDescription}
+        <ProfileInfo user={user} />
+        <ProfileDescription user={user} />
         {profileTabs()}
         {!selected ? (
-          mediaTab()
+          <MediaTab />
         ) : (
           <View style={Styles.profileHabitsContainer}>{mappedHabits}</View>
         )}
@@ -152,9 +80,25 @@ const ProfileScreen = ({navigation, route}: any) => {
   );
 };
 
-const ProfileOptions = () => {
+const ProfileOptions = (props: {user: profile}) => {
+  const [settingsVisible, setSettingsVisible] = useState(false);
   return (
     <View style={Styles.profileSpacing}>
+      <View style={Styles.profileOptionsContainer}>
+        <Pressable
+          style={Styles.profileOptionsButton}
+          onPress={() => setSettingsVisible(true)}>
+          <Image
+            style={Styles.profileOptionsImages}
+            source={require('../icons/settings.png')}
+          />
+        </Pressable>
+      </View>
+      <SettingsModal
+        user={props.user}
+        visible={settingsVisible}
+        setVisible={setSettingsVisible}
+      />
     </View>
   );
 };
@@ -164,6 +108,108 @@ const Header = ({navigation}: any) => {
       <CloseButton type={'back'} closeFunction={() => navigation.goBack()} />
     </View>
   );
+};
+
+const ProfileInfo = ({user}: any) => {
+  const profileCounter = (type: string) => {
+    return (
+      <View style={Styles.followContainer}>
+        <Text style={[Styles.text, Styles.profileHeaderText]}>{type}</Text>
+        <Text style={[Styles.text, Styles.followCount]}>
+          {type === 'Habits'
+            ? user.habits.length
+            : type === 'Following'
+            ? user.following
+            : user.followers}
+        </Text>
+      </View>
+    );
+  };
+  return (
+    <View>
+      <View style={Styles.profileHeader}>
+        <View style={Styles.profileHeaderUser}>
+          <Image source={user.profilePic} style={Styles.profilePicture} />
+          <Text style={[Styles.text, Styles.profileNameText]}>
+            {user.username}
+          </Text>
+        </View>
+        {profileCounter('Habits')}
+        {profileCounter('Following')}
+        {profileCounter('Followers')}
+      </View>
+      {user.username !== currentUser ? <ProfileButtons user={user} /> : null}
+    </View>
+  );
+};
+
+const ProfileButtons = ({user}: any) => {
+  // TODO: Implement following
+  // if (currentUser.following.includes('@' + user.username)) {
+  //   return (
+  //     <View style={Styles.profileButtonsContainer}>
+  //       <Pressable style={Styles.profileButton}>
+  //         <Text style={[Styles.paragraphText]}>Unfollow</Text>
+  //       </Pressable>
+  //     </View>
+  //   );
+  // }
+  return (
+    <View style={Styles.profileButtonsContainer}>
+      <Pressable style={Styles.profileButton}>
+        <Text style={[Styles.paragraphText]}>Challenge</Text>
+      </Pressable>
+      <Pressable style={Styles.profileButton}>
+        <Text style={[Styles.paragraphText]}>Follow</Text>
+      </Pressable>
+    </View>
+  );
+};
+
+const ProfileDescription = ({user}: any) => {
+  return (
+    <View style={Styles.profileDescriptionContainer}>
+      <Text
+        style={[
+          Styles.paragraphText,
+          {fontStyle: 'italic', textAlign: 'center'},
+        ]}>
+        {user.description}
+      </Text>
+    </View>
+  );
+};
+
+const MediaTab = () => {
+  const mapPosts = mockPosts.map((post, index: number) => {
+    let postContent = null;
+    if (post.postType === 'image') {
+      postContent = (
+        <Image source={post.image} style={Styles.postSquareImage} />
+      );
+    } else if (post.postType === 'challenge') {
+      // TODO: Add challenge image
+      postContent = (
+        <View style={Styles.postSquareChallenge}>
+          <Text style={[Styles.text, Styles.challengeSquareText]}>VS</Text>
+          <Text style={[Styles.text, Styles.challengeSquareChallenger]}>
+            {post.challenger}
+          </Text>
+        </View>
+      );
+    }
+
+    return (
+      <Pressable
+        key={index}
+        style={Styles.postSquare}
+        onPress={() => console.log(post.postType)}>
+        {postContent}
+      </Pressable>
+    );
+  });
+
+  return <View style={Styles.mediaTabContainer}>{mapPosts}</View>;
 };
 
 export default ProfileScreen;

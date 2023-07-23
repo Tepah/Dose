@@ -376,7 +376,7 @@ const styles = StyleSheet.create({
   input: {
     fontFamily: 'Helvetica',
     fontSize: 20,
-    color: 'black',
+    color: fontColor,
     backgroundColor: secondary,
     marginVertical: 10,
     padding: 5,
@@ -469,13 +469,26 @@ const styles = StyleSheet.create({
     padding: 10,
     height: '6%',
     marginTop: 50,
-    backgroundColor: menu,
+    backgroundColor: main,
+  },
+  profileOptionsContainer: {
+    flex: 1,
+    flexDirection: 'row-reverse',
+    paddingHorizontal: 10,
+  },
+  profileOptionsButton: {
+    aspectRatio: 1,
+    height: 25,
+  },
+  profileOptionsImages: {
+    aspectRatio: 1,
+    height: 25,
   },
   profileHeader: {
     flex: 3,
-    backgroundColor: menu,
+    backgroundColor: main,
     width: '100%',
-    paddingVertical: 15,
+    paddingVertical: 20,
     paddingHorizontal: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -505,10 +518,22 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 5,
   },
+  profileButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
+  profileButton: {
+    flex: 1,
+    alignItems: 'center',
+    padding: 8,
+    marginHorizontal: 10,
+    backgroundColor: menu,
+    borderRadius: 5,
+  },
   profileDescriptionContainer: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingVertical: 15,
   },
   profileTabsContainer: {
     flex: 1,
@@ -537,7 +562,7 @@ const styles = StyleSheet.create({
     padding: 15,
     margin: 5,
     borderRadius: 5,
-    backgroundColor: secondary,
+    backgroundColor: tertiary,
   },
   proHabitText: {
     fontSize: 24,
@@ -582,6 +607,35 @@ const styles = StyleSheet.create({
   challengeSquareChallenger: {
     alignSelf: 'flex-end',
     fontSize: 28,
+  },
+  settingsModal: {
+    backgroundColor: main,
+    width: '100%',
+    height: '90%',
+    position: 'absolute',
+    borderRadius: 10,
+    bottom: 0,
+    borderWidth: 1,
+    borderColor: secondary,
+  },
+  settingContainerTall: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 200,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+  },
+  settingContainer: {
+    height: 100,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+  },
+  settingContainerAlt: {
+    height: 70,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   //------------------------------------------------------------------------//
   // Error Styles
@@ -650,6 +704,9 @@ const styles = StyleSheet.create({
   },
   inputBar: {
     flex: 1,
+    color: 'black',
+    fontSize: 20,
+    padding: 5,
     marginHorizontal: 10,
     justifyContent: 'center',
     backgroundColor: 'white',
@@ -662,6 +719,14 @@ const styles = StyleSheet.create({
     flex: 1,
     opacity: 0.8,
     backgroundColor: main,
+  },
+  centerText: {textAlign: 'center'},
+  saveButton: {
+    backgroundColor: menu,
+    padding: 10,
+    borderRadius: 15,
+    width: 100,
+    alignSelf: 'center',
   },
 });
 

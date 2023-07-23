@@ -7,8 +7,9 @@ export type friend = {
 export type profile = {
   followers: any;
   following: any;
-  habits: any;
-  description: any;
+  habits: HabitType[];
+  description: string;
+  private: boolean;
   name: string;
   username: string;
   startDate: string;
