@@ -3,10 +3,11 @@ import {View, Text, ScrollView, Image, Pressable} from 'react-native';
 import Styles from '../components/Styles';
 import {useState} from 'react';
 import {mockPosts} from '../test/mockPosts';
-import { HabitType, profile } from "../components/types";
+import { HabitType, post, profile } from "../components/types";
 import {currentUser} from '../test/mockProfile1';
 import {CloseButton} from '../components/Close';
 import { SettingsModal } from "./Modals/Settings";
+import { PostModal } from "./Modals/PostModal";
 
 const ProfileScreen = ({navigation, route}: any) => {
   const {user} = route.params;
@@ -180,7 +181,8 @@ const ProfileDescription = ({user}: any) => {
   );
 };
 
-const MediaTab = () => {
+const MediaTab = ({navigation}: any) => {
+  const [modalVisible, setModalVisible] = useState(false);
   const mapPosts = mockPosts.map((post, index: number) => {
     let postContent = null;
     if (post.postType === 'image') {
@@ -200,16 +202,19 @@ const MediaTab = () => {
     }
 
     return (
-      <Pressable
-        key={index}
-        style={Styles.postSquare}
-        onPress={() => console.log(post.postType)}>
-        {postContent}
-      </Pressable>
+      <View key={index} style={Styles.postSquare}>
+        <Pressable onPress={() => setModalVisible(true)}>
+          {postContent}
+        </Pressable>
+      </View>
     );
   });
 
-  return <View style={Styles.mediaTabContainer}>{mapPosts}</View>;
+  return (
+    <View style={Styles.mediaTabContainer}>
+      {mapPosts}
+  </View>
+  );
 };
 
 export default ProfileScreen;

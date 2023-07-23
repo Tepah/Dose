@@ -232,6 +232,28 @@ const styles = StyleSheet.create({
     opacity: 0.95,
     width: '100%',
   },
+  // Post Modal Styles
+  postModalContainer: {
+    backgroundColor: 'rgba(30, 30, 30, 0.7)',
+    flex: 1,
+  },
+  postModalScroll: {
+    paddingTop: 100,
+  },
+  postDetailContainer: {
+    margin: 5,
+    marginVertical: 7,
+    paddingVertical: 10,
+    borderRadius: 20,
+    opacity: 0.95,
+  },
+  postCommentContainer: {
+    margin: 5,
+    marginVertical: 7,
+    padding: 10,
+    borderRadius: 15,
+    opacity: 0.95,
+  },
   //------------------------------------------------------------------------//
   // Stats Page Styles
   statsContainer: {flexGrow: 1, width: '100%'},
