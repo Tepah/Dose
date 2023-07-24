@@ -68,11 +68,15 @@ const SocialScreen = ({navigation}: any) => {
           </View>
           <Text style={Styles.text}>challenged</Text>
           <View style={Styles.challengers}>
-            <Image
-              style={Styles.userPostImage}
-              source={mockProfileList[post.challenger].profilePic}
-            />
-            <Text style={[Styles.text, Styles.userText]}>{post.challenger}</Text>
+            {post.challenger ? (
+              <Image
+                style={Styles.userPostImage}
+                source={mockProfileList[post.challenger].profilePic}
+              />
+            ) : null}
+            <Text style={[Styles.text, Styles.userText]}>
+              {post.challenger}
+            </Text>
           </View>
         </View>
         <PostDetailContainer navigation={navigation} post={post} />

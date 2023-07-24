@@ -4,7 +4,7 @@ import styles from '../components/Styles';
 import HomeScreen from '../screens/Home';
 import SocialScreen from '../screens/Social';
 import StatsScreen from '../screens/Stats';
-import ProfileScreen from '../screens/Profile';
+import ProfileScreen, { UserProfile } from "../screens/Profile";
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {mockProfileList} from '../test/mockProfile1';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -71,8 +71,8 @@ const Navigator = () => {
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
+        name="MainProfile"
+        component={ProfileStackNavigator}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={focused ? styles.iconFocused : null}>
@@ -85,7 +85,6 @@ const Navigator = () => {
           ),
           headerShown: false,
         }}
-        initialParams={{user: mockProfileList['@petah']}}
       />
     </Tab.Navigator>
   );
@@ -117,7 +116,7 @@ const SocialStackNavigator = () => {
       />
       <Stack.Screen
         name="Profile"
-        component={ProfileStackNavigator}
+        component={ProfileScreen}
         options={{
           headerShown: false,
         }}
@@ -150,6 +149,14 @@ const SearchStackNavigator = () => {
 const ProfileStackNavigator = () => {
   return (
     <Stack.Navigator>
+      <Stack.Screen
+        name="UserProfile"
+        component={ProfileScreen}
+        options={{
+          headerShown: false,
+        }}
+        initialParams={{user: mockProfileList['@petah']}}
+      />
       <Stack.Screen
         name="Profile"
         component={ProfileScreen}

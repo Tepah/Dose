@@ -1,18 +1,28 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, ScrollView, Image, Pressable} from 'react-native';
 import Styles from '../components/Styles';
 import {useState} from 'react';
 import {mockPosts} from '../test/mockPosts';
-import { HabitType, PostType, profile } from "../components/types";
-import {currentUser} from '../test/mockProfile1';
+import {HabitType, PostType, profile} from '../components/types';
+import {currentUser, mockProfileList} from '../test/mockProfile1';
 import {CloseButton} from '../components/Close';
-import { SettingsModal } from "./Modals/Settings";
-import { PostModal } from "./Modals/PostModal";
+import {SettingsModal} from './Modals/Settings';
+import {PostModal} from './Modals/PostModal';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 
-const ProfileScreen = ({navigation, route}: any) => {
+
+const ProfileScreen = ({route}: any) => {
   const {user} = route.params;
-
+  const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [selected, setSelected] = useState(true);
+
+  // useEffect(() => {
+  //   if (isFocused && currentUser !== user.username) {
+  //     navigation.navigate('Profile', {user: mockProfileList[currentUser]});
+  //   }
+  // }, [isFocused, navigation]);
+
   const profileTabs = () => {
     const onTabPress = (value: string) => {
       if (value === 'Habits' && !selected) {
@@ -65,7 +75,7 @@ const ProfileScreen = ({navigation, route}: any) => {
       {currentUser === user.username ? (
         <ProfileOptions user={user} />
       ) : (
-        <Header navigation={navigation} />
+        <Header />
       )}
       <ScrollView style={Styles.profileContainer}>
         <ProfileInfo user={user} />
@@ -103,7 +113,8 @@ const ProfileOptions = (props: {user: profile}) => {
     </View>
   );
 };
-const Header = ({navigation}: any) => {
+const Header = () => {
+  const navigation = useNavigation();
   return (
     <View style={Styles.profileSpacing}>
       <CloseButton type={'back'} closeFunction={() => navigation.goBack()} />
@@ -181,58 +192,34 @@ const ProfileDescription = ({user}: any) => {
   );
 };
 
-const MediaTab = ({navigation}: any) => {
+const MediaTab = () => {
   const [modalVisible, setModalVisible] = useState(false);
-
-  const challengePost = (post: PostType, index: number) => {
-    return (
-      <View key={index} style={Styles.postSquare}>
-        <Pressable onPress={() => {
-          setModalVisible(true)}}>
-          <View style={Styles.postSquareChallenge}>
-            <Text style={[Styles.text, Styles.challengeSquareText]}>VS</Text>
-            <Text style={[Styles.text, Styles.challengeSquareChallenger]}>
-              {post.challenger}
-            </Text>
-          </View>
-        </Pressable>
-        <PostModal
-          post={post}
-          navigation={navigation}
-          visible={modalVisible}
-          setVisible={setModalVisible}
-        />
-      </View>
-    );
-  };
-
   const renderPosts = mockPosts.map((post: PostType, index) => {
     if (post.postType === 'image') {
-      return (<ImagePost key={index} post={post} navigation={navigation} />);
+      return <ImagePost key={index} post={post} />;
     } else if (post.postType === 'challenge') {
-      return (<ChallengePost key={index} post={post} navigation={navigation} />);
+      return <ChallengePost key={index} post={post} />;
     }
   });
 
-  return (
-    <View style={Styles.mediaTabContainer}>
-      {renderPosts}
-    </View>
-  );
+  return <View style={Styles.mediaTabContainer}>{renderPosts}</View>;
 };
 
-type PostProps = { post: PostType, navigation: any };
+type PostProps = {post: PostType};
 const ImagePost = (prop: PostProps) => {
+  const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <View style={Styles.postSquare}>
-      <Pressable onPress={() => {
-        setModalVisible(true)}}>
+      <Pressable
+        onPress={() => {
+          setModalVisible(true);
+        }}>
         <Image source={prop.post.image} style={Styles.postSquareImage} />
       </Pressable>
       <PostModal
         post={prop.post}
-        navigation={prop.navigation}
+        navigation={navigation}
         visible={modalVisible}
         setVisible={setModalVisible}
       />
@@ -240,13 +227,15 @@ const ImagePost = (prop: PostProps) => {
   );
 };
 
-
 const ChallengePost = (prop: PostProps) => {
+  const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <View style={Styles.postSquare}>
-      <Pressable onPress={() => {
-        setModalVisible(true)}}>
+      <Pressable
+        onPress={() => {
+          setModalVisible(true);
+        }}>
         <View style={Styles.postSquareChallenge}>
           <Text style={[Styles.text, Styles.challengeSquareText]}>VS</Text>
           <Text style={[Styles.text, Styles.challengeSquareChallenger]}>
@@ -256,13 +245,12 @@ const ChallengePost = (prop: PostProps) => {
       </Pressable>
       <PostModal
         post={prop.post}
-        navigation={prop.navigation}
+        navigation={navigation}
         visible={modalVisible}
         setVisible={setModalVisible}
       />
     </View>
   );
 };
-
 
 export default ProfileScreen;
