@@ -3,7 +3,7 @@ import {View, Text, ScrollView, Image, Pressable} from 'react-native';
 import Styles from '../components/Styles';
 import {useState} from 'react';
 import {mockPosts} from '../test/mockPosts';
-import { HabitType, post, profile } from "../components/types";
+import { HabitType, PostType, profile } from "../components/types";
 import {currentUser} from '../test/mockProfile1';
 import {CloseButton} from '../components/Close';
 import { SettingsModal } from "./Modals/Settings";
@@ -183,38 +183,86 @@ const ProfileDescription = ({user}: any) => {
 
 const MediaTab = ({navigation}: any) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const mapPosts = mockPosts.map((post, index: number) => {
-    let postContent = null;
-    if (post.postType === 'image') {
-      postContent = (
-        <Image source={post.image} style={Styles.postSquareImage} />
-      );
-    } else if (post.postType === 'challenge') {
-      // TODO: Add challenge image
-      postContent = (
-        <View style={Styles.postSquareChallenge}>
-          <Text style={[Styles.text, Styles.challengeSquareText]}>VS</Text>
-          <Text style={[Styles.text, Styles.challengeSquareChallenger]}>
-            {post.challenger}
-          </Text>
-        </View>
-      );
-    }
 
+  const challengePost = (post: PostType, index: number) => {
     return (
       <View key={index} style={Styles.postSquare}>
-        <Pressable onPress={() => setModalVisible(true)}>
-          {postContent}
+        <Pressable onPress={() => {
+          setModalVisible(true)}}>
+          <View style={Styles.postSquareChallenge}>
+            <Text style={[Styles.text, Styles.challengeSquareText]}>VS</Text>
+            <Text style={[Styles.text, Styles.challengeSquareChallenger]}>
+              {post.challenger}
+            </Text>
+          </View>
         </Pressable>
+        <PostModal
+          post={post}
+          navigation={navigation}
+          visible={modalVisible}
+          setVisible={setModalVisible}
+        />
       </View>
     );
+  };
+
+  const renderPosts = mockPosts.map((post: PostType, index) => {
+    if (post.postType === 'image') {
+      return (<ImagePost key={index} post={post} navigation={navigation} />);
+    } else if (post.postType === 'challenge') {
+      return (<ChallengePost key={index} post={post} navigation={navigation} />);
+    }
   });
 
   return (
     <View style={Styles.mediaTabContainer}>
-      {mapPosts}
-  </View>
+      {renderPosts}
+    </View>
   );
 };
+
+type PostProps = { post: PostType, navigation: any };
+const ImagePost = (prop: PostProps) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  return (
+    <View style={Styles.postSquare}>
+      <Pressable onPress={() => {
+        setModalVisible(true)}}>
+        <Image source={prop.post.image} style={Styles.postSquareImage} />
+      </Pressable>
+      <PostModal
+        post={prop.post}
+        navigation={prop.navigation}
+        visible={modalVisible}
+        setVisible={setModalVisible}
+      />
+    </View>
+  );
+};
+
+
+const ChallengePost = (prop: PostProps) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  return (
+    <View style={Styles.postSquare}>
+      <Pressable onPress={() => {
+        setModalVisible(true)}}>
+        <View style={Styles.postSquareChallenge}>
+          <Text style={[Styles.text, Styles.challengeSquareText]}>VS</Text>
+          <Text style={[Styles.text, Styles.challengeSquareChallenger]}>
+            {prop.post.challenger}
+          </Text>
+        </View>
+      </Pressable>
+      <PostModal
+        post={prop.post}
+        navigation={prop.navigation}
+        visible={modalVisible}
+        setVisible={setModalVisible}
+      />
+    </View>
+  );
+};
+
 
 export default ProfileScreen;

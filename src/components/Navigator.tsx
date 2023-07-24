@@ -117,7 +117,7 @@ const SocialStackNavigator = () => {
       />
       <Stack.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={ProfileStackNavigator}
         options={{
           headerShown: false,
         }}
@@ -136,6 +136,20 @@ const SearchStackNavigator = () => {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+const ProfileStackNavigator = () => {
+  return (
+    <Stack.Navigator>
       <Stack.Screen
         name="Profile"
         component={ProfileScreen}

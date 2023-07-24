@@ -17,7 +17,7 @@ import Styles from '../components/Styles';
 import {mockProfileList} from '../test/mockProfile1';
 import LinearGradient from 'react-native-linear-gradient';
 import {mockPosts} from '../test/mockPosts';
-import {post} from '../components/types';
+import {PostType} from '../components/types';
 import { PostModal } from "./Modals/PostModal";
 
 const CONTENT_STRING_SIZE: number = 65;
@@ -44,7 +44,7 @@ const SocialScreen = ({navigation}: any) => {
       </View>
     </View>
   );
-  const imagePost = (post: post, index: number) => {
+  const imagePost = (post: PostType, index: number) => {
     return (
       <View key={index} style={Styles.imagePostContainer}>
         <Image style={Styles.imagePost} source={post.image} />
@@ -53,7 +53,7 @@ const SocialScreen = ({navigation}: any) => {
     );
   };
 
-  const challengePost = (post: post, index: number) => {
+  const challengePost = (post: PostType, index: number) => {
     return (
       <View key={index} style={Styles.challengePostContainer}>
         <View style={Styles.challengePost}>
@@ -98,7 +98,7 @@ const SocialScreen = ({navigation}: any) => {
   );
 };
 
-const MiniComments = (prop: {post: post; navigation: any}) => {
+const MiniComments = (prop: {post: PostType; navigation: any}) => {
   let username = Object.keys(prop.post.postComments[0])[0];
   let comment = Object.values(prop.post.postComments[0])[0];
   return (
@@ -122,7 +122,7 @@ const MiniComments = (prop: {post: post; navigation: any}) => {
   );
 };
 
-export const ReactBar = (prop: {post: post; navigation: any}) => {
+export const ReactBar = (prop: {post: PostType; navigation: any}) => {
   const [commentField, setCommentField] = useState(false);
   const [liked, setLiked] = useState(false);
   return (
@@ -170,7 +170,7 @@ export const ReactBar = (prop: {post: post; navigation: any}) => {
   );
 };
 
-const PostDetailContainer = (prop: {post: post; navigation: any}) => {
+const PostDetailContainer = (prop: {post: PostType; navigation: any}) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const postCaption = () => {

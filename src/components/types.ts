@@ -16,7 +16,7 @@ export type profile = {
   profilePic: any;
 };
 
-export type post = {
+export type PostType = {
   postID: number;
   username: string;
   postType: string;

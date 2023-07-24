@@ -1,5 +1,5 @@
-import { post } from "../../components/types";
-import React, { useRef } from "react";
+import { PostType } from "../../components/types";
+import React, { useEffect, useRef } from "react";
 import { Image, Modal, Pressable, ScrollView, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
 import Styles from "../../components/Styles";
 import LinearGradient from "react-native-linear-gradient";
@@ -8,12 +8,11 @@ import { mockProfileList } from "../../test/mockProfile1";
 
 
 type Props = {
-  post: post;
+  post: PostType;
   navigation: any;
   visible: boolean;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 };
-
 
 export const PostModal = ({post, navigation, visible, setVisible}: Props) => {
   const scrollViewRef = useRef(null);
