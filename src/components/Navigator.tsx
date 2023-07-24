@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Image, View } from "react-native";
+import {Image, View} from 'react-native';
 import styles from '../components/Styles';
 import HomeScreen from '../screens/Home';
 import SocialScreen from '../screens/Social';
 import StatsScreen from '../screens/Stats';
-import ProfileScreen, { UserProfile } from "../screens/Profile";
+import ProfileScreen from '../screens/Profile';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {mockProfileList} from '../test/mockProfile1';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -13,7 +13,6 @@ import SearchScreen from '../screens/Search';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
-
 
 const Navigator = () => {
   return (

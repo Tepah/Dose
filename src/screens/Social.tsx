@@ -199,6 +199,7 @@ const PostDetailContainer = (prop: {post: PostType; navigation: any}) => {
           {postCaption()}
           <MiniComments post={prop.post} navigation={prop.navigation} />
         </LinearGradient>
+        {prop.post.postComments.length > 1 ? <HidingBubbles /> : null}
       </Pressable>
       <PostModal
         post={prop.post}
@@ -248,6 +249,21 @@ const CommentField = ({visible, setVisible}: CommentFieldProps) => {
         </LinearGradient>
       </KeyboardAvoidingView>
     </Modal>
+  );
+};
+
+const HidingBubbles = () => {
+  return (
+    <View>
+      <LinearGradient
+        colors={['#0D1821', '#344966']}
+        style={Styles.hidingBubble}
+      />
+      <LinearGradient
+        colors={['#0D1821', '#344966']}
+        style={Styles.hidingBubble2}
+      />
+    </View>
   );
 };
 

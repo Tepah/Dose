@@ -140,9 +140,8 @@ const styles = StyleSheet.create({
   },
   challengePostContainer: {
     width: '100%',
-    height: 340,
     paddingTop: 25,
-    paddingBottom: 50,
+    paddingBottom: 20,
   },
   challengePost: {
     width: '90%',
@@ -162,9 +161,8 @@ const styles = StyleSheet.create({
   },
   imagePostContainer: {
     width: '100%',
-    height: 530,
-    paddingTop: 25,
-    paddingBottom: 50,
+    paddingTop: 20,
+    paddingBottom: 20,
   },
   imagePost: {
     alignSelf: 'center',
@@ -178,6 +176,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 20,
     opacity: 0.95,
+    zIndex: 5,
   },
   reactBar: {
     flexDirection: 'row',
@@ -239,6 +238,22 @@ const styles = StyleSheet.create({
   },
   postModalScroll: {
     paddingTop: 100,
+  },
+  hidingBubble: {
+    marginHorizontal: 15,
+    marginTop: -25,
+    paddingVertical: 20,
+    borderRadius: 20,
+    opacity: 0.60,
+    zIndex: 3,
+  },
+  hidingBubble2: {
+    marginHorizontal: 20,
+    marginTop: -25,
+    paddingVertical: 20,
+    borderRadius: 20,
+    opacity: 0.50,
+    zIndex: 2,
   },
   postDetailContainer: {
     margin: 5,
