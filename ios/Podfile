@@ -42,6 +42,7 @@ target 'Dose' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
+  use_frameworks! :linkage => :static
 
   target 'DoseTests' do
     inherit! :complete

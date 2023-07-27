@@ -1,5 +1,5 @@
 {
-  "name": "Dose",
+  "name": "dose",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -10,10 +10,13 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-firebase/app": "^18.3.0",
+    "@react-native-firebase/firestore": "^18.3.0",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
     "d3-scale": "^4.0.2",
+    "firebase": "^10.1.0",
     "react": "18.2.0",
     "react-native": "0.71.8",
     "react-native-chart-kit": "^6.12.0",
