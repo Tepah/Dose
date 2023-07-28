@@ -1,10 +1,11 @@
 import React from 'react';
 import {Pressable, Text, View} from 'react-native';
 import Styles from '../../components/Styles';
-import {useNavigation} from '@react-navigation/native';
+import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 export const SignUpScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   return (
     <View style={Styles.app}>
       <Pressable style={Styles.button} onPress={() => navigation.navigate('Email Sign Up')}>
