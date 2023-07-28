@@ -1,7 +1,7 @@
 import React from 'react';
 import {Pressable, Text, TextInput, View} from 'react-native';
 import Styles from '../../components/Styles';
-import {createEmailUser} from '../../components/emailSignUp';
+import {createEmailUser} from '../../components/auth/emailSignUp';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 

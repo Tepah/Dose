@@ -3,6 +3,8 @@ import { Modal, Pressable, ScrollView, Switch, Text, TextInput, View } from "rea
 import Styles from '../../components/Styles';
 import {CloseButton} from '../../components/Close';
 import {profile} from '../../components/types';
+import {AppButton} from '../../components/Button';
+import {signOut} from '../../components/auth/signOut';
 
 interface Props {
   user: profile;
@@ -15,11 +17,13 @@ export const SettingsModal = ({user, visible, setVisible}: Props) => {
   const [name, setName] = React.useState(user.name);
   const [description, setDescription] = React.useState(user.description);
 
+  // TODO: Implement a system to save user settings
+  const saveSettings = () => {
+    console.log('Nothing here yet');
+  };
+
   return (
-    <Modal
-      animationType="slide"
-      visible={visible}
-      transparent>
+    <Modal animationType="slide" visible={visible} transparent>
       <View style={[Styles.settingsModal]}>
         <View style={Styles.pageHeader}>
           <Text style={[Styles.text, Styles.centerText]}>Settings</Text>
@@ -55,11 +59,17 @@ export const SettingsModal = ({user, visible, setVisible}: Props) => {
               value={isEnabled}
             />
           </View>
-          <Pressable style={Styles.saveButton}>
-            <Text style={[Styles.text, Styles.centerText, Styles.paragraphText]}>
+          <Pressable style={Styles.saveButton} onPress={saveSettings}>
+            <Text
+              style={[Styles.text, Styles.centerText, Styles.paragraphText]}>
               Save
             </Text>
           </Pressable>
+          <AppButton
+            title={'Log Out'}
+            onPress={() => signOut()}
+            additionalStyle={{backgroundColor: 'red'}}
+          />
         </ScrollView>
       </View>
     </Modal>

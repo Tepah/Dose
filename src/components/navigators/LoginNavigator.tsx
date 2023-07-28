@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {SignUpScreen} from '../screens/signups/SignUp';
-import {WelcomeScreen} from '../screens/signups/Welcome';
-import {EmailSignInScreen} from '../screens/signups/EmailSignIn';
+import {SignUpScreen} from '../../screens/signups/SignUp';
+import {WelcomeScreen} from '../../screens/signups/Welcome';
+import {EmailSignInScreen} from '../../screens/signups/EmailSignIn';
 
 const stack = createNativeStackNavigator();
 export const LoginNavigator = (prop: any) => {

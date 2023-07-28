@@ -378,11 +378,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     alignContent: 'center',
   },
-  button: {
-    minHeight: 10,
-    minWidth: 10,
-    padding: 10,
-  },
   submitButton: {
     backgroundColor: menu,
     padding: 10,
@@ -769,8 +764,19 @@ const styles = StyleSheet.create({
   saveButton: {
     backgroundColor: menu,
     padding: 10,
+    marginVertical: 10,
     borderRadius: 15,
-    width: 100,
+    width: 200,
+    alignSelf: 'center',
+  },
+  button: {
+    backgroundColor: menu,
+    alignItems: 'center',
+    padding: 10,
+    marginVertical: 10,
+    marginHorizontal: 10,
+    borderRadius: 15,
+    width: 200,
     alignSelf: 'center',
   },
 });

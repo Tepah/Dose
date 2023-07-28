@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import Navigator from './src/components/Navigator';
+import Navigator from './src/components/navigators/Navigator';
 import {StatusBar} from 'react-native';
-import {LoginNavigator} from './src/components/LoginNavigator';
+import {LoginNavigator} from './src/components/navigators/LoginNavigator';
 import firebaseInit from './src/firebase/config';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 
