@@ -15,6 +15,14 @@ const styles = StyleSheet.create({
     backgroundColor: main,
   },
   //------------------------------------------------------------------------//
+  // Login Page Styles
+  welcomeButtonContainer: {
+    flex: 1,
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  //------------------------------------------------------------------------//
   // Modal Styles
   // Add Modal Styles
   addModal: {

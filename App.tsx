@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import Navigator from './src/components/Navigator';
 import {StatusBar} from 'react-native';
-import {SignInScreen} from './src/components/SignIn';
+import {LoginNavigator} from './src/components/SignIn';
 import firebaseInit from './src/firebase/config';
 
 function App(): JSX.Element {
@@ -11,10 +11,18 @@ function App(): JSX.Element {
 
   firebaseInit();
 
+  if (!user) {
+    return (
+      <NavigationContainer>
+        <LoginNavigator />
+      </NavigationContainer>
+    );
+  }
+
   return (
     <NavigationContainer>
       <StatusBar barStyle="light-content" />
-      {!user ? <SignInScreen /> : <Navigator />}
+      <Navigator />
     </NavigationContainer>
   );
 }
