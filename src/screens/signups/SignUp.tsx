@@ -3,7 +3,6 @@ import {Pressable, Text, View} from 'react-native';
 import Styles from '../../components/Styles';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {gmailSignUp} from '../../components/auth/gmailSignUp';
 
 export const SignUpScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -13,9 +12,6 @@ export const SignUpScreen = () => {
         style={Styles.button}
         onPress={() => navigation.navigate('Email Sign Up')}>
         <Text style={Styles.text}>Sign Up with Email</Text>
-      </Pressable>
-      <Pressable style={Styles.button} onPress={gmailSignUp}>
-        <Text style={Styles.text}>Sign Up with Google</Text>
       </Pressable>
     </View>
   );

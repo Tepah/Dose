@@ -6,7 +6,7 @@ import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 
-export const EmailSignInScreen = () => {
+export const EmailSignUpScreen = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   // To get typescript to play nice, use the following:

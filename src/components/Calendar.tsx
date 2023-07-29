@@ -24,6 +24,7 @@ type DateType = {
   month: number;
   year: number;
 };
+// TODO: RN, you can click on month in calendar and it'll change if you close out of the calendar box
 const Calendar = ({dateChange}: Props) => {
   const isFocused = useIsFocused();
   const scrollViewRef = useRef(null);
