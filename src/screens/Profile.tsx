@@ -17,12 +17,6 @@ const ProfileScreen = ({route}: any) => {
   const isFocused = useIsFocused();
   const [selected, setSelected] = useState(true);
 
-  // useEffect(() => {
-  //   if (isFocused && currentUser !== user.username) {
-  //     navigation.navigate('Profile', {user: mockProfileList[currentUser]});
-  //   }
-  // }, [isFocused, navigation]);
-
   const profileTabs = () => {
     const onTabPress = (value: string) => {
       if (value === 'Habits' && !selected) {

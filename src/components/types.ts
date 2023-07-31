@@ -14,6 +14,8 @@ export type profile = {
   username: string;
   startDate: string;
   profilePic: any;
+  birthday: string;
+  email: string;
 };
 
 export type PostType = {

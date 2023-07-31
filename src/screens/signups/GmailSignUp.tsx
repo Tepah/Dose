@@ -1,42 +1,39 @@
 import React from 'react';
 import {Pressable, Text, TextInput, View} from 'react-native';
 import Styles from '../../components/Styles';
-import {createEmailUser} from '../../components/auth/emailSignUp';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {CloseButton} from '../../components/Close';
 import createUserDoc from '../../components/auth/createUserDoc';
 import {profile} from '../../components/types';
+import {createEmailUser} from '../../components/auth/emailSignUp';
+import auth from '@react-native-firebase/auth';
 
-export const EmailSignUpScreen = () => {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [name, setName] = React.useState('');
+export const GmailSignUpScreen = ({route}: any) => {
+  const {user, googleCredential} = route.params;
+  const [email, setEmail] = React.useState(user.email);
+  const [name, setName] = React.useState(user.name);
   const [birthday, setBirthday] = React.useState('');
   const [username, setUsername] = React.useState('');
   // To get typescript to play nice, use the following:
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
+  const onPress = () => {
+    createEmailUserOnPress();
+    auth().signInWithCredential(googleCredential);
+  }
   const createEmailUserOnPress = () => {
-    if (
-      email === '' ||
-      password === '' ||
-      name === '' ||
-      birthday === '' ||
-      username === ''
-    ) {
+    if (email === '' || name === '' || birthday === '' || username === '') {
       console.log(
         'missing parameters: ' +
           (!email ? 'email ' : '') +
-          (!password ? 'password ' : '') +
           (!name ? 'name ' : '') +
           (!birthday ? 'birthday ' : '') +
           (!username ? 'username ' : ''),
       );
       return;
     }
-    createEmailUser(email, password);
-    const user: profile = {
+    const newUserData: profile = {
       username: '@' + username,
       name: name,
       birthday: birthday,
@@ -49,7 +46,7 @@ export const EmailSignUpScreen = () => {
       startDate: new Date().toLocaleDateString('en-US'),
       profilePic: '',
     };
-    createUserDoc(user);
+    createUserDoc(newUserData);
     navigation.navigate('Welcome');
   };
   // TODO: Create password creation, also error handling
@@ -57,13 +54,6 @@ export const EmailSignUpScreen = () => {
     <View style={[Styles.app]}>
       <Text style={Styles.text}>Email</Text>
       <TextInput style={Styles.input} value={email} onChangeText={setEmail} />
-      <Text style={Styles.text}>Password</Text>
-      <TextInput
-        style={Styles.input}
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry={true}
-      />
       <Text style={Styles.text}>Name</Text>
       <TextInput style={Styles.input} value={name} onChangeText={setName} />
       <Text style={Styles.text}>User Name</Text>
@@ -79,7 +69,7 @@ export const EmailSignUpScreen = () => {
         value={birthday}
         onChangeText={setBirthday}
       />
-      <Pressable style={Styles.button} onPress={createEmailUserOnPress}>
+      <Pressable style={Styles.button} onPress={onPress}>
         <Text style={Styles.text}>Sign up</Text>
       </Pressable>
       <CloseButton

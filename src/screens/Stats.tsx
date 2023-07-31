@@ -70,16 +70,13 @@ const createChartData = () => {
       for (let j = 0; j < chartData.length; j++) {
         if (
           chartData[j].date === formattedDate &&
-          mockProfileList['@petah'].habits[i].progress[date] === true
+          mockProfileList['@petah'].habits[i].progress[date]
         ) {
           chartData[j].count += 1;
           found = true;
         }
       }
-      if (
-        !found &&
-        mockProfileList['@petah'].habits[i].progress[date] === true
-      ) {
+      if (!found && mockProfileList['@petah'].habits[i].progress[date]) {
         chartData.push({date: formattedDate, count: 1});
       }
     });

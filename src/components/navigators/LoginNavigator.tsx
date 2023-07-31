@@ -4,6 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {WelcomeScreen} from '../../screens/signups/Welcome';
 import {EmailSignUpScreen} from '../../screens/signups/EmailSignUp';
 import {LoginScreen} from '../../screens/signups/Login';
+import {GmailSignUpScreen} from '../../screens/signups/GmailSignUp';
 
 const stack = createNativeStackNavigator();
 export const LoginNavigator = (prop: any) => {
@@ -35,6 +36,13 @@ export const LoginNavigator = (prop: any) => {
       <stack.Screen
         name="Email Sign Up"
         component={EmailSignUpScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <stack.Screen
+        name="Gmail Sign Up"
+        component={GmailSignUpScreen}
         options={{
           headerShown: false,
         }}

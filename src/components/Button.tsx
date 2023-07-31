@@ -12,7 +12,9 @@ export const AppButton = (props: Props) => {
     <Pressable
       style={[Styles.button, props.additionalStyle]}
       onPress={props.onPress}>
-      <Text style={[Styles.centerText, Styles.paragraphText]}>{props.title}</Text>
+      <Text style={[Styles.centerText, Styles.paragraphText]}>
+        {props.title}
+      </Text>
     </Pressable>
   );
 };
