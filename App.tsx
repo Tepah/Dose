@@ -29,6 +29,7 @@ function App() {
   if (!user) {
     return (
       <NavigationContainer>
+        <StatusBar barStyle="light-content" />
         <LoginNavigator user={user} setUser={changeUser} />
       </NavigationContainer>
     );

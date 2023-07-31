@@ -16,11 +16,20 @@ const styles = StyleSheet.create({
   },
   //------------------------------------------------------------------------//
   // Login Page Styles
+  upperWelcomeContainer: {
+    flex: 3,
+    justifyContent: 'center',
+  },
   welcomeButtonContainer: {
     flex: 1,
     justifyContent: 'space-evenly',
     alignItems: 'center',
     flexDirection: 'row',
+  },
+  welcomeOtherSignInContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
   },
   //------------------------------------------------------------------------//
   // Modal Styles
