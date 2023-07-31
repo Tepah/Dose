@@ -1,11 +1,10 @@
 import React from 'react';
-import {Pressable, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import Styles from '../../components/Styles';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {AppButton} from '../../components/Button';
 import {GoogleButton} from '../../components/GoogleButton';
-import {AppleSignIn} from '../../components/AppleButton';
 
 export const WelcomeScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -27,7 +26,6 @@ export const WelcomeScreen = () => {
       <View style={Styles.welcomeOtherSignInContainer}>
         <Text style={Styles.paragraphText}>or</Text>
         <GoogleButton />
-        <AppleSignIn />
       </View>
     </View>
   );

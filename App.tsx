@@ -3,7 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import Navigator from './src/components/navigators/Navigator';
 import {StatusBar} from 'react-native';
 import {LoginNavigator} from './src/components/navigators/LoginNavigator';
-import firebaseInit from './src/firebase/config';
+import firebaseInit from './src/configs/firebase/config';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 
 function App() {

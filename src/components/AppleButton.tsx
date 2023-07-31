@@ -1,8 +1,11 @@
 import React from 'react';
-import {AppleButton} from '@invertase/react-native-apple-authentication';
+import {
+  appleAuth,
+  AppleButton,
+} from '@invertase/react-native-apple-authentication';
+import auth from '@react-native-firebase/auth';
 
 export const AppleSignIn = () => {
-
   async function onAppleButtonPress() {
     // Start the sign-in request
     const appleAuthRequestResponse = await appleAuth.performRequest({
@@ -16,8 +19,11 @@ export const AppleSignIn = () => {
     }
 
     // Create a Firebase credential from the response
-    const { identityToken, nonce } = appleAuthRequestResponse;
-    const appleCredential = auth.AppleAuthProvider.credential(identityToken, nonce);
+    const {identityToken, nonce} = appleAuthRequestResponse;
+    const appleCredential = auth.AppleAuthProvider.credential(
+      identityToken,
+      nonce,
+    );
 
     // Sign the user in with the credential
     return auth().signInWithCredential(appleCredential);
@@ -31,7 +37,9 @@ export const AppleSignIn = () => {
         width: 160,
         height: 45,
       }}
-      onPress={() => onAppleButtonPress().then(() => console.log('Apple sign-in complete!'))}
+      onPress={() =>
+        onAppleButtonPress().then(() => console.log('Apple sign-in complete!'))
+      }
     />
   );
-}
+};

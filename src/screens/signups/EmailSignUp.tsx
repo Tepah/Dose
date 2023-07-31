@@ -4,6 +4,7 @@ import Styles from '../../components/Styles';
 import {createEmailUser} from '../../components/auth/emailSignUp';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {CloseButton} from '../../components/Close';
 
 
 export const EmailSignUpScreen = () => {
@@ -30,6 +31,10 @@ export const EmailSignUpScreen = () => {
       <Pressable style={Styles.button} onPress={createEmailUserOnPress}>
         <Text style={Styles.text}>Sign up</Text>
       </Pressable>
+      <CloseButton
+        type={'back'}
+        closeFunction={() => navigation.navigate('Welcome')}
+      />
     </View>
   );
 };

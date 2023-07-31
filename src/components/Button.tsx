@@ -1,10 +1,9 @@
 import React from 'react';
 import {Pressable, Text} from 'react-native';
 import Styles from './Styles';
-import {HabitType, profile} from './types';
 
 interface Props {
-  onPress: () => void;
+  onPress: (arg0?: any, arg1?: any) => void;
   title: string;
   additionalStyle?: object;
 }
