@@ -1,14 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import Navigator from './src/components/navigators/Navigator';
 import {StatusBar} from 'react-native';
 import {LoginNavigator} from './src/components/navigators/LoginNavigator';
 import firebaseInit from './src/configs/firebase/config';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 function App() {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
+  const [username, setUsername] = useState<string>('');
 
   firebaseInit();
 
@@ -34,11 +36,26 @@ function App() {
       </NavigationContainer>
     );
   }
+  const {email} = user;
+  const getUserDataByEmail = async () => {
+    try {
+      const usersRef = firestore().collection('Users');
+      const query = await usersRef
+        .where('email', '==', email?.toLowerCase())
+        .get();
+      if (!query.empty) {
+        setUsername(query.docs[0].data().username);
+      }
+    } catch (err) {
+      console.error('Error getting user data: ', err);
+    }
+  };
+  getUserDataByEmail();
 
   return (
     <NavigationContainer>
       <StatusBar barStyle="light-content" />
-      <Navigator />
+      <Navigator user={username} />
     </NavigationContainer>
   );
 }

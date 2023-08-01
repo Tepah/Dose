@@ -2,12 +2,12 @@ import React from 'react';
 import { Modal, Pressable, ScrollView, Switch, Text, TextInput, View } from "react-native";
 import Styles from '../../components/Styles';
 import {CloseButton} from '../../components/Close';
-import {profile} from '../../components/types';
+import {ProfileType} from '../../components/types';
 import {AppButton} from '../../components/Button';
 import {signOut} from '../../components/auth/signOut';
 
 interface Props {
-  user: profile;
+  user: ProfileType;
   visible: boolean;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }

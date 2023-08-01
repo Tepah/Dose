@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {Image, Pressable, ScrollView, Text, TextInput, View} from 'react-native';
 import Styles from '../components/Styles';
-import {profile} from '../components/types';
+import {ProfileType} from '../components/types';
 import {mockProfileList} from '../test/mockProfile1';
 import {CloseButton} from '../components/Close';
 
 const SearchScreen = ({navigation}: any) => {
-  const [profiles, setProfiles] = useState<{[key: string]: profile}>(
+  const [profiles, setProfiles] = useState<{[key: string]: ProfileType}>(
     mockProfileList,
   );
-  const [searchResults, setSearchResults] = useState<profile[]>(
+  const [searchResults, setSearchResults] = useState<ProfileType[]>(
     Object.values(profiles),
   );
   const [searchText, setSearchText] = useState<string>('');
@@ -19,7 +19,7 @@ const SearchScreen = ({navigation}: any) => {
       setSearchResults(Object.values(profiles));
     } else {
       const filteredList = Object.values(profiles).filter(
-        (user: profile) =>
+        (user: ProfileType) =>
           user.username.toLowerCase().includes(searchText.toLowerCase()) ||
           user.name.toLowerCase().includes(searchText.toLowerCase()),
       );
@@ -67,12 +67,12 @@ const SearchBar = ({setSearchText}: SearchBarProps) => {
 };
 
 interface SearchResultsProps {
-  profiles: profile[];
+  profiles: ProfileType[];
   navigation: any;
 }
 
 const SearchResults = ({profiles, navigation}: SearchResultsProps) => {
-  const renderProfiles = profiles.map((user: profile, index: number) => (
+  const renderProfiles = profiles.map((user: ProfileType, index: number) => (
     <Pressable
       key={index}
       style={Styles.searchResultContainer}

@@ -6,7 +6,7 @@ import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {CloseButton} from '../../components/Close';
 import createUserDoc from '../../components/auth/createUserDoc';
-import {profile} from '../../components/types';
+import {ProfileType} from '../../components/types';
 
 export const EmailSignUpScreen = () => {
   const [email, setEmail] = React.useState('');
@@ -36,11 +36,11 @@ export const EmailSignUpScreen = () => {
       return;
     }
     createEmailUser(email, password);
-    const user: profile = {
-      username: '@' + username,
-      name: name,
+    const user: ProfileType = {
+      username: '@' + username.toLowerCase(),
+      name: name.toLowerCase(),
       birthday: birthday,
-      email: email,
+      email: email.toLowerCase(),
       private: false,
       followers: [],
       following: [],

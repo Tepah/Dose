@@ -27,7 +27,6 @@ export const gmailSignUp = (
         .collection('Users')
         .where('email', '==', userInfo.user.email)
         .get();
-      console.log(usersWithEmail);
       if (usersWithEmail.docs.length > 0) {
         return auth().signInWithCredential(googleCredential);
       }

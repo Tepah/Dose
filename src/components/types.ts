@@ -4,7 +4,7 @@ export type friend = {
   profilePic: string;
 };
 
-export type profile = {
+export type ProfileType = {
   followers: any;
   following: any;
   habits: HabitType[];

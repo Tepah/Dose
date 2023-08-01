@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {View, Text, ScrollView, Image, Pressable} from 'react-native';
 import Styles from '../components/Styles';
 import {useState} from 'react';
 import {mockPosts} from '../test/mockPosts';
-import {HabitType, PostType, profile} from '../components/types';
-import {currentUser, mockProfileList} from '../test/mockProfile1';
+import {HabitType, PostType, ProfileType} from '../components/types';
+import {currentUser} from '../test/mockProfile1';
 import {CloseButton} from '../components/Close';
 import {SettingsModal} from './Modals/Settings';
 import {PostModal} from './Modals/PostModal';
@@ -85,7 +85,7 @@ const ProfileScreen = ({route}: any) => {
   );
 };
 
-const ProfileOptions = (props: {user: profile}) => {
+const ProfileOptions = (props: {user: ProfileType}) => {
   const [settingsVisible, setSettingsVisible] = useState(false);
   return (
     <View style={Styles.profileSpacing}>

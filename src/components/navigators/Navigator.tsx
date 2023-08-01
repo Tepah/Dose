@@ -14,7 +14,7 @@ import SearchScreen from '../../screens/Search';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-const Navigator = () => {
+const Navigator = ({user}: {user: string}) => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -71,12 +71,12 @@ const Navigator = () => {
       />
       <Tab.Screen
         name="MainProfile"
-        component={ProfileStackNavigator}
+        component={ProfileStackNavigator(user)}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={focused ? styles.iconFocused : null}>
               <Image
-                source={mockProfileList['@petah'].profilePic}
+                source={mockProfileList[user].profilePic}
                 style={[styles.icons, styles.userPostImage]}
                 resizeMode="contain"
               />
@@ -145,7 +145,7 @@ const SearchStackNavigator = () => {
   );
 };
 
-const ProfileStackNavigator = () => {
+const ProfileStackNavigator = (user: string) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -154,7 +154,7 @@ const ProfileStackNavigator = () => {
         options={{
           headerShown: false,
         }}
-        initialParams={{user: mockProfileList['@petah']}}
+        initialParams={{user: mockProfileList[user]}}
       />
       <Stack.Screen
         name="Profile"

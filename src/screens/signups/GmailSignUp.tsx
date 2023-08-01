@@ -5,7 +5,7 @@ import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {CloseButton} from '../../components/Close';
 import createUserDoc from '../../components/auth/createUserDoc';
-import {profile} from '../../components/types';
+import {ProfileType} from '../../components/types';
 import {createEmailUser} from '../../components/auth/emailSignUp';
 import auth from '@react-native-firebase/auth';
 
@@ -33,11 +33,11 @@ export const GmailSignUpScreen = ({route}: any) => {
       );
       return;
     }
-    const newUserData: profile = {
-      username: '@' + username,
-      name: name,
+    const newUserData: ProfileType = {
+      username: '@' + username.toLowerCase(),
+      name: name.toLowerCase(),
       birthday: birthday,
-      email: email,
+      email: email.toLowerCase(),
       private: false,
       followers: [],
       following: [],
@@ -49,7 +49,7 @@ export const GmailSignUpScreen = ({route}: any) => {
     createUserDoc(newUserData);
     navigation.navigate('Welcome');
   };
-  // TODO: Create password creation, also error handling
+  // TODO: Create password creation, also error handling like name size, etc.
   return (
     <View style={[Styles.app]}>
       <Text style={Styles.text}>Email</Text>

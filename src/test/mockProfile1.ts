@@ -1,8 +1,8 @@
-import {profile} from '../components/types';
+import {ProfileType} from '../components/types';
 
 export const currentUser: string = '@petah';
 
-export const mockProfileList: {[key: string]: profile} = {
+export const mockProfileList: {[key: string]: ProfileType} = {
   '@dennisturner': {
     name: 'Dennis Turner',
     username: '@dennisturner',
