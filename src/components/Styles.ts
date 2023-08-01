@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     marginTop: -25,
     paddingVertical: 20,
     borderRadius: 20,
-    opacity: 0.60,
+    opacity: 0.6,
     zIndex: 3,
   },
   hidingBubble2: {
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
     marginTop: -25,
     paddingVertical: 20,
     borderRadius: 20,
-    opacity: 0.50,
+    opacity: 0.5,
     zIndex: 2,
   },
   postDetailContainer: {
@@ -311,7 +311,7 @@ const styles = StyleSheet.create({
     height: 120,
     width: 120,
     aspectRatio: 1,
-    borderRadius: 60,
+    borderRadius: 80,
   },
   statsProfileTextContainer: {
     flex: 2,
@@ -673,6 +673,17 @@ const styles = StyleSheet.create({
     height: 200,
     paddingHorizontal: 15,
     paddingVertical: 10,
+  },
+  changeProfilePic: {
+    flex: 1,
+  },
+  editPicIcon: {
+    position: 'absolute',
+    backgroundColor: secondary,
+    padding: 10,
+    borderRadius: 25,
+    right: 5,
+    bottom: 10,
   },
   settingContainer: {
     height: 100,

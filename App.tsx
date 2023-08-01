@@ -16,13 +16,15 @@ function App() {
 
   const changeUser = (newUser: FirebaseAuthTypes.User | null) => {
     setUser(newUser);
-    setInitializing(false);
   };
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(changeUser);
     return subscriber;
   }, []);
+  useEffect(() => {
+    setInitializing(false);
+  }, [username]);
 
   if (initializing) {
     return null;

@@ -13,8 +13,6 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 
 const ProfileScreen = ({route}: any) => {
   const {user} = route.params;
-  const navigation = useNavigation();
-  const isFocused = useIsFocused();
   const [selected, setSelected] = useState(true);
 
   const profileTabs = () => {

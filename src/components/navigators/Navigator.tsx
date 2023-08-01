@@ -15,6 +15,7 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const Navigator = ({user}: {user: string}) => {
+  console.log(user);
   return (
     <Tab.Navigator
       screenOptions={{
@@ -71,12 +72,12 @@ const Navigator = ({user}: {user: string}) => {
       />
       <Tab.Screen
         name="MainProfile"
-        component={ProfileStackNavigator(user)}
+        component={ProfileStackNavigator}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={focused ? styles.iconFocused : null}>
               <Image
-                source={mockProfileList[user].profilePic}
+                source={mockProfileList['@petah'].profilePic}
                 style={[styles.icons, styles.userPostImage]}
                 resizeMode="contain"
               />
@@ -84,6 +85,7 @@ const Navigator = ({user}: {user: string}) => {
           ),
           headerShown: false,
         }}
+        initialParams={{user: user}}
       />
     </Tab.Navigator>
   );
@@ -145,7 +147,8 @@ const SearchStackNavigator = () => {
   );
 };
 
-const ProfileStackNavigator = (user: string) => {
+const ProfileStackNavigator = (prop: any) => {
+  console.log(prop);
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -154,7 +157,7 @@ const ProfileStackNavigator = (user: string) => {
         options={{
           headerShown: false,
         }}
-        initialParams={{user: mockProfileList[user]}}
+        initialParams={{user: mockProfileList['@petah']}}
       />
       <Stack.Screen
         name="Profile"
