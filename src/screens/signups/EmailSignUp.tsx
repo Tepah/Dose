@@ -1,12 +1,13 @@
 import React from 'react';
-import {Pressable, Text, TextInput, View} from 'react-native';
+import {Image, Pressable, Text, TextInput, View} from 'react-native';
 import Styles from '../../components/Styles';
 import {createEmailUser} from '../../components/auth/emailSignUp';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {CloseButton} from '../../components/Close';
-import createUserDoc from '../../components/auth/createUserDoc';
-import {ProfileType} from '../../components/types';
+import {mockProfileList} from '../../test/mockProfile1';
+import {selectImage} from '../../components/photo/selectImage';
+import {createUserOnPress} from '../../components/auth/createUserOnPress';
 
 export const EmailSignUpScreen = () => {
   const [email, setEmail] = React.useState('');
@@ -14,47 +15,48 @@ export const EmailSignUpScreen = () => {
   const [name, setName] = React.useState('');
   const [birthday, setBirthday] = React.useState('');
   const [username, setUsername] = React.useState('');
+  const [selectedImage, setSelectedImage] = React.useState(null);
   // To get typescript to play nice, use the following:
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
-  const createEmailUserOnPress = () => {
-    if (
-      email === '' ||
-      password === '' ||
-      name === '' ||
-      birthday === '' ||
-      username === ''
-    ) {
-      console.log(
-        'missing parameters: ' +
-          (!email ? 'email ' : '') +
-          (!password ? 'password ' : '') +
-          (!name ? 'name ' : '') +
-          (!birthday ? 'birthday ' : '') +
-          (!username ? 'username ' : ''),
-      );
-      return;
+  const onPress = () => {
+    const created: boolean | undefined = createUserOnPress(
+      selectedImage,
+      email,
+      password,
+      name,
+      birthday,
+      username,
+    );
+    if (created) {
+      createEmailUser(email, password);
     }
-    createEmailUser(email, password);
-    const user: ProfileType = {
-      username: '@' + username.toLowerCase(),
-      name: name.toLowerCase(),
-      birthday: birthday,
-      email: email.toLowerCase(),
-      private: false,
-      followers: [],
-      following: [],
-      habits: [],
-      description: '',
-      startDate: new Date().toLocaleDateString('en-US'),
-      profilePic: '',
-    };
-    createUserDoc(user);
-    navigation.navigate('Welcome');
   };
+
   // TODO: Create password creation, also error handling
   return (
     <View style={[Styles.app]}>
+      <View style={Styles.settingContainerTall}>
+        <Pressable
+          style={Styles.changeProfilePic}
+          onPress={() => selectImage(setSelectedImage)}>
+          {selectedImage === null ? (
+            <Image
+              source={mockProfileList['@petah'].profilePic}
+              style={Styles.profileStatsImage}
+            />
+          ) : (
+            <Image
+              source={{uri: selectedImage}}
+              style={Styles.profileStatsImage}
+            />
+          )}
+          <View style={Styles.editPicIcon}>
+            <Image source={require('../../icons/pencil.png')} />
+          </View>
+        </Pressable>
+        <Text style={Styles.paragraphText}>Profile Picture</Text>
+      </View>
       <Text style={Styles.text}>Email</Text>
       <TextInput style={Styles.input} value={email} onChangeText={setEmail} />
       <Text style={Styles.text}>Password</Text>
@@ -79,7 +81,7 @@ export const EmailSignUpScreen = () => {
         value={birthday}
         onChangeText={setBirthday}
       />
-      <Pressable style={Styles.button} onPress={createEmailUserOnPress}>
+      <Pressable style={Styles.button} onPress={onPress}>
         <Text style={Styles.text}>Sign up</Text>
       </Pressable>
       <CloseButton

@@ -28,7 +28,8 @@ export const mockProfileList: {[key: string]: ProfileType} = {
   '@petah': {
     name: 'Pete Potipitak',
     username: '@petah',
-    profilePic: require('../test/profile.png'),
+    profilePic:
+      'https://firebasestorage.googleapis.com:443/v0/b/dose-1a0df.appspot.com/o/profilePics%2F@petah?alt=media&token=358675f6-3512-490f-9113-cb13ca8ec4c5',
     description: "If nobody believes in you, I'm nobody",
     private: false,
     following: 20,

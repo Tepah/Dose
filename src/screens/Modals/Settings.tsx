@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   Image,
   Modal,
@@ -19,6 +19,9 @@ import {
   ImageLibraryOptions,
   launchImageLibrary,
 } from 'react-native-image-picker';
+import {uploadProfilePic} from '../../components/photo/changeProfilePic';
+import {updateUser} from '../../components/updateUser';
+import {selectImage} from '../../components/photo/selectImage';
 
 interface Props {
   user: ProfileType;
@@ -31,29 +34,35 @@ export const SettingsModal = ({user, visible, setVisible}: Props) => {
   const [name, setName] = React.useState(user.name);
   const [description, setDescription] = React.useState(user.description);
   const [selectedImage, setSelectedImage] = React.useState(null);
+  const [picURL, setPicURL] = React.useState(user.profilePic);
+  const [changes, setChanges] = React.useState<{
+    description: string;
+    name: string;
+    profilePic: any;
+    private: boolean;
+  }>({description: '', name: '', profilePic: '', private: false});
+  const [saved, setSaved] = React.useState(false);
+
+  useEffect(() => {
+    setChanges({
+      name: name,
+      description: description,
+      private: isEnabled,
+      profilePic: picURL,
+    });
+    if (saved) {
+      updateUser(user.username, changes);
+    }
+  }, [description, isEnabled, name, saved, user.username]);
 
   // TODO: Implement a system to save user settings
   const saveSettings = () => {
-    console.log('Nothing here yet');
-  };
-  const selectImage = async () => {
-    // Options for the image picker
-    const options: ImageLibraryOptions = {
-      mediaType: 'photo', // Specify the media type, 'photo' for images
-      quality: 0.8, // Image quality (0.0 to 1.0)
-
-    };
-
-    // Launch the image picker
-    const result = await launchImageLibrary(options, response => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
+    if (name !== '') {
+      if (selectedImage !== null) {
+        const url = uploadProfilePic(selectedImage, user.username);
+        setPicURL(url);
+        setSaved(true);
       }
-    });
-    if (result.assets) {
-      setSelectedImage(result.assets[0].uri);
-    } else {
-      console.log('No image selected');
     }
   };
 
@@ -66,7 +75,9 @@ export const SettingsModal = ({user, visible, setVisible}: Props) => {
         </View>
         <ScrollView>
           <View style={Styles.settingContainerTall}>
-            <Pressable style={Styles.changeProfilePic} onPress={selectImage}>
+            <Pressable
+              style={Styles.changeProfilePic}
+              onPress={() => selectImage(setSelectedImage)}>
               {selectedImage === null ? (
                 <Image
                   source={mockProfileList['@petah'].profilePic}

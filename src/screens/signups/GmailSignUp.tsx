@@ -1,13 +1,16 @@
 import React from 'react';
-import {Pressable, Text, TextInput, View} from 'react-native';
+import {Image, Pressable, Text, TextInput, View} from 'react-native';
 import Styles from '../../components/Styles';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {CloseButton} from '../../components/Close';
 import createUserDoc from '../../components/auth/createUserDoc';
 import {ProfileType} from '../../components/types';
-import {createEmailUser} from '../../components/auth/emailSignUp';
 import auth from '@react-native-firebase/auth';
+import {mockProfileList} from '../../test/mockProfile1';
+import {selectImage} from '../../components/photo/selectImage';
+import {uploadProfilePic} from '../../components/photo/changeProfilePic';
+import {createUserOnPress} from '../../components/auth/createUserOnPress';
 
 export const GmailSignUpScreen = ({route}: any) => {
   const {user, googleCredential} = route.params;
@@ -15,45 +18,41 @@ export const GmailSignUpScreen = ({route}: any) => {
   const [name, setName] = React.useState(user.name);
   const [birthday, setBirthday] = React.useState('');
   const [username, setUsername] = React.useState('');
+  const [selectedImage, setSelectedImage] = React.useState(null);
   // To get typescript to play nice, use the following:
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   const onPress = () => {
-    createEmailUserOnPress();
-    auth().signInWithCredential(googleCredential);
-  }
-  const createEmailUserOnPress = () => {
-    if (email === '' || name === '' || birthday === '' || username === '') {
-      console.log(
-        'missing parameters: ' +
-          (!email ? 'email ' : '') +
-          (!name ? 'name ' : '') +
-          (!birthday ? 'birthday ' : '') +
-          (!username ? 'username ' : ''),
-      );
-      return;
+    const created: boolean = createUserOnPress();
+    if (created) {
+      auth().signInWithCredential(googleCredential);
     }
-    const newUserData: ProfileType = {
-      username: '@' + username.toLowerCase(),
-      name: name.toLowerCase(),
-      birthday: birthday,
-      email: email.toLowerCase(),
-      private: false,
-      followers: [],
-      following: [],
-      habits: [],
-      description: '',
-      startDate: new Date().toLocaleDateString('en-US'),
-      profilePic: '',
-    };
-    createUserDoc(newUserData);
-    navigation.navigate('Welcome');
   };
+
   // TODO: Create password creation, also error handling like name size, etc.
   return (
     <View style={[Styles.app]}>
-      <Text style={Styles.text}>Email</Text>
-      <TextInput style={Styles.input} value={email} onChangeText={setEmail} />
+      <View style={Styles.settingContainerTall}>
+        <Pressable
+          style={Styles.changeProfilePic}
+          onPress={() => selectImage(setSelectedImage)}>
+          {selectedImage === null ? (
+            <Image
+              source={mockProfileList['@petah'].profilePic}
+              style={Styles.profileStatsImage}
+            />
+          ) : (
+            <Image
+              source={{uri: selectedImage}}
+              style={Styles.profileStatsImage}
+            />
+          )}
+          <View style={Styles.editPicIcon}>
+            <Image source={require('../../icons/pencil.png')} />
+          </View>
+        </Pressable>
+        <Text style={Styles.paragraphText}>Profile Picture</Text>
+      </View>
       <Text style={Styles.text}>Name</Text>
       <TextInput style={Styles.input} value={name} onChangeText={setName} />
       <Text style={Styles.text}>User Name</Text>

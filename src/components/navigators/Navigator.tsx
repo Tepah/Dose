@@ -77,7 +77,7 @@ const Navigator = ({user}: {user: string}) => {
           tabBarIcon: ({focused}) => (
             <View style={focused ? styles.iconFocused : null}>
               <Image
-                source={mockProfileList['@petah'].profilePic}
+                source={{uri: mockProfileList['@petah'].profilePic}}
                 style={[styles.icons, styles.userPostImage]}
                 resizeMode="contain"
               />

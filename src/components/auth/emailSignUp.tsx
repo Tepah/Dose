@@ -1,6 +1,6 @@
 import auth from '@react-native-firebase/auth';
 
-export const createEmailUser = (email: string, password: string) => {
+export const createEmailUser = (email: string, password: string): boolean => {
   auth()
     .createUserWithEmailAndPassword(email, password)
     .then(() => {
@@ -14,7 +14,6 @@ export const createEmailUser = (email: string, password: string) => {
       if (error.code === 'auth/invalid-email') {
         console.log('That email address is invalid!');
       }
-
       console.error(error);
     });
 };

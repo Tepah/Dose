@@ -24,6 +24,9 @@ function App() {
   }, []);
   useEffect(() => {
     setInitializing(false);
+    return () => {
+      setUsername('');
+    };
   }, [username]);
 
   if (initializing) {
