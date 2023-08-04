@@ -12,8 +12,9 @@ import Styles from '../components/Styles';
 import AddHabitScreen from './Modals/AddHabit';
 import {mockProfileList} from '../test/mockProfile1';
 import EditHabitScreen from './Modals/EditHabit';
-import {HabitType} from '../components/types';
+import {HabitType, ProfileType} from '../components/types';
 import {useIsFocused} from '@react-navigation/native';
+import firestore from '@react-native-firebase/firestore';
 
 /* TODO: add past date rendering, */
 /*   add clickable past dates to track progress, but don't allow editing on past dates. */
@@ -21,10 +22,10 @@ import {useIsFocused} from '@react-navigation/native';
 
 interface SwipeableItemProps {
   type: string;
-  habits: HabitType[];
+  habits: HabitType[] | undefined;
   swipedHabits: HabitType[];
   setSwipedHabits: React.Dispatch<React.SetStateAction<HabitType[]>>;
-  setHabits: React.Dispatch<React.SetStateAction<HabitType[]>>;
+  setHabits: React.Dispatch<React.SetStateAction<HabitType[] | undefined>>;
   setEditModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedList: React.Dispatch<React.SetStateAction<string>>;
   setCurrentHabitIndex: React.Dispatch<React.SetStateAction<number>>;
@@ -182,10 +183,20 @@ const handleLongPress = (
   setSelectedList(type);
 };
 
-const HomeScreen = () => {
+const getProfileHabits = async (username: string) => {
+  try {
+    const usersRef = firestore().collection('Users');
+    const query = await usersRef.doc(username).get();
+  } catch (err) {
+    console.error('Error getting habits: ', err);
+  }
+};
+
+const HomeScreen = ({route}: any) => {
+  const {username} = route.params;
+  console.log(getProfileHabits(username));
   const isFocused = useIsFocused();
-  const [habits, setHabits] = useState<HabitType[]>(
-    mockProfileList['@petah'].habits,
+  const [habits, setHabits] = useState<HabitType[] | undefined>([]
   );
   const [swipedHabits, setSwipedHabits] = useState<HabitType[]>([]);
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
@@ -253,7 +264,9 @@ const HomeScreen = () => {
   };
 
   const editHabit = (habit: HabitType, index: number) => {
-    setHabits([...habits.slice(0, index), habit, ...habits.slice(index + 1)]);
+    if (habits) {
+      setHabits([...habits.slice(0, index), habit, ...habits.slice(index + 1)]);
+    }
   };
 
   const dateChange = (newDate: string) => {

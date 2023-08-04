@@ -37,6 +37,7 @@ const Navigator = ({user}: {user: string}) => {
           ),
           headerShown: false,
         }}
+        initialParams={{user: user}}
       />
       <Tab.Screen
         name="Social"

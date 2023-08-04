@@ -1,6 +1,3 @@
-import {uploadProfilePic} from '../photo/changeProfilePic';
-import {ProfileType} from '../types';
-import createUserDoc from './createUserDoc';
 import {checkUserExists} from './checkUserExists';
 
 export const createUserOnPress = async (
@@ -21,6 +18,7 @@ export const createUserOnPress = async (
   ) {
     console.log(
       'missing parameters: ' +
+        (!selectedImage ? 'selectedImage ' : '') +
         (!email ? 'email ' : '') +
         (!password ? 'password ' : '') +
         (!name ? 'name ' : '') +
@@ -29,7 +27,6 @@ export const createUserOnPress = async (
     );
     return false;
   }
-  if (!(await checkUserExists(email, username))) {
-    return true;
-  }
+  const userExists = await checkUserExists(email, username);
+  return !userExists;
 };

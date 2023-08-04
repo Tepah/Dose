@@ -10,7 +10,6 @@ import {selectImage} from '../../components/photo/selectImage';
 import {createUserOnPress} from '../../components/auth/createUserOnPress';
 import {ProfileType} from '../../components/types';
 import createUserDoc from '../../components/auth/createUserDoc';
-import {createEmailUser} from '../../components/auth/emailSignUp';
 import {uploadProfilePic} from '../../components/photo/changeProfilePic';
 
 export const GmailSignUpScreen = ({route}: any) => {
@@ -19,29 +18,24 @@ export const GmailSignUpScreen = ({route}: any) => {
   const [birthday, setBirthday] = React.useState('');
   const [username, setUsername] = React.useState('');
   const [selectedImage, setSelectedImage] = React.useState(null);
+  const [profilePicUrl, setProfilePicUrl] = React.useState<string | null>(null);
+  const [created, setCreated] = React.useState<boolean | undefined>(false);
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
-  const onPress = () => {
-    const created: boolean = createUserOnPress(
-      selectedImage,
-      user.email,
-      'N/A',
-      name,
-      birthday,
-      username,
-    );
-    if (created) {
-      auth().signInWithCredential(googleCredential);
-    }
-  };
 
   useEffect(() => {
-    if (created) {
-      const user: ProfileType = {
+    if (created && !profilePicUrl) {
+      const changeProfilePic = async () => {
+        setProfilePicUrl(await uploadProfilePic(selectedImage, username));
+      };
+      changeProfilePic();
+    }
+    if (created && profilePicUrl) {
+      const newUser: ProfileType = {
         username: '@' + username.toLowerCase(),
         name: name.toLowerCase(),
         birthday: birthday,
-        email: email.toLowerCase(),
+        email: user.email.toLowerCase(),
         private: false,
         followers: [],
         following: [],
@@ -50,23 +44,22 @@ export const GmailSignUpScreen = ({route}: any) => {
         startDate: new Date().toLocaleDateString('en-US'),
         profilePic: profilePicUrl,
       };
-      createUserDoc(user);
-      auth.().signInWithCredential(googleCredential);
+      createUserDoc(newUser);
+      auth().signInWithCredential(googleCredential);
     }
-  }, [profilePicUrl]);
+  }, [created, profilePicUrl]);
 
   const onPress = async () => {
     setCreated(
       await createUserOnPress(
         selectedImage,
         user.email,
-        "",
+        'N/A',
         name,
         birthday,
         username,
       ),
     );
-    setProfilePicUrl(await uploadProfilePic(selectedImage, username));
   };
 
   // TODO: Create password creation, also error handling like name size, etc.

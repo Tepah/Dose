@@ -11,6 +11,7 @@ import {createUserOnPress} from '../../components/auth/createUserOnPress';
 import {uploadProfilePic} from '../../components/photo/changeProfilePic';
 import {ProfileType} from '../../components/types';
 import createUserDoc from '../../components/auth/createUserDoc';
+import profile from '../Profile';
 
 export const EmailSignUpScreen = () => {
   const [email, setEmail] = React.useState('');
@@ -25,7 +26,13 @@ export const EmailSignUpScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   useEffect(() => {
-    if (created) {
+    if (created && !profilePicUrl) {
+      const changeProfilePic = async () => {
+        setProfilePicUrl(await uploadProfilePic(selectedImage, username));
+      };
+      changeProfilePic();
+    }
+    if (profilePicUrl && created) {
       const user: ProfileType = {
         username: '@' + username.toLowerCase(),
         name: name.toLowerCase(),
@@ -42,7 +49,7 @@ export const EmailSignUpScreen = () => {
       createUserDoc(user);
       createEmailUser(email, password);
     }
-  }, [profilePicUrl]);
+  }, [created, profilePicUrl]);
 
   const onPress = async () => {
     setCreated(
@@ -55,7 +62,6 @@ export const EmailSignUpScreen = () => {
         username,
       ),
     );
-    setProfilePicUrl(await uploadProfilePic(selectedImage, username));
   };
 
   // TODO: Create password creation, also error handling
