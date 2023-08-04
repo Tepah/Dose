@@ -1,9 +1,16 @@
 import {uploadProfilePic} from '../photo/changeProfilePic';
-import {createEmailUser} from './emailSignUp';
 import {ProfileType} from '../types';
 import createUserDoc from './createUserDoc';
+import {checkUserExists} from './checkUserExists';
 
-export const createUserOnPress = (selectedImage, email, password, name, birthday, username) => {
+export const createUserOnPress = async (
+  selectedImage: string | null,
+  email: string,
+  password: string,
+  name: string,
+  birthday: string,
+  username: string,
+) => {
   if (
     selectedImage === null ||
     email === '' ||
@@ -14,33 +21,15 @@ export const createUserOnPress = (selectedImage, email, password, name, birthday
   ) {
     console.log(
       'missing parameters: ' +
-      (!email ? 'email ' : '') +
-      (!password ? 'password ' : '') +
-      (!name ? 'name ' : '') +
-      (!birthday ? 'birthday ' : '') +
-      (!username ? 'username ' : ''),
+        (!email ? 'email ' : '') +
+        (!password ? 'password ' : '') +
+        (!name ? 'name ' : '') +
+        (!birthday ? 'birthday ' : '') +
+        (!username ? 'username ' : ''),
     );
     return false;
   }
-  if (checkUserExists(email, username)) {
-    return false;
-  }
-  const profilePicUrl = uploadProfilePic(selectedImage, username);
-  if (createdNewUser) {
-    const user: ProfileType = {
-      username: '@' + username.toLowerCase(),
-      name: name.toLowerCase(),
-      birthday: birthday,
-      email: email.toLowerCase(),
-      private: false,
-      followers: [],
-      following: [],
-      habits: [],
-      description: '',
-      startDate: new Date().toLocaleDateString('en-US'),
-      profilePic: profilePicUrl,
-    };
-    createUserDoc(user);
-    return true
+  if (!(await checkUserExists(email, username))) {
+    return true;
   }
 };

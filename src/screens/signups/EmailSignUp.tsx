@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Image, Pressable, Text, TextInput, View} from 'react-native';
 import Styles from '../../components/Styles';
 import {createEmailUser} from '../../components/auth/emailSignUp';
@@ -8,6 +8,9 @@ import {CloseButton} from '../../components/Close';
 import {mockProfileList} from '../../test/mockProfile1';
 import {selectImage} from '../../components/photo/selectImage';
 import {createUserOnPress} from '../../components/auth/createUserOnPress';
+import {uploadProfilePic} from '../../components/photo/changeProfilePic';
+import {ProfileType} from '../../components/types';
+import createUserDoc from '../../components/auth/createUserDoc';
 
 export const EmailSignUpScreen = () => {
   const [email, setEmail] = React.useState('');
@@ -16,21 +19,43 @@ export const EmailSignUpScreen = () => {
   const [birthday, setBirthday] = React.useState('');
   const [username, setUsername] = React.useState('');
   const [selectedImage, setSelectedImage] = React.useState(null);
+  const [created, setCreated] = React.useState<boolean | undefined>(false);
+  const [profilePicUrl, setProfilePicUrl] = React.useState<string | null>(null);
   // To get typescript to play nice, use the following:
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
-  const onPress = () => {
-    const created: boolean | undefined = createUserOnPress(
-      selectedImage,
-      email,
-      password,
-      name,
-      birthday,
-      username,
-    );
+  useEffect(() => {
     if (created) {
+      const user: ProfileType = {
+        username: '@' + username.toLowerCase(),
+        name: name.toLowerCase(),
+        birthday: birthday,
+        email: email.toLowerCase(),
+        private: false,
+        followers: [],
+        following: [],
+        habits: [],
+        description: '',
+        startDate: new Date().toLocaleDateString('en-US'),
+        profilePic: profilePicUrl,
+      };
+      createUserDoc(user);
       createEmailUser(email, password);
     }
+  }, [profilePicUrl]);
+
+  const onPress = async () => {
+    setCreated(
+      await createUserOnPress(
+        selectedImage,
+        email,
+        password,
+        name,
+        birthday,
+        username,
+      ),
+    );
+    setProfilePicUrl(await uploadProfilePic(selectedImage, username));
   };
 
   // TODO: Create password creation, also error handling

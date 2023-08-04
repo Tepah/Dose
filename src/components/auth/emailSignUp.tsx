@@ -1,6 +1,6 @@
 import auth from '@react-native-firebase/auth';
 
-export const createEmailUser = (email: string, password: string): boolean => {
+export const createEmailUser = (email: string, password: string): void => {
   auth()
     .createUserWithEmailAndPassword(email, password)
     .then(() => {
