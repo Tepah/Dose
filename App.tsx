@@ -24,7 +24,6 @@ function App() {
   }, []);
   useEffect(() => {
     setInitializing(false);
-    console.log("I am being re-rendered.");
   }, [username]);
 
   if (initializing) {

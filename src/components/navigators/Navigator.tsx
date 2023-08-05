@@ -10,12 +10,42 @@ import {mockProfileList} from '../../test/mockProfile1';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import NotificationsScreen from '../../screens/Notifications';
 import SearchScreen from '../../screens/Search';
+import firestore from '@react-native-firebase/firestore';
+import {useEffect} from 'react';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const Navigator = ({user}: {user: string}) => {
+  const [loading, setLoading] = React.useState(true);
+  const [imageUrl, setImageUrl] = React.useState<String>('');
   console.log(user);
+
+  useEffect(() => {
+    setLoading(false);
+  }, [imageUrl]);
+
+  const getImage = async () => {
+    // Gets profile picture of current user for navigation bar
+    try {
+      const docSnapshot = await firestore().collection('Users').doc(user).get();
+      if (docSnapshot.exists) {
+        const picUrl = await docSnapshot.data()?.profilePic;
+        setImageUrl(picUrl);
+      } else {
+        console.log('No profile picture?');
+        return '';
+      }
+    } catch (err) {
+      console.error('Error getting profile pic: ', err);
+    }
+  };
+  getImage();
+
+  if (loading) {
+    return null;
+  }
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -77,11 +107,13 @@ const Navigator = ({user}: {user: string}) => {
         options={{
           tabBarIcon: ({focused}) => (
             <View style={focused ? styles.iconFocused : null}>
-              <Image
-                source={{uri: mockProfileList['@petah'].profilePic}}
-                style={[styles.icons, styles.userPostImage]}
-                resizeMode="contain"
-              />
+              {loading ? null : (
+                <Image
+                  source={{uri: imageUrl}}
+                  style={[styles.icons, styles.userPostImage]}
+                  resizeMode="contain"
+                />
+              )}
             </View>
           ),
           headerShown: false,
