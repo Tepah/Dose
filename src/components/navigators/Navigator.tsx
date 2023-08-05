@@ -18,11 +18,14 @@ const Stack = createNativeStackNavigator();
 
 const Navigator = ({user}: {user: string}) => {
   const [loading, setLoading] = React.useState(true);
-  const [imageUrl, setImageUrl] = React.useState<String>('');
-  console.log(user);
+  const [imageUrl, setImageUrl] = React.useState<string>('');
+  console.log('On user sign in the user is: ' + user);
 
   useEffect(() => {
-    setLoading(false);
+    console.log('When there is an image: ' + user);
+    if (imageUrl !== '') {
+      setLoading(false);
+    }
   }, [imageUrl]);
 
   const getImage = async () => {
@@ -33,7 +36,7 @@ const Navigator = ({user}: {user: string}) => {
         const picUrl = await docSnapshot.data()?.profilePic;
         setImageUrl(picUrl);
       } else {
-        console.log('No profile picture?');
+        console.log('No profile picture?' + ' Current user is: ' + user);
         return '';
       }
     } catch (err) {
@@ -45,7 +48,6 @@ const Navigator = ({user}: {user: string}) => {
   if (loading) {
     return null;
   }
-
   return (
     <Tab.Navigator
       screenOptions={{
@@ -67,7 +69,7 @@ const Navigator = ({user}: {user: string}) => {
           ),
           headerShown: false,
         }}
-        initialParams={{user: user}}
+        initialParams={{username: user}}
       />
       <Tab.Screen
         name="Social"
@@ -181,7 +183,6 @@ const SearchStackNavigator = () => {
 };
 
 const ProfileStackNavigator = (prop: any) => {
-  console.log(prop);
   return (
     <Stack.Navigator>
       <Stack.Screen

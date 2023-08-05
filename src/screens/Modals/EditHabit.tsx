@@ -19,7 +19,7 @@ import {CloseButton} from '../../components/Close';
 interface Props {
   editHabit: (habit: HabitType, index: number) => void;
   visible: boolean;
-  habits: HabitType[];
+  habits: HabitType[] | undefined;
   currentHabitIndex: number;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   selectedList: string;

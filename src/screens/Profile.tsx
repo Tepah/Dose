@@ -8,8 +8,7 @@ import {currentUser} from '../test/mockProfile1';
 import {CloseButton} from '../components/Close';
 import {SettingsModal} from './Modals/Settings';
 import {PostModal} from './Modals/PostModal';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
-
+import {useNavigation} from '@react-navigation/native';
 
 const ProfileScreen = ({route}: any) => {
   const {user} = route.params;

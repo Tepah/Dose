@@ -10,7 +10,6 @@ import {
 import Calendar from '../components/Calendar';
 import Styles from '../components/Styles';
 import AddHabitScreen from './Modals/AddHabit';
-import {mockProfileList} from '../test/mockProfile1';
 import EditHabitScreen from './Modals/EditHabit';
 import {HabitType, ProfileType} from '../components/types';
 import {useIsFocused} from '@react-navigation/native';
@@ -56,10 +55,10 @@ const SwipeableItem = ({
         toValue: {x: 0, y: 0},
         useNativeDriver: false,
       }).start();
-      if (type === 'current') {
+      if (habits && type === 'current') {
         setHabits([...habits.slice(0, index), ...habits.slice(index + 1)]);
         setSwipedHabits([...swipedHabits, habit]);
-      } else if (type === 'swiped') {
+      } else if (habits && type === 'swiped') {
         setSwipedHabits([
           ...swipedHabits.slice(0, index),
           ...swipedHabits.slice(index + 1),
@@ -185,19 +184,21 @@ const handleLongPress = (
 
 const getProfileHabits = async (username: string) => {
   try {
-    const usersRef = firestore().collection('Users');
-    const query = await usersRef.doc(username).get();
+    const query = await firestore().collection('Users').doc(username).get();
+    if (query.exists) {
+      const profile: ProfileType = query.data() as ProfileType;
+      console.log(profile.habits);
+      return profile.habits;
+    }
   } catch (err) {
     console.error('Error getting habits: ', err);
   }
 };
 
 const HomeScreen = ({route}: any) => {
-  const {username} = route.params;
-  console.log(getProfileHabits(username));
+  const username = route.params?.username;
   const isFocused = useIsFocused();
-  const [habits, setHabits] = useState<HabitType[] | undefined>([]
-  );
+  const [habits, setHabits] = useState<HabitType[] | undefined>([]);
   const [swipedHabits, setSwipedHabits] = useState<HabitType[]>([]);
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
   const [currentHabit, setCurrentHabit] = useState<number>(0);
@@ -206,28 +207,45 @@ const HomeScreen = ({route}: any) => {
   const [currentDate, setCurrentDate] = useState<string>(
     new Date().toLocaleDateString('en-US'),
   );
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const newDay = new Date().toLocaleDateString('en-US');
     setCurrentDate(() => newDay);
     setDate(() => currentDate);
-    habits.forEach((habit: HabitType) => {
-      if (habit.progress[newDay] === undefined) {
-        habit.progress[newDay] = false;
-      }
-    });
+    if (habits) {
+      habits.forEach((habit: HabitType) => {
+        if (habit.progress[newDay] === undefined) {
+          habit.progress[newDay] = false;
+        }
+      });
+    }
   }, [currentDate, isFocused]);
 
   useEffect(() => {
-    const dateHabitsDone = mockProfileList['@petah'].habits.filter(
-      (habit: HabitType) => !habit.progress[date],
-    );
-    setHabits(() => dateHabitsDone);
-    const dateHabitsNotDone = mockProfileList['@petah'].habits.filter(
-      (habit: HabitType) => habit.progress[date],
-    );
-    setSwipedHabits(() => dateHabitsNotDone);
+    const getHabits = async () => {
+      try {
+        const fullHabitsList = await getProfileHabits(username);
+        if (fullHabitsList) {
+          const dateHabitsDone = fullHabitsList.filter(
+            (habit: HabitType) => !habit.progress[date],
+          );
+          setHabits(() => dateHabitsDone);
+          const dateHabitsNotDone = fullHabitsList.filter(
+            (habit: HabitType) => habit.progress[date],
+          );
+          setSwipedHabits(() => dateHabitsNotDone);
+        }
+      } catch (err) {
+        console.error('Error getting habits: ', err);
+      }
+    };
+    getHabits();
   }, [date]);
+
+  useEffect(() => {
+    setLoading(false);
+  }, [habits, swipedHabits]);
 
   const renderHabits = (type: string, list: HabitType[]) => {
     const checkDate = currentDate === date;
@@ -259,8 +277,9 @@ const HomeScreen = ({route}: any) => {
       ),
     );
   };
+
   const addHabit = (habit: HabitType) => {
-    setHabits([...habits, habit]);
+    setHabits(habits ? [...habits, habit] : [habit]);
   };
 
   const editHabit = (habit: HabitType, index: number) => {
@@ -273,31 +292,37 @@ const HomeScreen = ({route}: any) => {
     setDate(() => newDate);
   };
 
+  const habitList = (
+    <ScrollView style={Styles.habitList} keyboardShouldPersistTaps="always">
+      {habits && habits.length > 0 ? renderHabits('current', habits) : null}
+      <AddHabitScreen addHabit={addHabit} />
+      {(habits && currentHabit < habits.length && selectedList === 'current') ||
+      (swipedHabits &&
+        currentHabit < swipedHabits.length &&
+        selectedList === 'swiped') ? (
+        <EditHabitScreen
+          editHabit={editHabit}
+          habits={
+            selectedList === 'current'
+              ? habits
+              : selectedList === 'swiped'
+              ? swipedHabits
+              : []
+          }
+          currentHabitIndex={currentHabit}
+          visible={editModalVisible}
+          setVisible={setEditModalVisible}
+          selectedList={selectedList}
+        />
+      ) : null}
+      {renderHabits('swiped', swipedHabits)}
+    </ScrollView>
+  );
+
   return (
     <View style={Styles.app}>
       <Calendar dateChange={dateChange} />
-      <ScrollView style={Styles.habitList} keyboardShouldPersistTaps="always">
-        {renderHabits('current', habits)}
-        <AddHabitScreen addHabit={addHabit} />
-        {(currentHabit < habits.length && selectedList === 'current') ||
-        (currentHabit < swipedHabits.length && selectedList === 'swiped') ? (
-          <EditHabitScreen
-            editHabit={editHabit}
-            habits={
-              selectedList === 'current'
-                ? habits
-                : selectedList === 'swiped'
-                ? swipedHabits
-                : []
-            }
-            currentHabitIndex={currentHabit}
-            visible={editModalVisible}
-            setVisible={setEditModalVisible}
-            selectedList={selectedList}
-          />
-        ) : null}
-        {renderHabits('swiped', swipedHabits)}
-      </ScrollView>
+      {loading ? <View /> : habitList}
     </View>
   );
 };
