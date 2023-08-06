@@ -11,20 +11,60 @@ import {
 import Styles from '../../components/Styles';
 import {HabitType} from '../../components/types';
 import {CloseButton} from '../../components/Close';
+import firestore from '@react-native-firebase/firestore';
 
 interface Props {
   addHabit: (habit: HabitType) => void;
+  user: string;
 }
 
-const AddHabitScreen = ({addHabit}: Props) => {
+const AddHabitScreen = ({addHabit, user}: Props) => {
   const [addScreenVisible, setAddScreenVisible] = useState(false);
   const [habitName, setHabitName] = useState('');
   const [habitDesc, setHabitDesc] = useState('');
   const [errorModal, setErrorModal] = useState(false);
+  let habitId = '';
 
   const openCloseModal = () => {
     setAddScreenVisible(() => !addScreenVisible);
     setHabitName('');
+    setHabitDesc('');
+  };
+
+  const addHabitToDB = async () => {
+    try {
+      // Checks if habit name already exists in firestore
+      const habitRef = await firestore()
+        .collection('Habits')
+        .where('name', '==', habitName.toLowerCase())
+        .get();
+      if (habitRef.docs.length === 0) {
+        const newRef = await firestore().collection('Habits').doc();
+        await newRef.set({
+          name: habitName,
+          users: [user],
+        });
+        habitId = newRef.id;
+      } else {
+        habitId = habitRef.docs[0].id;
+        const docRef = firestore().collection('Habits').doc(habitId);
+        await docRef.update({
+          users: firestore.FieldValue.arrayUnion(user),
+        });
+      }
+      const date = new Date().toDateString();
+      const progress: {[key: string]: boolean} = {};
+      progress[date] = false;
+      addHabit({
+        name: habitName,
+        description: habitDesc,
+        streak: 0,
+        progress: progress,
+        habitId: habitId,
+      });
+    } catch (err) {
+      console.error('Error checking habit name: ', err);
+    }
   };
 
   const addHabitHandler = () => {
@@ -32,15 +72,7 @@ const AddHabitScreen = ({addHabit}: Props) => {
       setErrorModal(true);
       return;
     }
-    const date = new Date().toDateString();
-    const progress: {[key: string]: boolean} = {};
-    progress[date] = false;
-    addHabit({
-      name: habitName,
-      description: habitDesc,
-      streak: 0,
-      progress: progress,
-    });
+    addHabitToDB();
     setHabitName('');
     openCloseModal();
   };
@@ -54,9 +86,7 @@ const AddHabitScreen = ({addHabit}: Props) => {
         <TouchableWithoutFeedback onPress={() => openCloseModal()}>
           <View style={Styles.inputFieldBackground}></View>
         </TouchableWithoutFeedback>
-        <View style={Styles.addModal}>
-          {addForm()}
-        </View>
+        <View style={Styles.addModal}>{addForm()}</View>
       </Modal>
     );
   };

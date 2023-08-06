@@ -280,6 +280,20 @@ const HomeScreen = ({route}: any) => {
 
   const addHabit = (habit: HabitType) => {
     setHabits(habits ? [...habits, habit] : [habit]);
+    const syncHabit = async () => {
+      try {
+        const query = await firestore().collection('Users').doc(username).get();
+        if (query.exists) {
+          const profile: ProfileType = query.data() as ProfileType;
+          profile.habits.push(habit);
+          await firestore().collection('Users').doc(username).update(profile);
+
+        }
+      } catch (err) {
+        console.error('Error adding habit: ', err);
+      }
+    };
+    syncHabit();
   };
 
   const editHabit = (habit: HabitType, index: number) => {
@@ -295,7 +309,7 @@ const HomeScreen = ({route}: any) => {
   const habitList = (
     <ScrollView style={Styles.habitList} keyboardShouldPersistTaps="always">
       {habits && habits.length > 0 ? renderHabits('current', habits) : null}
-      <AddHabitScreen addHabit={addHabit} />
+      <AddHabitScreen addHabit={addHabit} user={username} />
       {(habits && currentHabit < habits.length && selectedList === 'current') ||
       (swipedHabits &&
         currentHabit < swipedHabits.length &&
