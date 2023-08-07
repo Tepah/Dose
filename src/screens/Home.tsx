@@ -44,8 +44,9 @@ const HomeScreen = ({route}: any) => {
             habit.progress[newDay] = false;
           }
           if (
-            habit.progress[formattedDayBeforeDate] === undefined ||
-            !habit.progress[formattedDayBeforeDate]
+            (habit.progress[formattedDayBeforeDate] === undefined ||
+              !habit.progress[formattedDayBeforeDate]) &&
+            habit.streak > 1
           ) {
             habit.streak = 0;
           }
