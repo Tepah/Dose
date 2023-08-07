@@ -5,21 +5,23 @@ import {
   Modal,
   Platform,
   Pressable,
-  ScrollView, StyleSheet,
+  ScrollView,
+  StyleSheet,
   Text,
   TextInput,
   TouchableWithoutFeedback,
-  View
+  View,
 } from 'react-native';
 import Styles from '../../components/Styles';
 import {HabitType} from '../../components/types';
 import {mockFriends} from '../../test/mockFriends';
 import {CloseButton} from '../../components/Close';
 import {AppButton} from '../../components/Button';
-import App from '../../../App';
+import firestore from '@react-native-firebase/firestore';
 
 interface Props {
-  editHabit: (habit: HabitType, index: number) => void;
+  username: string;
+  editHabit: (habit: HabitType, editType: string) => void;
   visible: boolean;
   habits: HabitType[] | undefined;
   currentHabitIndex: number;
@@ -28,6 +30,7 @@ interface Props {
 }
 
 const EditHabitScreen = ({
+  username,
   editHabit,
   visible,
   habits,
@@ -101,7 +104,7 @@ const EditHabitScreen = ({
     };
 
     const onEditDescriptionSave = () => {
-      editHabit(newHabit, currentHabitIndex);
+      editHabit(newHabit, 'edit');
       setEditModalVisible(false);
     };
 
@@ -184,26 +187,71 @@ const EditHabitScreen = ({
               </View>
             </View>
           </View>
-          <DeleteHabitButton />
+          <DeleteHabitButton
+            username={username}
+            habit={habits ? habits[currentHabitIndex] : null}
+            setEditModalVisible={setEditModalVisible}
+            editHabit={editHabit}
+          />
         </ScrollView>
       </View>
     );
   };
-  return (
-    <View>
-      {editModal()}
-    </View>
-  );
+  return <View>{editModal()}</View>;
 };
 
 const deleteHabit = (
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>,
+  username: string,
+  habit: HabitType | null,
+  setEditModalVisible: React.Dispatch<React.SetStateAction<boolean>>,
+  editHabit: (habit: HabitType, editType: string) => void,
 ) => {
-  console.log('delete habit');
+  // Deletes habit from both User collection and Habit collection if there is no users.
+  const deleteOnDatabase = async () => {
+    try {
+      if (habit) {
+        // removes habit from user's habits array
+        await firestore()
+          .collection('Users')
+          .doc(username)
+          .update({
+            habits: firestore.FieldValue.arrayRemove(habit),
+          });
+        const habitRef = firestore().collection('Habits').doc(habit.habitId);
+        const habitDoc = await habitRef.get();
+        if (habitDoc.exists) {
+          const habitData = habitDoc.data();
+          const deleteUserIndex = habitData?.users.findIndex(
+            (user: string) => user === username,
+          );
+          habitData?.users.splice(deleteUserIndex, 1);
+          if (habitData?.users.length === 0) {
+            await habitRef.delete();
+            console.log('Habit deleted from system because no users left');
+          } else {
+            await habitRef.update({
+              users: habitData?.users,
+            });
+          }
+        }
+      }
+    } catch (err) {
+      console.log('Error deleting habit on system: ' + err);
+    }
+  };
+  deleteOnDatabase();
+  editHabit(habit as HabitType, 'delete');
   setModalVisible(false);
+  setEditModalVisible(false);
 };
 
-const DeleteHabitButton = () => {
+const DeleteHabitButton = (props: {
+  username: string;
+  habit: HabitType | null;
+  setEditModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  editHabit: (habit: HabitType, editType: string) => void;
+}) => {
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <View>
@@ -219,7 +267,15 @@ const DeleteHabitButton = () => {
               Are you sure you want to delete this habit?
             </Text>
             <AppButton
-              onPress={() => deleteHabit(setModalVisible)}
+              onPress={() =>
+                deleteHabit(
+                  setModalVisible,
+                  props.username,
+                  props.habit,
+                  props.setEditModalVisible,
+                  props.editHabit,
+                )
+              }
               title={'Yes'}
             />
             <AppButton onPress={() => setModalVisible(false)} title={'No'} />

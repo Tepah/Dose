@@ -52,18 +52,26 @@ const AddHabitScreen = ({addHabit, user}: Props) => {
           users: firestore.FieldValue.arrayUnion(user),
         });
       }
-      const date = new Date().toLocaleDateString('en-US');
-      const progress: {[key: string]: boolean} = {};
-      progress[date] = false;
-      addHabit({
-        name: habitName,
-        description: habitDesc,
-        streak: 0,
-        progress: progress,
-        habitId: habitId,
-      });
+      const userRef = await firestore().collection('Users').doc(user).get();
+      const habitExists = userRef
+        .data()
+        ?.habits.find((obj: HabitType) => obj.habitId === habitId);
+      if (!habitExists) {
+        const date = new Date().toLocaleDateString('en-US');
+        const progress: {[key: string]: boolean} = {};
+        progress[date] = false;
+        addHabit({
+          name: habitName,
+          description: habitDesc,
+          streak: 0,
+          progress: progress,
+          habitId: habitId,
+        });
+      } else {
+        throw new Error('Habit already exists on this user.');
+      }
     } catch (err) {
-      console.error('Error checking habit name: ', err);
+      console.error('Error adding habit to DB: ', err);
     }
   };
 

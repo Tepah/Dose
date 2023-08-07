@@ -43,6 +43,7 @@ export const GmailSignUpScreen = ({route}: any) => {
         description: '',
         startDate: new Date().toLocaleDateString('en-US'),
         profilePic: profilePicUrl,
+        posts: [],
       };
       createUserDoc(newUser);
       auth().signInWithCredential(googleCredential);

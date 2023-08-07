@@ -16,6 +16,7 @@ export type ProfileType = {
   profilePic: any;
   birthday: string;
   email: string;
+  posts: PostType[];
 };
 
 export type PostType = {

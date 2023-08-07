@@ -45,6 +45,7 @@ export const EmailSignUpScreen = () => {
         description: '',
         startDate: new Date().toLocaleDateString('en-US'),
         profilePic: profilePicUrl,
+        posts: [],
       };
       createUserDoc(user);
       createEmailUser(email, password);

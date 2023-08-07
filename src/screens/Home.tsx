@@ -140,7 +140,7 @@ const HomeScreen = ({route}: any) => {
     syncHabit();
   };
 
-  const editHabit = (habit: HabitType, index: number) => {
+  const editHabit = (habit: HabitType, editType: string) => {
     const syncHabit = async () => {
       try {
         const allHabits = await getProfileHabits(username);
@@ -168,7 +168,11 @@ const HomeScreen = ({route}: any) => {
         console.error('Error Editing habit: ', err);
       }
     };
-    syncHabit();
+    if (editType === 'edit') {
+      syncHabit();
+    } else if (editType === 'delete') {
+      getHabits();
+    }
   };
 
   const dateChange = (newDate: string) => {
@@ -184,6 +188,7 @@ const HomeScreen = ({route}: any) => {
         currentHabit < swipedHabits.length &&
         selectedList === 'swiped') ? (
         <EditHabitScreen
+          username={username}
           editHabit={editHabit}
           habits={
             selectedList === 'current'
