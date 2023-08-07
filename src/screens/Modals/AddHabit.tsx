@@ -41,7 +41,7 @@ const AddHabitScreen = ({addHabit, user}: Props) => {
       if (habitRef.docs.length === 0) {
         const newRef = await firestore().collection('Habits').doc();
         await newRef.set({
-          name: habitName,
+          name: habitName.toLowerCase(),
           users: [user],
         });
         habitId = newRef.id;

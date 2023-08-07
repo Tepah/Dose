@@ -37,7 +37,6 @@ const HomeScreen = ({route}: any) => {
       const oneDayBefore = new Date(today);
       oneDayBefore.setDate(today.getDate() - 1);
       const formattedDayBeforeDate = oneDayBefore.toLocaleDateString('en-US');
-      console.log('Before All habits: ', allHabits);
       if (allHabits) {
         allHabits.forEach((habit: HabitType) => {
           if (habit.progress[newDay] === undefined) {
@@ -51,7 +50,6 @@ const HomeScreen = ({route}: any) => {
             habit.streak = 0;
           }
         });
-        console.log('All habits: ', allHabits);
       }
     } catch (err) {
       console.error('Error setting new day: ', err);
@@ -143,9 +141,34 @@ const HomeScreen = ({route}: any) => {
   };
 
   const editHabit = (habit: HabitType, index: number) => {
-    if (habits) {
-      setHabits([...habits.slice(0, index), habit, ...habits.slice(index + 1)]);
-    }
+    const syncHabit = async () => {
+      try {
+        const allHabits = await getProfileHabits(username);
+        if (allHabits) {
+          const habitIndex = allHabits.findIndex(
+            obj => obj.habitId === habit.habitId,
+          );
+          allHabits[habitIndex].description = habit.description;
+        }
+        await firestore()
+          .collection('Users')
+          .doc(username)
+          .update({habits: allHabits});
+        if (allHabits) {
+          const dateHabitsDone = allHabits.filter(
+            (obj: HabitType) => !obj.progress[date],
+          );
+          setHabits(() => dateHabitsDone);
+          const dateHabitsNotDone = allHabits.filter(
+            (obj: HabitType) => obj.progress[date],
+          );
+          setSwipedHabits(() => dateHabitsNotDone);
+        }
+      } catch (err) {
+        console.error('Error Editing habit: ', err);
+      }
+    };
+    syncHabit();
   };
 
   const dateChange = (newDate: string) => {
