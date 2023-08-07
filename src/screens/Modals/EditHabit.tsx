@@ -32,12 +32,16 @@ const EditHabitScreen = ({
   currentHabitIndex,
   setVisible,
 }: Props) => {
-  const [habitName, setHabitName] = useState(habits[currentHabitIndex].name);
-  const [habitDesc, setHabitDesc] = useState(
-    habits[currentHabitIndex].description,
+  const [habitName, setHabitName] = useState(
+    habits ? habits[currentHabitIndex].name : '',
   );
-  const [habitStreak, setHabitStreak] = useState(habits[currentHabitIndex].streak);
-  const [habitProgress, setHabitProgress] = useState(habits[currentHabitIndex].progress);
+  const [habitDesc, setHabitDesc] = useState(
+    habits ? habits[currentHabitIndex].description : '',
+  );
+  const [habitStreak, setHabitStreak] = useState(
+    habits ? habits[currentHabitIndex].streak : 0,
+  );
+  const habitProgress = habits ? habits[currentHabitIndex].progress : {};
 
   const openCloseModal = () => {
     setVisible(() => !visible);
@@ -82,7 +86,7 @@ const EditHabitScreen = ({
     description: habitDesc,
     streak: habitStreak,
     progress: habitProgress,
-    habitId: (habits ? habits[currentHabitIndex].habitId : ''),
+    habitId: habits ? habits[currentHabitIndex].habitId : '',
   });
   const editForm = () => {
     const onEditButtonPress = () => {
@@ -91,7 +95,7 @@ const EditHabitScreen = ({
         description: habitDesc,
         streak: habitStreak,
         progress: habitProgress,
-        habitId: habits[currentHabitIndex].habitId,
+        habitId: habits ? habits[currentHabitIndex].habitId : '',
       });
       setEditModalVisible(true);
     };

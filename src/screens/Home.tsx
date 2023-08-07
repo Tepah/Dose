@@ -29,17 +29,39 @@ const HomeScreen = ({route}: any) => {
   );
   const [loading, setLoading] = useState<boolean>(true);
 
+  const setNewDay = async () => {
+    try {
+      const newDay = new Date().toLocaleDateString('en-US');
+      const allHabits = await getProfileHabits(username);
+      const today = new Date();
+      const oneDayBefore = new Date(today);
+      oneDayBefore.setDate(today.getDate() - 1);
+      const formattedDayBeforeDate = oneDayBefore.toLocaleDateString('en-US');
+      console.log('Before All habits: ', allHabits);
+      if (allHabits) {
+        allHabits.forEach((habit: HabitType) => {
+          if (habit.progress[newDay] === undefined) {
+            habit.progress[newDay] = false;
+          }
+          if (
+            habit.progress[formattedDayBeforeDate] === undefined ||
+            !habit.progress[formattedDayBeforeDate]
+          ) {
+            habit.streak = 0;
+          }
+        });
+        console.log('All habits: ', allHabits);
+      }
+    } catch (err) {
+      console.error('Error setting new day: ', err);
+    }
+  };
+
   useEffect(() => {
     const newDay = new Date().toLocaleDateString('en-US');
     setCurrentDate(() => newDay);
     setDate(() => currentDate);
-    if (habits) {
-      habits.forEach((habit: HabitType) => {
-        if (habit.progress[newDay] === undefined) {
-          habit.progress[newDay] = false;
-        }
-      });
-    }
+    setNewDay();
   }, [currentDate, isFocused]);
 
   useEffect(() => {

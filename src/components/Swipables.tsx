@@ -3,7 +3,7 @@ import React, {useRef} from 'react';
 import {Animated, PanResponder, Pressable, Text, View} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import Styles from './Styles';
-import { getProfileHabits } from './firestore/getHabits';
+import {getProfileHabits} from './firestore/getHabits';
 
 interface SwipeableItemProps {
   type: string;
@@ -39,10 +39,16 @@ export const SwipeableItem = ({
       const date = new Date().toLocaleDateString('en-US');
       if (allHabits) {
         const habitIndex = allHabits.findIndex(
-          obj => JSON.stringify(obj) === JSON.stringify(habit),
+          obj => obj.habitId === habit.habitId,
         );
         allHabits[habitIndex].progress[date] =
           !allHabits[habitIndex].progress[date];
+        // Increments streak if habit is done, decrements if cancelled
+        if (allHabits[habitIndex].progress[date]) {
+          allHabits[habitIndex].streak++;
+        } else {
+          allHabits[habitIndex].streak--;
+        }
       }
       await firestore()
         .collection('Users')

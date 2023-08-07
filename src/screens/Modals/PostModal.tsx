@@ -1,11 +1,18 @@
-import { PostType } from "../../components/types";
-import React, { useEffect, useRef } from "react";
-import { Image, Modal, Pressable, ScrollView, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
-import Styles from "../../components/Styles";
-import LinearGradient from "react-native-linear-gradient";
-import { ReactBar } from "../Social";
-import { mockProfileList } from "../../test/mockProfile1";
-
+import {PostType} from '../../components/types';
+import React, {useRef} from 'react';
+import {
+  Image,
+  Modal,
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
+import Styles from '../../components/Styles';
+import LinearGradient from 'react-native-linear-gradient';
+import {ReactBar} from '../Social';
+import {mockProfileList} from '../../test/mockProfile1';
 
 type Props = {
   post: PostType;
@@ -29,9 +36,7 @@ export const PostModal = ({post, navigation, visible, setVisible}: Props) => {
   const postCaption = () => {
     return (
       <View style={Styles.postCaptionContainer}>
-        <Text style={[Styles.text, Styles.caption]}>
-          {post.postContent}
-        </Text>
+        <Text style={[Styles.text, Styles.caption]}>{post.postContent}</Text>
       </View>
     );
   };
@@ -50,7 +55,9 @@ export const PostModal = ({post, navigation, visible, setVisible}: Props) => {
               });
               closeModal();
             }}>
-            <Text style={[Styles.commentSmallBold]}>{Object.keys(comment)[0]}</Text>
+            <Text style={[Styles.commentSmallBold]}>
+              {Object.keys(comment)[0]}
+            </Text>
           </Pressable>
           <Text> </Text>
           <Text style={Styles.commentText}>{Object.values(comment)[0]}</Text>
