@@ -1,19 +1,38 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, ScrollView, Image, Pressable} from 'react-native';
 import Styles from '../components/Styles';
 import {useState} from 'react';
 import {mockPosts} from '../test/mockPosts';
 import {HabitType, PostType, ProfileType} from '../components/types';
-import {currentUser} from '../test/mockProfile1';
 import {CloseButton} from '../components/Close';
 import {SettingsModal} from './Modals/Settings';
 import {PostModal} from './Modals/PostModal';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {getUser} from '../components/firestore/getUser';
 
 const ProfileScreen = ({route}: any) => {
-  const {user} = route.params;
+  const {username, currentUser} = route.params;
+  const isFocused = useIsFocused();
   const [selected, setSelected] = useState(true);
+  const [user, setUser] = useState<ProfileType | undefined>();
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        setUser(await getUser(username));
+      } catch (err) {
+        console.error('Error getting user data: ', err);
+      }
+    };
+    getUserData();
+  }, [isFocused]);
+
+  useEffect(() => {
+    if (user) {
+      setLoading(false);
+    }
+  }, [user]);
   const profileTabs = () => {
     const onTabPress = (value: string) => {
       if (value === 'Habits' && !selected) {
@@ -47,7 +66,7 @@ const ProfileScreen = ({route}: any) => {
     );
   };
 
-  const mappedHabits = user.habits.map((habit: HabitType, index: number) => {
+  const mappedHabits = user?.habits.map((habit: HabitType, index: number) => {
     return (
       <View key={index} style={Styles.profileHabit}>
         <Text style={[Styles.text, Styles.proHabitText]}>{habit.name}</Text>
@@ -61,19 +80,24 @@ const ProfileScreen = ({route}: any) => {
     );
   });
 
+  if (loading || !user) {
+    return null;
+  }
+  console.log(user);
+
   return (
     <View style={Styles.app}>
-      {currentUser === user.username ? (
+      {currentUser === user?.username ? (
         <ProfileOptions user={user} />
       ) : (
         <Header />
       )}
       <ScrollView style={Styles.profileContainer}>
-        <ProfileInfo user={user} />
+        <ProfileInfo user={user} currentUser={currentUser} />
         <ProfileDescription user={user} />
         {profileTabs()}
         {!selected ? (
-          <MediaTab />
+          <MediaTab posts={user.posts} />
         ) : (
           <View style={Styles.profileHabitsContainer}>{mappedHabits}</View>
         )}
@@ -113,7 +137,7 @@ const Header = () => {
   );
 };
 
-const ProfileInfo = ({user}: any) => {
+const ProfileInfo = ({user, currentUser}: any) => {
   const profileCounter = (type: string) => {
     return (
       <View style={Styles.followContainer}>
@@ -122,8 +146,8 @@ const ProfileInfo = ({user}: any) => {
           {type === 'Habits'
             ? user.habits.length
             : type === 'Following'
-            ? user.following
-            : user.followers}
+            ? user.following.length
+            : user.followers.length}
         </Text>
       </View>
     );
@@ -132,7 +156,10 @@ const ProfileInfo = ({user}: any) => {
     <View>
       <View style={Styles.profileHeader}>
         <View style={Styles.profileHeaderUser}>
-          <Image source={user.profilePic} style={Styles.profilePicture} />
+          <Image
+            source={{uri: user.profilePic}}
+            style={Styles.profilePicture}
+          />
           <Text style={[Styles.text, Styles.profileNameText]}>
             {user.username}
           </Text>
@@ -183,15 +210,23 @@ const ProfileDescription = ({user}: any) => {
   );
 };
 
-const MediaTab = () => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const renderPosts = mockPosts.map((post: PostType, index) => {
+const MediaTab = (props: {posts: PostType[]}) => {
+  console.log(props.posts);
+  const renderPosts = props.posts.map((post: PostType, index) => {
     if (post.postType === 'image') {
       return <ImagePost key={index} post={post} />;
     } else if (post.postType === 'challenge') {
       return <ChallengePost key={index} post={post} />;
     }
   });
+
+  if (props.posts.length === 0) {
+    return (
+      <View style={Styles.mediaTabContainer}>
+        <Text style={[Styles.text]}>No posts to show</Text>
+      </View>
+    );
+  }
 
   return <View style={Styles.mediaTabContainer}>{renderPosts}</View>;
 };

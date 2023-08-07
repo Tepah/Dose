@@ -120,7 +120,7 @@ const Navigator = ({user}: {user: string}) => {
           ),
           headerShown: false,
         }}
-        initialParams={{user: user}}
+        initialParams={{user: user, currentUser: user}}
       />
     </Tab.Navigator>
   );
@@ -182,7 +182,8 @@ const SearchStackNavigator = () => {
   );
 };
 
-const ProfileStackNavigator = (prop: any) => {
+const ProfileStackNavigator = ({route}: any) => {
+  const {user, currentUser} = route.params;
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -191,7 +192,10 @@ const ProfileStackNavigator = (prop: any) => {
         options={{
           headerShown: false,
         }}
-        initialParams={{user: mockProfileList['@petah']}}
+        initialParams={{
+          username: user,
+          currentUser: currentUser,
+        }}
       />
       <Stack.Screen
         name="Profile"
