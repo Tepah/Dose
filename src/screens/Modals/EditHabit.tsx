@@ -61,7 +61,7 @@ const EditHabitScreen = ({
   };
 
   useEffect(() => {
-    if (habits.length >= currentHabitIndex) {
+    if (habits && habits.length >= currentHabitIndex) {
       setHabitName(() => habits[currentHabitIndex].name);
       setHabitDesc(() => habits[currentHabitIndex].description);
       setHabitStreak(() => habits[currentHabitIndex].streak);
@@ -82,6 +82,7 @@ const EditHabitScreen = ({
     description: habitDesc,
     streak: habitStreak,
     progress: habitProgress,
+    habitId: (habits ? habits[currentHabitIndex].habitId : ''),
   });
   const editForm = () => {
     const onEditButtonPress = () => {
@@ -90,6 +91,7 @@ const EditHabitScreen = ({
         description: habitDesc,
         streak: habitStreak,
         progress: habitProgress,
+        habitId: habits[currentHabitIndex].habitId,
       });
       setEditModalVisible(true);
     };

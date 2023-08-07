@@ -52,7 +52,7 @@ const AddHabitScreen = ({addHabit, user}: Props) => {
           users: firestore.FieldValue.arrayUnion(user),
         });
       }
-      const date = new Date().toDateString();
+      const date = new Date().toLocaleDateString('en-US');
       const progress: {[key: string]: boolean} = {};
       progress[date] = false;
       addHabit({
