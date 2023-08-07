@@ -5,16 +5,18 @@ import {
   Modal,
   Platform,
   Pressable,
-  ScrollView,
+  ScrollView, StyleSheet,
   Text,
   TextInput,
   TouchableWithoutFeedback,
-  View,
+  View
 } from 'react-native';
 import Styles from '../../components/Styles';
 import {HabitType} from '../../components/types';
 import {mockFriends} from '../../test/mockFriends';
 import {CloseButton} from '../../components/Close';
+import {AppButton} from '../../components/Button';
+import App from '../../../App';
 
 interface Props {
   editHabit: (habit: HabitType, index: number) => void;
@@ -57,9 +59,7 @@ const EditHabitScreen = ({
         <TouchableWithoutFeedback onPress={() => openCloseModal()}>
           <View style={Styles.inputFieldBackground}></View>
         </TouchableWithoutFeedback>
-        <View style={Styles.editModalContainer}>
-          {editForm()}
-        </View>
+        <View style={Styles.editModalContainer}>{editForm()}</View>
       </Modal>
     );
   };
@@ -184,6 +184,7 @@ const EditHabitScreen = ({
               </View>
             </View>
           </View>
+          <DeleteHabitButton />
         </ScrollView>
       </View>
     );
@@ -194,5 +195,57 @@ const EditHabitScreen = ({
     </View>
   );
 };
+
+const deleteHabit = (
+  setModalVisible: React.Dispatch<React.SetStateAction<boolean>>,
+) => {
+  console.log('delete habit');
+  setModalVisible(false);
+};
+
+const DeleteHabitButton = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  return (
+    <View>
+      <AppButton
+        onPress={() => setModalVisible(true)}
+        title={'Delete Habit'}
+        additionalStyle={{backgroundColor: 'red'}}
+      />
+      <Modal transparent visible={modalVisible} animationType={'slide'}>
+        <View style={innerStyles.optionsContainer}>
+          <View style={innerStyles.modalContent}>
+            <Text style={Styles.paragraphText}>
+              Are you sure you want to delete this habit?
+            </Text>
+            <AppButton
+              onPress={() => deleteHabit(setModalVisible)}
+              title={'Yes'}
+            />
+            <AppButton onPress={() => setModalVisible(false)} title={'No'} />
+          </View>
+        </View>
+      </Modal>
+    </View>
+  );
+};
+
+const innerStyles = StyleSheet.create({
+  optionsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(50,50,50,0.5)',
+    borderRadius: 20,
+  },
+  modalContent: {
+    alignItems: 'center',
+    height: 200,
+    width: 300,
+    backgroundColor: '#0D1821',
+    borderRadius: 20,
+    padding: 20,
+  },
+});
 
 export default EditHabitScreen;
