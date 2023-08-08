@@ -8,6 +8,7 @@ import {
   Text,
   TextInput,
   View,
+  ActivityIndicator,
 } from 'react-native';
 import Styles from '../../components/Styles';
 import {CloseButton} from '../../components/Close';
@@ -42,6 +43,7 @@ export const SettingsModal = ({user, visible, setVisible}: Props) => {
     private: boolean;
   }>({description: '', name: '', profilePic: '', private: false});
   const [saved, setSaved] = React.useState(false);
+  const [imageLoaded, setImageLoaded] = React.useState(false);
 
   useEffect(() => {
     setChanges({
@@ -66,6 +68,10 @@ export const SettingsModal = ({user, visible, setVisible}: Props) => {
     }
   };
 
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
+
   return (
     <Modal animationType="slide" visible={visible} transparent>
       <View style={[Styles.settingsModal]}>
@@ -78,10 +84,16 @@ export const SettingsModal = ({user, visible, setVisible}: Props) => {
             <Pressable
               style={Styles.changeProfilePic}
               onPress={() => selectImage(setSelectedImage)}>
+              {!imageLoaded ? (
+                <View style={Styles.profileStatsImage}>
+                  <ActivityIndicator size="large" color="grey" />
+                </View>
+              ) : null}
               {selectedImage === null ? (
                 <Image
-                  source={mockProfileList['@petah'].profilePic}
+                  source={{uri: user.profilePic}}
                   style={Styles.profileStatsImage}
+                  onLoadEnd={handleImageLoad}
                 />
               ) : (
                 <Image
