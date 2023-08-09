@@ -35,37 +35,36 @@ export const SettingsModal = ({user, visible, setVisible}: Props) => {
   const [name, setName] = React.useState(user.name);
   const [description, setDescription] = React.useState(user.description);
   const [selectedImage, setSelectedImage] = React.useState(null);
-  const [picURL, setPicURL] = React.useState(user.profilePic);
   const [changes, setChanges] = React.useState<{
     description: string;
     name: string;
     profilePic: any;
     private: boolean;
   }>({description: '', name: '', profilePic: '', private: false});
-  const [saved, setSaved] = React.useState(false);
   const [imageLoaded, setImageLoaded] = React.useState(false);
 
   useEffect(() => {
-    setChanges({
-      name: name,
-      description: description,
-      private: isEnabled,
-      profilePic: picURL,
-    });
-    if (saved) {
+    if (changes.name !== '') {
       updateUser(user.username, changes);
     }
-  }, [description, isEnabled, name, saved, user.username]);
+  }, [changes]);
 
   // TODO: Implement a system to save user settings
-  const saveSettings = () => {
+  const saveSettings = async () => {
     if (name !== '') {
       if (selectedImage !== null) {
-        const url = uploadProfilePic(selectedImage, user.username);
-        setPicURL(url);
-        setSaved(true);
+        const url = await uploadProfilePic(selectedImage, user.username);
+        setChanges({
+          description: description,
+          name: name,
+          profilePic: url,
+          private: isEnabled,
+        });
       }
+    } else {
+      throw new Error('Name cannot be empty');
     }
+    setVisible(false);
   };
 
   const handleImageLoad = () => {
@@ -93,12 +92,13 @@ export const SettingsModal = ({user, visible, setVisible}: Props) => {
                 <Image
                   source={{uri: user.profilePic}}
                   style={Styles.profileStatsImage}
-                  onLoadEnd={handleImageLoad}
+                  onLoad={handleImageLoad}
                 />
               ) : (
                 <Image
                   source={{uri: selectedImage}}
                   style={Styles.profileStatsImage}
+                  onLoad={handleImageLoad}
                 />
               )}
               <View style={Styles.editPicIcon}>
