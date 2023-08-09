@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Image, View} from 'react-native';
+import {ActivityIndicator, Image, View} from 'react-native';
 import styles from '../Styles';
 import HomeScreen from '../../screens/Home';
 import SocialScreen from '../../screens/Social';
@@ -12,6 +12,7 @@ import NotificationsScreen from '../../screens/Notifications';
 import SearchScreen from '../../screens/Search';
 import firestore from '@react-native-firebase/firestore';
 import {useEffect} from 'react';
+import Styles from '../Styles';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -19,6 +20,8 @@ const Stack = createNativeStackNavigator();
 const Navigator = ({user}: {user: string}) => {
   const [loading, setLoading] = React.useState(true);
   const [imageUrl, setImageUrl] = React.useState<string>('');
+  const [imageLoaded, setImageLoaded] = React.useState<Boolean>(false);
+  const [fullChanges, setFullChanges] = React.useState<Boolean>(false);
   console.log('On user sign in the user is: ' + user);
 
   useEffect(() => {
@@ -27,6 +30,11 @@ const Navigator = ({user}: {user: string}) => {
       setLoading(false);
     }
   }, [imageUrl]);
+
+  useEffect(() => {
+    // Get profile picture when loading, and when there are changes
+    getImage();
+  }, [fullChanges]);
 
   const getImage = async () => {
     // Gets profile picture of current user for navigation bar
@@ -109,18 +117,30 @@ const Navigator = ({user}: {user: string}) => {
         options={{
           tabBarIcon: ({focused}) => (
             <View style={focused ? styles.iconFocused : null}>
+              {!imageLoaded ? (
+                <ActivityIndicator
+                  size="small"
+                  color="grey"
+                  style={[styles.icons]}
+                />
+              ) : null}
               {loading ? null : (
                 <Image
                   source={{uri: imageUrl}}
                   style={[styles.icons, styles.userPostImage]}
                   resizeMode="contain"
+                  onLoad={() => setImageLoaded(true)}
                 />
               )}
             </View>
           ),
           headerShown: false,
         }}
-        initialParams={{user: user, currentUser: user}}
+        initialParams={{
+          user: user,
+          currentUser: user,
+          setFullChanges: setFullChanges,
+        }}
       />
     </Tab.Navigator>
   );

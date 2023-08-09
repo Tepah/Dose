@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import Navigator from './src/components/navigators/Navigator';
 import {StatusBar} from 'react-native';
@@ -6,6 +6,7 @@ import {LoginNavigator} from './src/components/navigators/LoginNavigator';
 import firebaseInit from './src/configs/firebase/config';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import UserContext from './src/Contexts/UserContext';
 
 function App() {
   const [initializing, setInitializing] = useState(true);
@@ -29,7 +30,7 @@ function App() {
   if (initializing) {
     return null;
   }
-
+  // Login Page
   if (!user) {
     return (
       <NavigationContainer>
@@ -53,12 +54,14 @@ function App() {
     }
   };
   getUserDataByEmail();
-
+  // Main Page
   return (
-    <NavigationContainer>
-      <StatusBar barStyle="light-content" />
-      <Navigator user={username} />
-    </NavigationContainer>
+    <UserContext.Provider value={{username, profile, setProfile}}>
+      <NavigationContainer>
+        <StatusBar barStyle="light-content" />
+        <Navigator user={username} />
+      </NavigationContainer>
+    </UserContext.Provider>
   );
 }
 

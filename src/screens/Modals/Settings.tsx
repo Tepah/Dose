@@ -15,11 +15,6 @@ import {CloseButton} from '../../components/Close';
 import {ProfileType} from '../../components/types';
 import {AppButton} from '../../components/Button';
 import {signOut} from '../../components/auth/signOut';
-import {mockProfileList} from '../../test/mockProfile1';
-import {
-  ImageLibraryOptions,
-  launchImageLibrary,
-} from 'react-native-image-picker';
 import {uploadProfilePic} from '../../components/photo/changeProfilePic';
 import {updateUser} from '../../components/updateUser';
 import {selectImage} from '../../components/photo/selectImage';
@@ -30,7 +25,11 @@ interface Props {
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const SettingsModal = ({user, visible, setVisible}: Props) => {
+export const SettingsModal = ({
+  user,
+  visible,
+  setVisible,
+}: Props) => {
   const [isEnabled, setIsEnabled] = React.useState(false);
   const [name, setName] = React.useState(user.name);
   const [description, setDescription] = React.useState(user.description);
@@ -48,7 +47,6 @@ export const SettingsModal = ({user, visible, setVisible}: Props) => {
       updateUser(user.username, changes);
     }
   }, [changes]);
-
   // TODO: Implement a system to save user settings
   const saveSettings = async () => {
     if (name !== '') {

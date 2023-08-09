@@ -2,19 +2,20 @@ import React, {useEffect} from 'react';
 import {View, Text, ScrollView, Image, Pressable} from 'react-native';
 import Styles from '../components/Styles';
 import {useState} from 'react';
-import {mockPosts} from '../test/mockPosts';
 import {HabitType, PostType, ProfileType} from '../components/types';
 import {CloseButton} from '../components/Close';
 import {SettingsModal} from './Modals/Settings';
 import {PostModal} from './Modals/PostModal';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {getUser} from '../components/firestore/getUser';
+import firebase from 'firebase/compat';
 
 const ProfileScreen = ({route}: any) => {
   const {username, currentUser} = route.params;
   const isFocused = useIsFocused();
   const [selected, setSelected] = useState(true);
   const [user, setUser] = useState<ProfileType | undefined>();
+  const [settingsVisible, setSettingsVisible] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -26,13 +27,14 @@ const ProfileScreen = ({route}: any) => {
       }
     };
     getUserData();
-  }, [isFocused]);
+  }, [isFocused, settingsVisible]);
 
   useEffect(() => {
     if (user) {
       setLoading(false);
     }
   }, [user]);
+
   const profileTabs = () => {
     const onTabPress = (value: string) => {
       if (value === 'Habits' && !selected) {
@@ -88,7 +90,11 @@ const ProfileScreen = ({route}: any) => {
   return (
     <View style={Styles.app}>
       {currentUser === user?.username ? (
-        <ProfileOptions user={user} />
+        <ProfileOptions
+          user={user}
+          settingsVisible={settingsVisible}
+          setSettingsVisible={setSettingsVisible}
+        />
       ) : (
         <Header />
       )}
@@ -106,14 +112,17 @@ const ProfileScreen = ({route}: any) => {
   );
 };
 
-const ProfileOptions = (props: {user: ProfileType}) => {
-  const [settingsVisible, setSettingsVisible] = useState(false);
+const ProfileOptions = (props: {
+  user: ProfileType;
+  settingsVisible: boolean;
+  setSettingsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   return (
     <View style={Styles.profileSpacing}>
       <View style={Styles.profileOptionsContainer}>
         <Pressable
           style={Styles.profileOptionsButton}
-          onPress={() => setSettingsVisible(true)}>
+          onPress={() => props.setSettingsVisible(true)}>
           <Image
             style={Styles.profileOptionsImages}
             source={require('../icons/settings.png')}
@@ -122,8 +131,8 @@ const ProfileOptions = (props: {user: ProfileType}) => {
       </View>
       <SettingsModal
         user={props.user}
-        visible={settingsVisible}
-        setVisible={setSettingsVisible}
+        visible={props.settingsVisible}
+        setVisible={props.setSettingsVisible}
       />
     </View>
   );
