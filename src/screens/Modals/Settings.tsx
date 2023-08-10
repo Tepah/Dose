@@ -25,11 +25,7 @@ interface Props {
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const SettingsModal = ({
-  user,
-  visible,
-  setVisible,
-}: Props) => {
+export const SettingsModal = ({user, visible, setVisible}: Props) => {
   const [isEnabled, setIsEnabled] = React.useState(false);
   const [name, setName] = React.useState(user.name);
   const [description, setDescription] = React.useState(user.description);

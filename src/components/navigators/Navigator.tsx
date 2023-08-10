@@ -6,52 +6,28 @@ import SocialScreen from '../../screens/Social';
 import StatsScreen from '../../screens/Stats';
 import ProfileScreen from '../../screens/Profile';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {mockProfileList} from '../../test/mockProfile1';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import NotificationsScreen from '../../screens/Notifications';
 import SearchScreen from '../../screens/Search';
-import firestore from '@react-native-firebase/firestore';
-import {useEffect} from 'react';
-import Styles from '../Styles';
+import {useContext, useEffect} from 'react';
+import UserContext from '../../Contexts/UserContext';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-const Navigator = ({user}: {user: string}) => {
+const Navigator = () => {
+  const {username, profile} = useContext(UserContext);
   const [loading, setLoading] = React.useState(true);
-  const [imageUrl, setImageUrl] = React.useState<string>('');
+  const [imageUrl, setImageUrl] = React.useState<string>(profile?.profilePic);
   const [imageLoaded, setImageLoaded] = React.useState<Boolean>(false);
-  const [fullChanges, setFullChanges] = React.useState<Boolean>(false);
-  console.log('On user sign in the user is: ' + user);
 
   useEffect(() => {
-    console.log('When there is an image: ' + user);
+    console.log('When there is an image: ' + username);
+    setImageUrl(profile?.profilePic);
     if (imageUrl !== '') {
       setLoading(false);
     }
-  }, [imageUrl]);
-
-  useEffect(() => {
-    // Get profile picture when loading, and when there are changes
-    getImage();
-  }, [fullChanges]);
-
-  const getImage = async () => {
-    // Gets profile picture of current user for navigation bar
-    try {
-      const docSnapshot = await firestore().collection('Users').doc(user).get();
-      if (docSnapshot.exists) {
-        const picUrl = await docSnapshot.data()?.profilePic;
-        setImageUrl(picUrl);
-      } else {
-        console.log('No profile picture?' + ' Current user is: ' + user);
-        return '';
-      }
-    } catch (err) {
-      console.error('Error getting profile pic: ', err);
-    }
-  };
-  getImage();
+  }, [profile]);
 
   if (loading) {
     return null;
@@ -77,7 +53,7 @@ const Navigator = ({user}: {user: string}) => {
           ),
           headerShown: false,
         }}
-        initialParams={{username: user}}
+        initialParams={{username: username}}
       />
       <Tab.Screen
         name="Social"
@@ -137,9 +113,8 @@ const Navigator = ({user}: {user: string}) => {
           headerShown: false,
         }}
         initialParams={{
-          user: user,
-          currentUser: user,
-          setFullChanges: setFullChanges,
+          user: username,
+          currentUser: username,
         }}
       />
     </Tab.Navigator>

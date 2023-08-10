@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import Navigator from './src/components/navigators/Navigator';
 import {StatusBar} from 'react-native';
@@ -7,11 +7,14 @@ import firebaseInit from './src/configs/firebase/config';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import UserContext from './src/Contexts/UserContext';
+import {ProfileType} from './src/components/types';
 
 function App() {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
   const [username, setUsername] = useState<string>('');
+  const [profile, setProfile] = useState<ProfileType | undefined>();
+  const firstRender = useRef(true);
 
   firebaseInit();
 
@@ -25,7 +28,7 @@ function App() {
   }, []);
   useEffect(() => {
     setInitializing(false);
-  }, [username]);
+  }, [user]);
 
   if (initializing) {
     return null;
@@ -39,6 +42,7 @@ function App() {
       </NavigationContainer>
     );
   }
+
   const {email} = user;
   const getUserDataByEmail = async () => {
     try {
@@ -48,18 +52,23 @@ function App() {
         .get();
       if (!query.empty) {
         setUsername(query.docs[0].data().username);
+        setProfile(query.docs[0].data() as ProfileType);
       }
     } catch (err) {
       console.error('Error getting user data: ', err);
     }
   };
-  getUserDataByEmail();
+  if (firstRender.current) {
+    getUserDataByEmail();
+    firstRender.current = false;
+  }
+
   // Main Page
   return (
     <UserContext.Provider value={{username, profile, setProfile}}>
       <NavigationContainer>
         <StatusBar barStyle="light-content" />
-        <Navigator user={username} />
+        <Navigator />
       </NavigationContainer>
     </UserContext.Provider>
   );

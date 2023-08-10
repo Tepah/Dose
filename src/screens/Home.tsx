@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {View, Text, ScrollView} from 'react-native';
 import Calendar from '../components/Calendar';
 import Styles from '../components/Styles';
@@ -9,14 +9,14 @@ import {useIsFocused} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import {NonSwipeableItem, SwipeableItem} from '../components/Swipables';
 import {getProfileHabits} from '../components/firestore/getHabits';
+import UserContext from '../Contexts/UserContext';
 
 /* TODO: add past date rendering, */
 /*   add clickable past dates to track progress, but don't allow editing on past dates. */
 /*   make dates have completion status icons. */
 
-
-const HomeScreen = ({route}: any) => {
-  const username = route.params?.username;
+const HomeScreen = () => {
+  const {username, profile, setProfile} = useContext(UserContext);
   const isFocused = useIsFocused();
   const [habits, setHabits] = useState<HabitType[] | undefined>([]);
   const [swipedHabits, setSwipedHabits] = useState<HabitType[]>([]);
@@ -65,13 +65,8 @@ const HomeScreen = ({route}: any) => {
 
   useEffect(() => {
     getHabits();
-  }, [date]);
-
-  useEffect(() => {
-    if (loading) {
-      setLoading(false);
-    }
-  }, [habits, swipedHabits]);
+    setLoading(false);
+  }, [date, profile]);
 
   const getHabits = async () => {
     try {
@@ -129,9 +124,12 @@ const HomeScreen = ({route}: any) => {
       try {
         const query = await firestore().collection('Users').doc(username).get();
         if (query.exists) {
-          const profile: ProfileType = query.data() as ProfileType;
-          profile.habits.push(habit);
-          await firestore().collection('Users').doc(username).update(profile);
+          const newProfile: ProfileType = query.data() as ProfileType;
+          newProfile.habits.push(habit);
+          await firestore()
+            .collection('Users')
+            .doc(username)
+            .update(newProfile);
         }
       } catch (err) {
         console.error('Error adding habit: ', err);
@@ -150,10 +148,8 @@ const HomeScreen = ({route}: any) => {
           );
           allHabits[habitIndex].description = habit.description;
         }
-        await firestore()
-          .collection('Users')
-          .doc(username)
-          .update({habits: allHabits});
+        const userRef = firestore().collection('Users').doc(username);
+        await userRef.update({habits: allHabits});
         if (allHabits) {
           const dateHabitsDone = allHabits.filter(
             (obj: HabitType) => !obj.progress[date],
@@ -164,6 +160,8 @@ const HomeScreen = ({route}: any) => {
           );
           setSwipedHabits(() => dateHabitsNotDone);
         }
+        const userDocs = await userRef.get();
+        setProfile(userDocs.data() as ProfileType);
       } catch (err) {
         console.error('Error Editing habit: ', err);
       }
