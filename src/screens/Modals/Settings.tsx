@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect, useRef} from 'react';
 import {
   Image,
   Modal,
@@ -18,6 +18,7 @@ import {signOut} from '../../components/auth/signOut';
 import {uploadProfilePic} from '../../components/photo/changeProfilePic';
 import {updateUser} from '../../components/updateUser';
 import {selectImage} from '../../components/photo/selectImage';
+import UserContext from '../../Contexts/UserContext';
 
 interface Props {
   user: ProfileType;
@@ -26,6 +27,7 @@ interface Props {
 }
 
 export const SettingsModal = ({user, visible, setVisible}: Props) => {
+  const {setProfile} = useContext(UserContext);
   const [isEnabled, setIsEnabled] = React.useState(false);
   const [name, setName] = React.useState(user.name);
   const [description, setDescription] = React.useState(user.description);
@@ -37,11 +39,16 @@ export const SettingsModal = ({user, visible, setVisible}: Props) => {
     private: boolean;
   }>({description: '', name: '', profilePic: '', private: false});
   const [imageLoaded, setImageLoaded] = React.useState(false);
+  const firstRender = useRef(true);
 
   useEffect(() => {
-    if (changes.name !== '') {
-      updateUser(user.username, changes);
+    const changeProfileAndUpdate = async () => {
+      setProfile(await updateUser(user.username, changes));
+    };
+    if (!firstRender.current) {
+      changeProfileAndUpdate();
     }
+    firstRender.current = false;
   }, [changes]);
   // TODO: Implement a system to save user settings
   const saveSettings = async () => {

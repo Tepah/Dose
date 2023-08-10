@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {View, Text, ScrollView, Image, Pressable} from 'react-native';
 import Styles from '../components/Styles';
 import {useState} from 'react';
@@ -8,32 +8,35 @@ import {SettingsModal} from './Modals/Settings';
 import {PostModal} from './Modals/PostModal';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {getUser} from '../components/firestore/getUser';
-import firebase from 'firebase/compat';
+import UserContext from '../Contexts/UserContext';
 
 const ProfileScreen = ({route}: any) => {
-  const {username, currentUser} = route.params;
+  const {user} = route.params;
+  const {username} = useContext(UserContext);
   const isFocused = useIsFocused();
   const [selected, setSelected] = useState(true);
-  const [user, setUser] = useState<ProfileType | undefined>();
+  const [userProfile, setUserProfile] = useState<ProfileType | undefined>();
   const [settingsVisible, setSettingsVisible] = useState(false);
   const [loading, setLoading] = useState(true);
+  const firstRender = React.useRef(true);
 
   useEffect(() => {
     const getUserData = async () => {
       try {
-        setUser(await getUser(username));
+        setUserProfile(await getUser(user));
       } catch (err) {
         console.error('Error getting user data: ', err);
       }
     };
     getUserData();
+    firstRender.current = false;
   }, [isFocused, settingsVisible]);
 
   useEffect(() => {
-    if (user) {
+    if (userProfile) {
       setLoading(false);
     }
-  }, [user]);
+  }, [userProfile]);
 
   const profileTabs = () => {
     const onTabPress = (value: string) => {
@@ -68,30 +71,32 @@ const ProfileScreen = ({route}: any) => {
     );
   };
 
-  const mappedHabits = user?.habits.map((habit: HabitType, index: number) => {
-    return (
-      <View key={index} style={Styles.profileHabit}>
-        <Text style={[Styles.text, Styles.proHabitText]}>{habit.name}</Text>
-        <Text style={[Styles.text, Styles.proHabitDescriptionText]}>
-          {habit.description}
-        </Text>
-        <Text style={[Styles.text, Styles.proHabitStreakText]}>
-          Going for {habit.streak} days
-        </Text>
-      </View>
-    );
-  });
+  const mappedHabits = userProfile?.habits.map(
+    (habit: HabitType, index: number) => {
+      return (
+        <View key={index} style={Styles.profileHabit}>
+          <Text style={[Styles.text, Styles.proHabitText]}>{habit.name}</Text>
+          <Text style={[Styles.text, Styles.proHabitDescriptionText]}>
+            {habit.description}
+          </Text>
+          <Text style={[Styles.text, Styles.proHabitStreakText]}>
+            Going for {habit.streak} days
+          </Text>
+        </View>
+      );
+    },
+  );
 
-  if (loading || !user) {
+  if (loading || !userProfile) {
     return null;
   }
-  console.log(user);
+  console.log('render');
 
   return (
     <View style={Styles.app}>
-      {currentUser === user?.username ? (
+      {username === userProfile?.username ? (
         <ProfileOptions
-          user={user}
+          user={userProfile}
           settingsVisible={settingsVisible}
           setSettingsVisible={setSettingsVisible}
         />
@@ -99,11 +104,11 @@ const ProfileScreen = ({route}: any) => {
         <Header />
       )}
       <ScrollView style={Styles.profileContainer}>
-        <ProfileInfo user={user} currentUser={currentUser} />
-        <ProfileDescription user={user} />
+        <ProfileInfo user={userProfile} currentUser={username} />
+        <ProfileDescription user={userProfile} />
         {profileTabs()}
         {!selected ? (
-          <MediaTab posts={user.posts} />
+          <MediaTab posts={userProfile.posts} />
         ) : (
           <View style={Styles.profileHabitsContainer}>{mappedHabits}</View>
         )}
@@ -232,7 +237,9 @@ const MediaTab = (props: {posts: PostType[]}) => {
   if (props.posts.length === 0) {
     return (
       <View style={Styles.mediaTabContainer}>
-        <Text style={[Styles.text]}>No posts to show</Text>
+        <View style={Styles.noPostContainer}>
+          <Text style={[Styles.text]}>No posts to show</Text>
+        </View>
       </View>
     );
   }

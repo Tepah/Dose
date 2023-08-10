@@ -53,7 +53,6 @@ const Navigator = () => {
           ),
           headerShown: false,
         }}
-        initialParams={{username: username}}
       />
       <Tab.Screen
         name="Social"
@@ -113,8 +112,7 @@ const Navigator = () => {
           headerShown: false,
         }}
         initialParams={{
-          user: username,
-          currentUser: username,
+          username: username,
         }}
       />
     </Tab.Navigator>
@@ -177,8 +175,8 @@ const SearchStackNavigator = () => {
   );
 };
 
-const ProfileStackNavigator = ({route}: any) => {
-  const {user, currentUser} = route.params;
+const ProfileStackNavigator = () => {
+  const {username} = useContext(UserContext);
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -188,8 +186,7 @@ const ProfileStackNavigator = ({route}: any) => {
           headerShown: false,
         }}
         initialParams={{
-          username: user,
-          currentUser: currentUser,
+          user: username,
         }}
       />
       <Stack.Screen

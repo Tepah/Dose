@@ -625,11 +625,18 @@ const styles = StyleSheet.create({
     color: 'grey',
   },
   mediaTabContainer: {
+    flex: 1,
     backgroundColor: menu,
     width: '100%',
     flexDirection: 'row',
     flexWrap: 'wrap',
     paddingTop: 5,
+  },
+  noPostContainer: {
+    flex: 1,
+    height: 450,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   postSquare: {
     width: '33%',
