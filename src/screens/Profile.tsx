@@ -18,7 +18,6 @@ const ProfileScreen = ({route}: any) => {
   const [userProfile, setUserProfile] = useState<ProfileType | undefined>();
   const [settingsVisible, setSettingsVisible] = useState(false);
   const [loading, setLoading] = useState(true);
-  const firstRender = React.useRef(true);
 
   useEffect(() => {
     const getUserData = async () => {
@@ -29,7 +28,6 @@ const ProfileScreen = ({route}: any) => {
       }
     };
     getUserData();
-    firstRender.current = false;
   }, [isFocused, settingsVisible]);
 
   useEffect(() => {
@@ -238,7 +236,7 @@ const MediaTab = (props: {posts: PostType[]}) => {
     return (
       <View style={Styles.mediaTabContainer}>
         <View style={Styles.noPostContainer}>
-          <Text style={[Styles.text]}>No posts to show</Text>
+          <Text style={[Styles.paragraphText]}>No posts to show... yet</Text>
         </View>
       </View>
     );

@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   View,
+  StyleSheet,
 } from 'react-native';
 import Styles from '../../components/Styles';
 import {HabitType} from '../../components/types';
@@ -22,6 +23,7 @@ const AddHabitScreen = ({addHabit, user}: Props) => {
   const [addScreenVisible, setAddScreenVisible] = useState(false);
   const [habitName, setHabitName] = useState('');
   const [habitDesc, setHabitDesc] = useState('');
+  const [habitTags, setHabitTags] = useState<string[]>([]);
   const [errorModal, setErrorModal] = useState(false);
   let habitId = '';
 
@@ -123,6 +125,21 @@ const AddHabitScreen = ({addHabit, user}: Props) => {
           style={Styles.input}
           onChangeText={setHabitDesc}
         />
+        <Text style={[Styles.paragraphText]}>Tags</Text>
+        <View style={Styles.inputBarContainer}>
+          <TextInput
+            multiline
+            maxLength={30}
+            value={habitDesc}
+            style={[Styles.input, innerStyles.inputBar]}
+            onChangeText={setHabitDesc}
+          />
+          <Pressable
+            style={[Styles.inputBarButton, Styles.addTagButton]}
+            onPress={() => console.log('Search!')}>
+            <Image source={require('../../icons/plus.png')} />
+          </Pressable>
+        </View>
         <View style={Styles.buttonContainer}>
           <Pressable onPress={addHabitHandler} style={Styles.submitButton}>
             <Text style={[Styles.text, {textAlign: 'center'}]}>Submit</Text>
@@ -171,5 +188,9 @@ const AddHabitScreen = ({addHabit, user}: Props) => {
     </View>
   );
 };
+
+const innerStyles = StyleSheet.create({
+  inputBar: {flex: 10, marginRight: 5},
+});
 
 export default AddHabitScreen;

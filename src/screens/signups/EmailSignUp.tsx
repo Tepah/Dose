@@ -28,7 +28,7 @@ export const EmailSignUpScreen = () => {
   useEffect(() => {
     if (created && !profilePicUrl) {
       const changeProfilePic = async () => {
-        setProfilePicUrl(await uploadProfilePic(selectedImage, username));
+        setProfilePicUrl(await uploadProfilePic(selectedImage, '@' + username));
       };
       changeProfilePic();
     }

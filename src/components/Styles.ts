@@ -422,15 +422,6 @@ const styles = StyleSheet.create({
   test: {
     backgroundColor: 'black',
   },
-  input: {
-    fontFamily: 'Helvetica',
-    fontSize: 20,
-    color: fontColor,
-    backgroundColor: secondary,
-    marginVertical: 10,
-    padding: 5,
-    borderRadius: 5,
-  },
   datePickerContainer: {
     height: '45%',
     paddingTop: 75,
@@ -769,16 +760,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  input: {
+    fontFamily: 'Helvetica',
+    fontSize: 20,
+    color: fontColor,
+    backgroundColor: secondary,
+    marginVertical: 10,
+    padding: 5,
+    borderRadius: 5,
+  },
   inputBar: {
-    flex: 1,
+    flex: 8,
     color: 'black',
     fontSize: 20,
-    padding: 5,
     marginHorizontal: 10,
+    padding: 5,
     justifyContent: 'center',
     backgroundColor: 'white',
   },
   inputBarButton: {
+    flex: 1,
     paddingHorizontal: 10,
     justifyContent: 'center',
   },
@@ -805,6 +806,13 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     width: 200,
     alignSelf: 'center',
+  },
+  addTagButton: {
+    backgroundColor: menu,
+    alignItems: 'center',
+    padding: 5,
+    marginHorizontal: 5,
+    borderRadius: 10,
   },
 });
 

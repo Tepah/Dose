@@ -26,7 +26,7 @@ export const GmailSignUpScreen = ({route}: any) => {
   useEffect(() => {
     if (created && !profilePicUrl) {
       const changeProfilePic = async () => {
-        setProfilePicUrl(await uploadProfilePic(selectedImage, username));
+        setProfilePicUrl(await uploadProfilePic(selectedImage, '@' + username));
       };
       changeProfilePic();
     }
