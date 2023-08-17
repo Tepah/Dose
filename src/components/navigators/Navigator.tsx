@@ -12,6 +12,7 @@ import SearchScreen from '../../screens/Search';
 import {useContext, useEffect} from 'react';
 import UserContext from '../../Contexts/UserContext';
 import {AllHabitsScreen} from '../../screens/AllHabits';
+import {SearchHabitsScreen} from '../../screens/SearchHabits';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -168,6 +169,13 @@ const HomeStackNavigator = () => {
       <Stack.Screen
         name="Add Habits"
         component={AllHabitsScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Search Habits"
+        component={SearchHabitsScreen}
         options={{
           headerShown: false,
         }}

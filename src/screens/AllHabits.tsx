@@ -7,6 +7,7 @@ import {HabitDataType} from '../components/types';
 import AddHabit from './Modals/AddHabit';
 import {addHabitToDB} from '../components/addHabit';
 import userContext from '../Contexts/UserContext';
+import {fetchHabitData} from '../components/firestore/getHabits';
 
 export const AllHabitsScreen = ({navigation}: any) => {
   const [searchText, setSearchText] = React.useState<string>('');
@@ -17,20 +18,8 @@ export const AllHabitsScreen = ({navigation}: any) => {
   const firstRender = React.useRef(true);
 
   useEffect(() => {
-    const fetchHabitData = async (tag: string) => {
-      setLoading(true);
-      try {
-        const habits = await firestore()
-          .collection('Habits')
-          .where('tags', 'array-contains', tag.toLowerCase())
-          .get();
-        setHabitIds(habits.docs.map(doc => doc.id));
-        setHabits(habits.docs.map(doc => doc.data()) as HabitDataType[]);
-      } catch (err) {
-        console.error('Error fetching habit data: ', err);
-      }
-    };
-    fetchHabitData(selectedTag);
+    setLoading(true);
+    fetchHabitData(selectedTag, setHabitIds, setHabits);
   }, [selectedTag]);
 
   useEffect(() => {
@@ -93,7 +82,7 @@ export const AllHabitsScreen = ({navigation}: any) => {
         />
         <Pressable
           style={Styles.inputBarButton}
-          onPress={() => console.log('Search!')}>
+          onPress={() => navigation.navigate('Search Habits', {search: searchText})}>
           <Image source={require('../icons/search.png')} />
         </Pressable>
       </View>
@@ -160,9 +149,7 @@ const ShowHabits = (props: {
         }
       })}
       {habitsShown.current === 0 ? (
-        <Text style={Styles.text}>
-          No habits to show. Try a different tag!
-        </Text>
+        <Text style={Styles.text}>No habits to add. Try a different tag!</Text>
       ) : null}
       <AddHabit />
     </ScrollView>

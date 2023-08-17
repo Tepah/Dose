@@ -45,3 +45,8 @@ export type HabitDataType = {
   desc: string;
   tags: string[];
 };
+
+export type RootStackParamList = {
+  Home: undefined;
+  Habits: {search: string};
+};

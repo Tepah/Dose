@@ -43,6 +43,8 @@ export const addHabitToDB = async (
       await newRef.set({
         name: habitName.toLowerCase(),
         users: [user],
+        desc: habitDesc,
+        tags: habitTags,
       });
       habitId = newRef.id;
     } else {
