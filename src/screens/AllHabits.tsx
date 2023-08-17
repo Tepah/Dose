@@ -108,10 +108,12 @@ export const AllHabitsScreen = () => {
         </View>
       </View>
       {loading ? (
-        <View style={innerStyles.habitContainer}>
-          <ActivityIndicator size="large" color="white" />
-          <Text>Loading...</Text>
-        </View>
+        <ScrollView showsHorizontalScrollIndicator={false}>
+          <View style={innerStyles.habitContainer}>
+            <ActivityIndicator size="large" color="white" />
+            <Text style={Styles.text}>Loading...</Text>
+          </View>
+        </ScrollView>
       ) : (
         <ShowHabits habits={habits} habitIds={habitIds} />
       )}
@@ -128,7 +130,6 @@ const ShowHabits = (props: {habits: HabitDataType[]; habitIds: string[]}) => {
     addHabitToDB(habit.name, habit.desc, habit.tags, username, setProfile);
     navigation.navigate('Home');
   };
-  console.log(userHabitIds, props.habitIds)
   return (
     <ScrollView showsHorizontalScrollIndicator={false}>
       {props.habits.map((habit, index) => {

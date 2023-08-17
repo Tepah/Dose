@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Image,
   KeyboardAvoidingView,
@@ -13,11 +13,12 @@ import {
   View,
 } from 'react-native';
 import Styles from '../../components/Styles';
-import {HabitType} from '../../components/types';
+import {HabitType, ProfileType} from '../../components/types';
 import {mockFriends} from '../../test/mockFriends';
 import {CloseButton} from '../../components/Close';
 import {AppButton} from '../../components/Button';
 import firestore from '@react-native-firebase/firestore';
+import UserContext from '../../Contexts/UserContext';
 
 interface Props {
   username: string;
@@ -90,6 +91,7 @@ const EditHabitScreen = ({
     streak: habitStreak,
     progress: habitProgress,
     habitId: habits ? habits[currentHabitIndex].habitId : '',
+    habitTags: habits ? habits[currentHabitIndex].habitTags : [],
   });
   const editForm = () => {
     const onEditButtonPress = () => {
@@ -99,6 +101,7 @@ const EditHabitScreen = ({
         streak: habitStreak,
         progress: habitProgress,
         habitId: habits ? habits[currentHabitIndex].habitId : '',
+        habitTags: habits ? habits[currentHabitIndex].habitTags : [],
       });
       setEditModalVisible(true);
     };
