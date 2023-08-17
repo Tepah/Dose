@@ -13,8 +13,9 @@ import UserContext from '../Contexts/UserContext';
 /* TODO: add past date rendering, */
 /*   add clickable past dates to track progress, but don't allow editing on past dates. */
 /*   make dates have completion status icons. */
+/* TODO: fix bug where the streak doesn't go away if the next day is done */
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}: any) => {
   const {username, profile, setProfile} = useContext(UserContext);
   const isFocused = useIsFocused();
   const [habits, setHabits] = useState<HabitType[] | undefined>([]);
@@ -159,7 +160,7 @@ const HomeScreen = () => {
   const habitList = (
     <ScrollView style={Styles.habitList} keyboardShouldPersistTaps="always">
       {habits && habits.length > 0 ? renderHabits('current', habits) : null}
-      <HabitPageNavigator />
+      <HabitPageNavigator navigation={navigation} />
       {(habits && currentHabit < habits.length && selectedList === 'current') ||
       (swipedHabits &&
         currentHabit < swipedHabits.length &&
@@ -200,12 +201,11 @@ const HomeScreen = () => {
   );
 };
 
-const HabitPageNavigator = () => {
-  const navigation = useNavigation();
+const HabitPageNavigator = (props: {navigation: any}) => {
   return (
     <Pressable
       style={Styles.addButton}
-      onPress={() => navigation.navigate('Add Habits')}>
+      onPress={() => props.navigation.navigate('Add Habits')}>
       <Image
         source={require('../icons/add.png')}
         style={{

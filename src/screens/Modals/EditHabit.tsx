@@ -193,7 +193,7 @@ const EditHabitScreen = ({
           <DeleteHabitButton
             username={username}
             habit={habits ? habits[currentHabitIndex] : null}
-            setEditModalVisible={setEditModalVisible}
+            setVisible={setVisible}
             editHabit={editHabit}
           />
         </ScrollView>
@@ -207,8 +207,9 @@ const deleteHabit = (
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>,
   username: string,
   habit: HabitType | null,
-  setEditModalVisible: React.Dispatch<React.SetStateAction<boolean>>,
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>,
   editHabit: (habit: HabitType, editType: string) => void,
+  setProfile: React.Dispatch<React.SetStateAction<ProfileType | undefined>>,
 ) => {
   // Deletes habit from both User collection and Habit collection if there is no users.
   const deleteOnDatabase = async () => {
@@ -238,6 +239,11 @@ const deleteHabit = (
             });
           }
         }
+        const userRef = await firestore().collection('Users').doc(username);
+        const userDoc = await userRef.get();
+        if (userDoc.exists) {
+          setProfile(userDoc.data() as ProfileType);
+        }
       }
     } catch (err) {
       console.log('Error deleting habit on system: ' + err);
@@ -246,15 +252,16 @@ const deleteHabit = (
   deleteOnDatabase();
   editHabit(habit as HabitType, 'delete');
   setModalVisible(false);
-  setEditModalVisible(false);
+  setVisible(false);
 };
 
 const DeleteHabitButton = (props: {
   username: string;
   habit: HabitType | null;
-  setEditModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   editHabit: (habit: HabitType, editType: string) => void;
 }) => {
+  const {setProfile} = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <View>
@@ -275,8 +282,9 @@ const DeleteHabitButton = (props: {
                   setModalVisible,
                   props.username,
                   props.habit,
-                  props.setEditModalVisible,
+                  props.setVisible,
                   props.editHabit,
+                  setProfile,
                 )
               }
               title={'Yes'}

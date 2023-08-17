@@ -2,15 +2,13 @@ import {ActivityIndicator, Image, Pressable, ScrollView, StyleSheet, Text, TextI
 import Styles from '../components/Styles';
 import {CloseButton} from '../components/Close';
 import React, {useContext, useEffect} from 'react';
-import {useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import {HabitDataType} from '../components/types';
 import AddHabit from './Modals/AddHabit';
 import {addHabitToDB} from '../components/addHabit';
 import userContext from '../Contexts/UserContext';
 
-export const AllHabitsScreen = () => {
-  const navigation = useNavigation();
+export const AllHabitsScreen = ({navigation}: any) => {
   const [searchText, setSearchText] = React.useState<string>('');
   const [selectedTag, setSelectedTag] = React.useState<string>('Dose');
   const [habits, setHabits] = React.useState<HabitDataType[]>([]);
@@ -115,36 +113,58 @@ export const AllHabitsScreen = () => {
           </View>
         </ScrollView>
       ) : (
-        <ShowHabits habits={habits} habitIds={habitIds} />
+        <ShowHabits
+          habits={habits}
+          habitIds={habitIds}
+          navigation={navigation}
+        />
       )}
-      <AddHabit />
     </View>
   );
 };
 
-const ShowHabits = (props: {habits: HabitDataType[]; habitIds: string[]}) => {
-  const navigation = useNavigation();
+const ShowHabits = (props: {
+  habits: HabitDataType[];
+  habitIds: string[];
+  navigation: any;
+}) => {
   const {username, profile, setProfile} = useContext(userContext);
   const userHabitIds = profile?.habits.map(habit => habit.habitId);
+  const habitsShown = React.useRef(0);
   const onPress = (habit: HabitDataType) => {
-    addHabitToDB(habit.name, habit.desc, habit.tags, username, setProfile);
-    navigation.navigate('Home');
+    addHabitToDB(
+      habit.name.replace(/\b\w/g, l => l.toUpperCase()),
+      habit.desc,
+      habit.tags,
+      username,
+      setProfile,
+    );
+    props.navigation.navigate('Home');
   };
   return (
     <ScrollView showsHorizontalScrollIndicator={false}>
       {props.habits.map((habit, index) => {
         if (!userHabitIds?.includes(props.habitIds[index])) {
+          habitsShown.current++;
           return (
             <Pressable
               key={index}
               style={innerStyles.habitContainer}
               onPress={() => onPress(habit)}>
-              <Text style={Styles.text}>{habit.name}</Text>
+              <Text style={Styles.text}>
+                {habit.name.replace(/\b\w/g, char => char.toUpperCase())}
+              </Text>
               <Text style={innerStyles.paragraphText}>{habit.desc}</Text>
             </Pressable>
           );
         }
       })}
+      {habitsShown.current === 0 ? (
+        <Text style={Styles.text}>
+          No habits to show. Try a different tag!
+        </Text>
+      ) : null}
+      <AddHabit />
     </ScrollView>
   );
 };

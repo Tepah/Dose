@@ -140,7 +140,7 @@ const AddHabitScreen = () => {
           style={{
             width: 60,
             height: 60,
-            alignSelf: 'center'
+            alignSelf: 'center',
           }}
           resizeMode="contain"
         />
