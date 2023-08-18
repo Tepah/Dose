@@ -2,7 +2,6 @@ import {ActivityIndicator, Image, Pressable, ScrollView, StyleSheet, Text, TextI
 import Styles from '../components/Styles';
 import {CloseButton} from '../components/Close';
 import React, {useContext, useEffect} from 'react';
-import firestore from '@react-native-firebase/firestore';
 import {HabitDataType} from '../components/types';
 import AddHabit from './Modals/AddHabit';
 import {addHabitToDB} from '../components/addHabit';
@@ -82,7 +81,9 @@ export const AllHabitsScreen = ({navigation}: any) => {
         />
         <Pressable
           style={Styles.inputBarButton}
-          onPress={() => navigation.navigate('Search Habits', {search: searchText})}>
+          onPress={() =>
+            navigation.navigate('Search Habits', {search: searchText})
+          }>
           <Image source={require('../icons/search.png')} />
         </Pressable>
       </View>

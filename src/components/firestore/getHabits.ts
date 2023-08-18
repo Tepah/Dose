@@ -14,7 +14,11 @@ export const getProfileHabits = async (username: string) => {
   }
 };
 
-export const getHabitSearch = async (search: string, page: number) => {
+export const getHabitSearch = async (
+  search: string,
+  page: number,
+  setHabitIds: React.Dispatch<SetStateAction<string[]>>,
+) => {
   try {
     const habitTagsDoc = await firestore()
       .collection('Habits')
@@ -25,15 +29,19 @@ export const getHabitSearch = async (search: string, page: number) => {
       .where('name', '==', search.toLowerCase())
       .get();
     const matchingResults: HabitDataType[] = [];
+    const habitIds: string[] = [];
     habitTagsDoc.forEach(doc => {
       matchingResults.push(doc.data() as HabitDataType);
+      habitIds.push(doc.id);
     });
     habitNameDoc.forEach(doc => {
       if (!matchingResults.includes(doc.data() as HabitDataType)) {
         matchingResults.push(doc.data() as HabitDataType);
+        habitIds.push(doc.id);
       }
     });
-    console.log('matchingResults: ', matchingResults);
+    setHabitIds(habitIds);
+    return matchingResults;
   } catch (err) {
     console.error('Error getting habits: ', err);
   }
