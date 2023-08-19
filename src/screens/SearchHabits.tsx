@@ -18,6 +18,7 @@ export const SearchHabitsScreen = ({route, navigation}: any) => {
   const [habitIds, setHabitIds] = React.useState<string[]>([]);
   const [habits, setHabits] = React.useState<HabitDataType[] | undefined>([]);
   const [loading, setLoading] = React.useState<boolean>(true);
+  const [selectedTag, setSelectedTag] = React.useState<string>('All');
   const userHabitIds = profile?.habits.map(habit => habit.habitId);
   const habitsShown = useRef<number>(0);
 
@@ -29,11 +30,11 @@ export const SearchHabitsScreen = ({route, navigation}: any) => {
 
   useEffect(() => {
     setLoading(true);
-    getHabitSearch(searchText, page, setHabitIds).then(res => {
+    getHabitSearch(search, page, setHabitIds).then(res => {
       setHabits(res);
     });
     setPage(1);
-  }, [searchText]);
+  }, [search]);
 
   const onPress = (habit: HabitDataType) => {
     addHabitToDB(
@@ -46,7 +47,38 @@ export const SearchHabitsScreen = ({route, navigation}: any) => {
     navigation.navigate('Home');
   };
 
+  const defaultTags = () => {
+    // TODO: Implement User Tags
+    const defaultTags = [
+      'All',
+      'Habits',
+      'Tags',
+    ];
+    return (
+      <>
+        {defaultTags.map((tag, index) => {
+          return (
+            <Pressable
+              key={index}
+              style={
+                selectedTag !== tag
+                  ? innerStyles.tags
+                  : [innerStyles.tags, innerStyles.selectedTag]
+              }
+              onPress={() => setSelectedTag(tag)}>
+              <Text
+                style={selectedTag === tag ? innerStyles.paragraphText : null}>
+                {tag}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </>
+    );
+  };
+
   const renderHabits = () => {
+    habitsShown.current = 0;
     return (
       <ScrollView style={innerStyles.habitScrollView}>
         {habits?.map((habit, index) => {
@@ -66,7 +98,14 @@ export const SearchHabitsScreen = ({route, navigation}: any) => {
           }
         })}
         {habitsShown.current === 0 ? (
-          <Text style={Styles.paragraphText}>No results...</Text>
+          <View style={innerStyles.noHabitContainer}>
+            <Text style={[innerStyles.noHabitText, Styles.text]}>
+              No habits here..
+            </Text>
+            <Text style={[innerStyles.noHabitText, Styles.paragraphText]}>
+              Try a different tag or add your own!
+            </Text>
+          </View>
         ) : null}
       </ScrollView>
     );
@@ -81,20 +120,22 @@ export const SearchHabitsScreen = ({route, navigation}: any) => {
       <View style={Styles.inputBarContainer}>
         <TextInput
           style={[Styles.input, Styles.inputBar]}
-          onChangeText={setSearchText}
+          onChangeText={text => setSearchText(text)}
           value={searchText}
           placeholderTextColor={'grey'}
           placeholder="Search..."
         />
         <Pressable
           style={Styles.inputBarButton}
-          onPress={() => console.log('Search!')}>
+          onPress={() => {
+            navigation.navigate('Search Habits', {search: searchText});
+          }}>
           <Image source={require('../icons/search.png')} />
         </Pressable>
       </View>
       {loading ? (
         <ScrollView>
-          <View style={innerStyles.habitContainer}>
+          <View style={innerStyles.noHabitContainer}>
             <ActivityIndicator size="large" color="white" />
             <Text style={Styles.text}>Loading...</Text>
           </View>
@@ -150,5 +191,12 @@ const innerStyles = StyleSheet.create({
   habitScrollView: {
     width: '100%',
     alignContent: 'center',
+  },
+  noHabitContainer: {
+    padding: 15,
+    marginVertical: 25,
+  },
+  noHabitText: {
+    textAlign: 'center',
   },
 });

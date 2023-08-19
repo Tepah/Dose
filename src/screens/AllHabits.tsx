@@ -97,7 +97,7 @@ export const AllHabitsScreen = ({navigation}: any) => {
       </View>
       {loading ? (
         <ScrollView showsHorizontalScrollIndicator={false}>
-          <View style={innerStyles.habitContainer}>
+          <View style={innerStyles.noHabitContainer}>
             <ActivityIndicator size="large" color="white" />
             <Text style={Styles.text}>Loading...</Text>
           </View>
@@ -150,7 +150,14 @@ const ShowHabits = (props: {
         }
       })}
       {habitsShown.current === 0 ? (
-        <Text style={Styles.text}>No habits to add. Try a different tag!</Text>
+        <View style={innerStyles.noHabitContainer}>
+          <Text style={[innerStyles.noHabitText, Styles.text]}>
+            No habits here..
+          </Text>
+          <Text style={[innerStyles.noHabitText, Styles.paragraphText]}>
+            Try a different tag or add your own!
+          </Text>
+        </View>
       ) : null}
       <AddHabit />
     </ScrollView>
@@ -184,10 +191,19 @@ const innerStyles = StyleSheet.create({
     color: '#D9D9D9',
   },
   habitContainer: {
+    alignSelf: 'center',
     backgroundColor: '#2A3E59',
     padding: 20,
     borderRadius: 10,
     marginHorizontal: 0,
     marginBottom: 10,
+    width: '95%',
+  },
+  noHabitContainer: {
+    padding: 15,
+    marginVertical: 25,
+  },
+  noHabitText: {
+    textAlign: 'center',
   },
 });
