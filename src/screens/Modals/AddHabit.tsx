@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {ReactNode, useContext, useEffect, useState} from 'react';
 import {
   Image,
   Modal,
@@ -7,7 +7,7 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   View,
-  StyleSheet,
+  StyleSheet, Animated
 } from 'react-native';
 import Styles from '../../components/Styles';
 import {CloseButton} from '../../components/Close';

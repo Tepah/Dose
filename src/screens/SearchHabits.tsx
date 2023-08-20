@@ -1,7 +1,17 @@
 import Styles from '../components/Styles';
-import {ActivityIndicator, Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Animated,
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View
+} from 'react-native';
 import {CloseButton} from '../components/Close';
-import React, {useContext, useEffect, useRef} from 'react';
+import React, {ReactNode, useContext, useEffect, useRef} from 'react';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {HabitDataType, RootStackParamList} from '../components/types';
 import {getHabitSearch} from '../components/firestore/getHabits';
@@ -9,6 +19,10 @@ import UserContext from '../Contexts/UserContext';
 import {addHabitToDB} from '../components/addHabit';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Habits'>;
+
+const HEADER_MAX_HEIGHT = 110;
+const HEADER_MIN_HEIGHT = 10;
+const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export const SearchHabitsScreen = ({route, navigation}: any) => {
   const {search} = route.params;
@@ -21,6 +35,7 @@ export const SearchHabitsScreen = ({route, navigation}: any) => {
   const [selectedTag, setSelectedTag] = React.useState<string>('All');
   const userHabitIds = profile?.habits.map(habit => habit.habitId);
   const habitsShown = useRef<number>(0);
+  const scrollOffsetY = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     if (habits) {
@@ -80,7 +95,14 @@ export const SearchHabitsScreen = ({route, navigation}: any) => {
   const renderHabits = () => {
     habitsShown.current = 0;
     return (
-      <ScrollView style={innerStyles.habitScrollView}>
+      <ScrollView
+        contentContainerStyle={{marginTop: HEADER_MAX_HEIGHT}}
+        scrollEventThrottle={16}
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {y: scrollOffsetY}}}],
+          {useNativeDriver: false},
+        )}
+        style={innerStyles.habitScrollView}>
         {habits?.map((habit, index) => {
           if (!userHabitIds?.includes(habitIds[index])) {
             habitsShown.current++;
@@ -92,7 +114,9 @@ export const SearchHabitsScreen = ({route, navigation}: any) => {
                 <Text style={[Styles.text, innerStyles.habitName]}>
                   {habit.name.replace(/\b\w/g, l => l.toUpperCase())}
                 </Text>
-                <Text style={[Styles.paragraphText, innerStyles.habitDesc]}>{habit.desc}</Text>
+                <Text style={[Styles.paragraphText, innerStyles.habitDesc]}>
+                  {habit.desc}
+                </Text>
               </Pressable>
             );
           }
@@ -117,35 +141,78 @@ export const SearchHabitsScreen = ({route, navigation}: any) => {
         <Text style={[Styles.text, Styles.notificationHeaderText]}>{search}</Text>
         <CloseButton type={'back'} closeFunction={() => navigation.goBack()} />
       </View>
+      <View style={{flex: 1, width: '100%'}}>
+        {loading ? (
+          <ScrollView
+            contentContainerStyle={{marginTop: HEADER_MAX_HEIGHT}}
+            scrollEventThrottle={16}
+            onScroll={Animated.event(
+              [{nativeEvent: {contentOffset: {y: scrollOffsetY}}}],
+              {useNativeDriver: false},
+            )}
+            style={innerStyles.habitScrollView}>
+            <View style={innerStyles.noHabitContainer}>
+              <ActivityIndicator size="large" color="white" />
+              <Text style={Styles.text}>Loading...</Text>
+            </View>
+          </ScrollView>
+        ) : (
+          renderHabits()
+        )}
+        <DynamicHeader
+          animHeaderValue={scrollOffsetY}
+          navigation={navigation}
+          searchText={searchText}
+          setSearchText={setSearchText}
+          defaultTags={defaultTags}
+        />
+      </View>
+    </View>
+  );
+};
+
+const DynamicHeader = (props: {
+  animHeaderValue: Animated.Value;
+  navigation: any;
+  searchText: string;
+  setSearchText: React.Dispatch<React.SetStateAction<string>>;
+  defaultTags: () => ReactNode;
+}) => {
+  const animateHeaderHeight = props.animHeaderValue.interpolate({
+    inputRange: [0, HEADER_MAX_HEIGHT],
+    outputRange: [HEADER_MAX_HEIGHT, 0],
+    extrapolate: 'clamp',
+  });
+
+  return (
+    <Animated.View style={[innerStyles.header, {height: animateHeaderHeight}]}>
       <View style={Styles.inputBarContainer}>
         <TextInput
           style={[Styles.input, Styles.inputBar]}
-          onChangeText={text => setSearchText(text)}
-          value={searchText}
+          onChangeText={text => props.setSearchText(text)}
+          value={props.searchText}
           placeholderTextColor={'grey'}
           placeholder="Search..."
         />
         <Pressable
           style={Styles.inputBarButton}
           onPress={() => {
-            navigation.navigate('Search Habits', {search: searchText});
+            props.navigation.navigate('Search Habits', {
+              search: props.searchText,
+            });
           }}>
           <Image source={require('../icons/search.png')} />
         </Pressable>
       </View>
-      {loading ? (
-        <ScrollView>
-          <View style={innerStyles.noHabitContainer}>
-            <ActivityIndicator size="large" color="white" />
-            <Text style={Styles.text}>Loading...</Text>
-          </View>
-        </ScrollView>
-      ) : (
-        renderHabits()
-      )}
-    </View>
+      <View style={innerStyles.tagContainers}>
+        <View style={innerStyles.tagScroll}>
+          <ScrollView horizontal={true}>{props.defaultTags()}</ScrollView>
+        </View>
+      </View>
+    </Animated.View>
   );
 };
+
 
 const innerStyles = StyleSheet.create({
   tagScrollHeader: {
@@ -198,5 +265,12 @@ const innerStyles = StyleSheet.create({
   },
   noHabitText: {
     textAlign: 'center',
+  },
+  header: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    overflow: 'hidden',
   },
 });

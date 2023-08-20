@@ -1,12 +1,26 @@
-import {ActivityIndicator, Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Animated,
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import Styles from '../components/Styles';
 import {CloseButton} from '../components/Close';
-import React, {useContext, useEffect} from 'react';
+import React, {ReactNode, useContext, useEffect, useRef} from 'react';
 import {HabitDataType} from '../components/types';
 import AddHabit from './Modals/AddHabit';
 import {addHabitToDB} from '../components/addHabit';
 import userContext from '../Contexts/UserContext';
 import {fetchHabitData} from '../components/firestore/getHabits';
+
+const HEADER_MAX_HEIGHT = 110;
+const HEADER_MIN_HEIGHT = 10;
+const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export const AllHabitsScreen = ({navigation}: any) => {
   const [searchText, setSearchText] = React.useState<string>('');
@@ -15,6 +29,7 @@ export const AllHabitsScreen = ({navigation}: any) => {
   const [loading, setLoading] = React.useState<boolean>(true);
   const [habitIds, setHabitIds] = React.useState<string[]>([]);
   const firstRender = React.useRef(true);
+  const scrollOffsetY = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     setLoading(true);
@@ -56,7 +71,11 @@ export const AllHabitsScreen = ({navigation}: any) => {
               }
               onPress={() => setSelectedTag(tag)}>
               <Text
-                style={selectedTag === tag ? innerStyles.paragraphText : null}>
+                style={
+                  selectedTag === tag
+                    ? innerStyles.paragraphText
+                    : innerStyles.paragraphTextBlack
+                }>
                 {tag}
               </Text>
             </Pressable>
@@ -69,47 +88,82 @@ export const AllHabitsScreen = ({navigation}: any) => {
   return (
     <View style={Styles.app}>
       <View style={Styles.header}>
-        <Text style={[Styles.text, Styles.notificationHeaderText]}>Search</Text>
+        <Text style={[Styles.text, Styles.notificationHeaderText]}>
+          Add a Habit
+        </Text>
         <CloseButton type={'back'} closeFunction={() => navigation.goBack()} />
       </View>
+      <View style={{flex: 1, width: '100%'}}>
+        {loading ? (
+          <ScrollView
+            contentContainerStyle={{
+              alignSelf: 'center',
+              marginTop: HEADER_MAX_HEIGHT,
+            }}
+            showsHorizontalScrollIndicator={false}>
+            <View style={innerStyles.noHabitContainer}>
+              <ActivityIndicator size="large" color="white" />
+              <Text style={Styles.text}>Loading...</Text>
+            </View>
+          </ScrollView>
+        ) : (
+          <ShowHabits
+            habits={habits}
+            habitIds={habitIds}
+            navigation={navigation}
+            scrollOffsetY={scrollOffsetY}
+          />
+        )}
+        <DynamicHeader
+          navigation={navigation}
+          setSearchText={setSearchText}
+          animHeaderValue={scrollOffsetY}
+          searchText={searchText}
+          defaultTags={defaultTags}
+        />
+      </View>
+    </View>
+  );
+};
+
+const DynamicHeader = (props: {
+  animHeaderValue: Animated.Value;
+  navigation: any;
+  searchText: string;
+  setSearchText: React.Dispatch<React.SetStateAction<string>>;
+  defaultTags: () => ReactNode;
+}) => {
+  const animateHeaderHeight = props.animHeaderValue.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    outputRange: [HEADER_MAX_HEIGHT, 0],
+    extrapolate: 'clamp',
+  });
+
+  return (
+    <Animated.View style={[innerStyles.header, {height: animateHeaderHeight}]}>
       <View style={Styles.inputBarContainer}>
         <TextInput
           style={[Styles.input, Styles.inputBar]}
-          onChangeText={setSearchText}
+          onChangeText={props.setSearchText}
           placeholderTextColor={'grey'}
           placeholder="Search..."
         />
         <Pressable
           style={Styles.inputBarButton}
           onPress={() =>
-            navigation.navigate('Search Habits', {search: searchText})
+            props.navigation.navigate('Search Habits', {
+              search: props.searchText,
+            })
           }>
           <Image source={require('../icons/search.png')} />
         </Pressable>
       </View>
       <View style={innerStyles.tagContainers}>
-        <Text style={[Styles.paragraphText, innerStyles.tagScrollHeader]}>
-          Tags
-        </Text>
         <View style={innerStyles.tagScroll}>
-          <ScrollView horizontal={true}>{defaultTags()}</ScrollView>
+          <ScrollView horizontal={true}>{props.defaultTags()}</ScrollView>
         </View>
       </View>
-      {loading ? (
-        <ScrollView showsHorizontalScrollIndicator={false}>
-          <View style={innerStyles.noHabitContainer}>
-            <ActivityIndicator size="large" color="white" />
-            <Text style={Styles.text}>Loading...</Text>
-          </View>
-        </ScrollView>
-      ) : (
-        <ShowHabits
-          habits={habits}
-          habitIds={habitIds}
-          navigation={navigation}
-        />
-      )}
-    </View>
+    </Animated.View>
   );
 };
 
@@ -117,6 +171,7 @@ const ShowHabits = (props: {
   habits: HabitDataType[];
   habitIds: string[];
   navigation: any;
+  scrollOffsetY?: Animated.Value;
 }) => {
   const {username, profile, setProfile} = useContext(userContext);
   const userHabitIds = profile?.habits.map(habit => habit.habitId);
@@ -132,7 +187,14 @@ const ShowHabits = (props: {
     props.navigation.navigate('Home');
   };
   return (
-    <ScrollView showsHorizontalScrollIndicator={false}>
+    <ScrollView
+      contentContainerStyle={{marginTop: HEADER_MAX_HEIGHT}}
+      scrollEventThrottle={16}
+      onScroll={Animated.event(
+        [{nativeEvent: {contentOffset: {y: props.scrollOffsetY}}}],
+        {useNativeDriver: false},
+      )}
+      showsHorizontalScrollIndicator={false}>
       {props.habits.map((habit, index) => {
         if (!userHabitIds?.includes(props.habitIds[index])) {
           habitsShown.current++;
@@ -190,6 +252,10 @@ const innerStyles = StyleSheet.create({
     fontSize: 16,
     color: '#D9D9D9',
   },
+  paragraphTextBlack: {
+    fontSize: 16,
+    color: 'black',
+  },
   habitContainer: {
     alignSelf: 'center',
     backgroundColor: '#2A3E59',
@@ -205,5 +271,12 @@ const innerStyles = StyleSheet.create({
   },
   noHabitText: {
     textAlign: 'center',
+  },
+  header: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    overflow: 'hidden',
   },
 });
