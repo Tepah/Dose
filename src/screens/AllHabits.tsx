@@ -17,6 +17,7 @@ import AddHabit from './Modals/AddHabit';
 import {addHabitToDB} from '../components/addHabit';
 import userContext from '../Contexts/UserContext';
 import {fetchHabitData} from '../components/firestore/getHabits';
+import Mapping = Animated.Mapping;
 
 const HEADER_MAX_HEIGHT = 110;
 const HEADER_MIN_HEIGHT = 10;
@@ -191,7 +192,7 @@ const ShowHabits = (props: {
       contentContainerStyle={{marginTop: HEADER_MAX_HEIGHT}}
       scrollEventThrottle={16}
       onScroll={Animated.event(
-        [{nativeEvent: {contentOffset: {y: props.scrollOffsetY}}}],
+        [{nativeEvent: {contentOffset: {y: props.scrollOffsetY as Mapping}}}],
         {useNativeDriver: false},
       )}
       showsHorizontalScrollIndicator={false}>
@@ -207,6 +208,17 @@ const ShowHabits = (props: {
                 {habit.name.replace(/\b\w/g, char => char.toUpperCase())}
               </Text>
               <Text style={innerStyles.paragraphText}>{habit.desc}</Text>
+              <View style={innerStyles.habitTagsContainer}>
+                {habit.tags.map((tag, index) => {
+                  return (
+                    <View key={index} style={innerStyles.habitTag}>
+                      <Text style={innerStyles.paragraphText}>
+                        {tag.replace(/\b\w/g, i => i.toUpperCase())}
+                      </Text>
+                    </View>
+                  );
+                })}
+              </View>
             </Pressable>
           );
         }
@@ -240,6 +252,16 @@ const innerStyles = StyleSheet.create({
   selectedTag: {
     backgroundColor: 'grey',
   },
+  habitTagsContainer: {
+    flexDirection: 'row',
+    paddingTop: 5,
+  },
+  habitTag: {
+    backgroundColor: '#1D2B3E',
+    borderRadius: 10,
+    padding: 7,
+    marginVertical: 5,
+  },
   tagContainers: {
     paddingVertical: 5,
     borderRadius: 5,
@@ -259,7 +281,8 @@ const innerStyles = StyleSheet.create({
   habitContainer: {
     alignSelf: 'center',
     backgroundColor: '#2A3E59',
-    padding: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
     borderRadius: 10,
     marginHorizontal: 0,
     marginBottom: 10,

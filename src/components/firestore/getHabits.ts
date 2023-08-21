@@ -17,6 +17,7 @@ export const getProfileHabits = async (username: string) => {
 export const getHabitSearch = async (
   search: string,
   page: number,
+  selectedTag: string,
   setHabitIds: React.Dispatch<SetStateAction<string[]>>,
 ) => {
   try {
@@ -24,10 +25,18 @@ export const getHabitSearch = async (
       .collection('Habits')
       .where('tags', 'array-contains', search.toLowerCase())
       .get();
+    if (selectedTag === 'Tag') {
+      setHabitIds(habitTagsDoc.docs.map(doc => doc.id));
+      return habitTagsDoc.docs.map(doc => doc.data()) as HabitDataType[];
+    }
     const habitNameDoc = await firestore()
       .collection('Habits')
       .where('name', '==', search.toLowerCase())
       .get();
+    if (selectedTag === 'Habits') {
+      setHabitIds(habitNameDoc.docs.map(doc => doc.id));
+      return habitNameDoc.docs.map(doc => doc.data()) as HabitDataType[];
+    }
     const matchingResults: HabitDataType[] = [];
     const habitIds: string[] = [];
     habitTagsDoc.forEach(doc => {

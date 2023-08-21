@@ -14,7 +14,7 @@ import {CloseButton} from '../components/Close';
 import React, {ReactNode, useContext, useEffect, useRef} from 'react';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {HabitDataType, RootStackParamList} from '../components/types';
-import {getHabitSearch} from '../components/firestore/getHabits';
+import {fetchHabitData, getHabitSearch} from '../components/firestore/getHabits';
 import UserContext from '../Contexts/UserContext';
 import {addHabitToDB} from '../components/addHabit';
 
@@ -45,7 +45,14 @@ export const SearchHabitsScreen = ({route, navigation}: any) => {
 
   useEffect(() => {
     setLoading(true);
-    getHabitSearch(search, page, setHabitIds).then(res => {
+    getHabitSearch(search, page, selectedTag, setHabitIds).then(res => {
+      setHabits(res);
+    });
+  }, [selectedTag]);
+
+  useEffect(() => {
+    setLoading(true);
+    getHabitSearch(search, page, selectedTag, setHabitIds).then(res => {
       setHabits(res);
     });
     setPage(1);
@@ -64,11 +71,7 @@ export const SearchHabitsScreen = ({route, navigation}: any) => {
 
   const defaultTags = () => {
     // TODO: Implement User Tags
-    const defaultTags = [
-      'All',
-      'Habits',
-      'Tags',
-    ];
+    const defaultTags = ['All', 'Habits', 'Tags'];
     return (
       <>
         {defaultTags.map((tag, index) => {
@@ -82,7 +85,11 @@ export const SearchHabitsScreen = ({route, navigation}: any) => {
               }
               onPress={() => setSelectedTag(tag)}>
               <Text
-                style={selectedTag === tag ? innerStyles.paragraphText : null}>
+                style={
+                  selectedTag === tag
+                    ? innerStyles.paragraphText
+                    : innerStyles.paragraphTextBlack
+                }>
                 {tag}
               </Text>
             </Pressable>
@@ -111,12 +118,23 @@ export const SearchHabitsScreen = ({route, navigation}: any) => {
                 key={index}
                 style={innerStyles.habitContainer}
                 onPress={() => onPress(habit)}>
-                <Text style={[Styles.text, innerStyles.habitName]}>
+                <Text style={[Styles.text]}>
                   {habit.name.replace(/\b\w/g, l => l.toUpperCase())}
                 </Text>
-                <Text style={[Styles.paragraphText, innerStyles.habitDesc]}>
+                <Text style={[innerStyles.paragraphText]}>
                   {habit.desc}
                 </Text>
+                <View style={innerStyles.habitTagsContainer}>
+                  {habit.tags.map((tag, index) => {
+                    return (
+                      <View key={index} style={innerStyles.habitTag}>
+                        <Text style={innerStyles.paragraphText}>
+                          {tag.replace(/\b\w/g, i => i.toUpperCase())}
+                        </Text>
+                      </View>
+                    );
+                  })}
+                </View>
               </Pressable>
             );
           }
@@ -138,7 +156,9 @@ export const SearchHabitsScreen = ({route, navigation}: any) => {
   return (
     <View style={Styles.app}>
       <View style={Styles.header}>
-        <Text style={[Styles.text, Styles.notificationHeaderText]}>{search}</Text>
+        <Text style={[Styles.text, Styles.notificationHeaderText]}>
+          {search}
+        </Text>
         <CloseButton type={'back'} closeFunction={() => navigation.goBack()} />
       </View>
       <View style={{flex: 1, width: '100%'}}>
@@ -153,7 +173,7 @@ export const SearchHabitsScreen = ({route, navigation}: any) => {
             style={innerStyles.habitScrollView}>
             <View style={innerStyles.noHabitContainer}>
               <ActivityIndicator size="large" color="white" />
-              <Text style={Styles.text}>Loading...</Text>
+              <Text style={[Styles.text, innerStyles.noHabitText]}>Loading...</Text>
             </View>
           </ScrollView>
         ) : (
@@ -213,7 +233,6 @@ const DynamicHeader = (props: {
   );
 };
 
-
 const innerStyles = StyleSheet.create({
   tagScrollHeader: {
     paddingHorizontal: 10,
@@ -243,17 +262,22 @@ const innerStyles = StyleSheet.create({
   habitContainer: {
     alignSelf: 'center',
     backgroundColor: '#2A3E59',
-    padding: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
     borderRadius: 10,
     marginHorizontal: 0,
     marginBottom: 10,
     width: '95%',
   },
-  habitName: {
-
+  habitTagsContainer: {
+    flexDirection: 'row',
+    paddingTop: 5,
   },
-  habitDesc: {
-
+  habitTag: {
+    backgroundColor: '#1D2B3E',
+    borderRadius: 10,
+    padding: 7,
+    marginVertical: 5,
   },
   habitScrollView: {
     width: '100%',
@@ -273,4 +297,8 @@ const innerStyles = StyleSheet.create({
     right: 0,
     overflow: 'hidden',
   },
+  paragraphTextBlack: {
+    fontSize: 16,
+    color: 'black',
+  }
 });

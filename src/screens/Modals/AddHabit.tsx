@@ -7,7 +7,7 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   View,
-  StyleSheet, Animated
+  StyleSheet,
 } from 'react-native';
 import Styles from '../../components/Styles';
 import {CloseButton} from '../../components/Close';
@@ -38,6 +38,7 @@ const AddHabitScreen = () => {
     setHabitName('');
     openCloseModal();
   };
+
   const addModal = () => {
     return (
       <Modal
@@ -69,6 +70,24 @@ const AddHabitScreen = () => {
       </Pressable>
     );
   });
+
+  const addTagOnPress = () => {
+    if (
+      tag === '' ||
+      habitTags.includes(tag) ||
+      habitTags.length > 4 ||
+      tag.length > 10 ||
+      tag.length < 3 ||
+      tag === 'dose'
+    ) {
+      setErrorModal(true);
+      return;
+    }
+    setHabitTags(prev => {
+      setTag('');
+      return [...prev, tag];
+    });
+  };
 
   const addForm = () => {
     return (
@@ -106,12 +125,7 @@ const AddHabitScreen = () => {
           />
           <Pressable
             style={[Styles.inputBarButton, Styles.addTagButton]}
-            onPress={() =>
-              setHabitTags(prev => {
-                setTag('');
-                return [...prev, tag];
-              })
-            }>
+            onPress={() => addTagOnPress()}>
             <Image source={require('../../icons/plus.png')} />
           </Pressable>
         </View>
