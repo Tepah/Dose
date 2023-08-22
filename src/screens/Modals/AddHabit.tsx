@@ -1,4 +1,4 @@
-import React, {ReactNode, useContext, useEffect, useState} from 'react';
+import React, {ReactNode, useContext, useEffect, useRef, useState} from 'react';
 import {
   Image,
   Modal,
@@ -7,12 +7,14 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   View,
-  StyleSheet,
+  StyleSheet, Switch
 } from 'react-native';
 import Styles from '../../components/Styles';
 import {CloseButton} from '../../components/Close';
 import UserContext from '../../Contexts/UserContext';
 import {addHabitToDB} from '../../components/addHabit';
+import {HabitDataType, HabitType} from '../../components/types';
+import {AppButton} from '../../components/Button';
 
 const AddHabitScreen = () => {
   const {username: user, setProfile} = useContext(UserContext);
@@ -179,8 +181,60 @@ const AddHabitScreen = () => {
   );
 };
 
+export const ConfirmAddModal = (props: {
+  navigation: any;
+  habit: HabitDataType;
+  visible: boolean;
+  setVisible: (arg0: boolean) => void;
+}) => {
+  const [privateHabit, setPrivateHabit] = useState(false);
+  const openCloseModal = () => {
+    props.setVisible(false);
+  };
+  console.log(props.habit);
+
+  const addForm = () => {
+    return (
+      <View style={Styles.addHabitForm}>
+        <View style={Styles.pageHeader}>
+          <Text style={[Styles.text, {alignSelf: 'center'}]}>Add Habit</Text>
+          <CloseButton type={'close'} closeFunction={() => openCloseModal()} />
+        </View>
+        <Text style={Styles.text}>
+          {props.habit.name.replace(/\b\w/g, i => i.toUpperCase())}
+        </Text>
+        <Text style={Styles.paragraphText}>{props.habit.desc}</Text>
+        <View style={innerStyles.privateSwitchContainer}>
+          <Text style={Styles.text}>Private</Text>
+          <Switch
+            trackColor={{false: '#767577', true: '#81b0ff'}}
+            thumbColor={'white'}
+            ios_backgroundColor={'#3e3e3e'}
+            onValueChange={() => setPrivateHabit(temp => !temp)}
+            value={privateHabit}
+          />
+        </View>
+        <AppButton onPress={() => console.log(props.habit)} title={'Submit'} />
+      </View>
+    );
+  };
+
+  return (
+    <Modal visible={props.visible} animationType="slide" transparent={true}>
+      <TouchableWithoutFeedback onPress={() => openCloseModal()}>
+        <View style={Styles.inputFieldBackground}></View>
+      </TouchableWithoutFeedback>
+      <View style={Styles.addModal}>{addForm()}</View>
+    </Modal>
+  );
+};
+
 const innerStyles = StyleSheet.create({
   inputBar: {flex: 10, marginRight: 5},
+  privateSwitchContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
 });
 
 export default AddHabitScreen;

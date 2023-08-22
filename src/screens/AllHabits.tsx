@@ -13,7 +13,7 @@ import Styles from '../components/Styles';
 import {CloseButton} from '../components/Close';
 import React, {ReactNode, useContext, useEffect, useRef} from 'react';
 import {HabitDataType} from '../components/types';
-import AddHabit from './Modals/AddHabit';
+import AddHabit, {ConfirmAddModal} from './Modals/AddHabit';
 import {addHabitToDB} from '../components/addHabit';
 import userContext from '../Contexts/UserContext';
 import {fetchHabitData} from '../components/firestore/getHabits';
@@ -173,20 +173,38 @@ const ShowHabits = (props: {
   habitIds: string[];
   navigation: any;
   scrollOffsetY?: Animated.Value;
+  setConfirmModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const {username, profile, setProfile} = useContext(userContext);
+  const {profile} = useContext(userContext);
   const userHabitIds = profile?.habits.map(habit => habit.habitId);
   const habitsShown = React.useRef(0);
-  const onPress = (habit: HabitDataType) => {
-    addHabitToDB(
-      habit.name.replace(/\b\w/g, l => l.toUpperCase()),
-      habit.desc,
-      habit.tags,
-      username,
-      setProfile,
-    );
-    props.navigation.navigate('Home');
-  };
+  const [confirmModal, setConfirmModal] = React.useState<boolean>(false);
+  const [habit, setHabit] = React.useState<HabitDataType>({
+    name: '',
+    desc: '',
+    tags: [],
+  });
+  const firstRender = useRef(true);
+
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+    setConfirmModal(true);
+  }, [habit]);
+
+  // TODO: Put this in AddHabit.tsx
+  // const onPress = (habit: HabitDataType) => {
+  //   addHabitToDB(
+  //     habit.name.replace(/\b\w/g, l => l.toUpperCase()),
+  //     habit.desc,
+  //     habit.tags,
+  //     username,
+  //     setProfile,
+  //   );
+  //   props.navigation.navigate('Home');
+  // };
   return (
     <ScrollView
       contentContainerStyle={{marginTop: HEADER_MAX_HEIGHT}}
@@ -203,7 +221,9 @@ const ShowHabits = (props: {
             <Pressable
               key={index}
               style={innerStyles.habitContainer}
-              onPress={() => onPress(habit)}>
+              onPress={() => {
+                setHabit(habit);
+              }}>
               <Text style={Styles.text}>
                 {habit.name.replace(/\b\w/g, char => char.toUpperCase())}
               </Text>
@@ -232,6 +252,9 @@ const ShowHabits = (props: {
             Try a different tag or add your own!
           </Text>
         </View>
+      ) : null}
+      {confirmModal ? (
+        <ConfirmAddModal navigation={props.navigation} visible={confirmModal} setVisible={setConfirmModal} habit={habit} />
       ) : null}
       <AddHabit />
     </ScrollView>
