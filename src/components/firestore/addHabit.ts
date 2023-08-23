@@ -1,7 +1,7 @@
-import {HabitType, ProfileType} from './types';
+import {HabitType, ProfileType} from '../types';
 import firestore from '@react-native-firebase/firestore';
 import {useContext} from 'react';
-import userContext from '../Contexts/UserContext';
+import userContext from '../../Contexts/UserContext';
 
 const addHabit = (
   habit: HabitType,
@@ -30,6 +30,7 @@ export const addHabitToDB = async (
   habitTags: string[],
   user: string,
   setProfile: (profile: ProfileType) => void,
+  privateHabit: boolean,
 ) => {
   let habitId = '';
   try {
@@ -70,6 +71,7 @@ export const addHabitToDB = async (
           progress: progress,
           habitId: habitId,
           habitTags: habitTags,
+          private: privateHabit,
         },
         user,
         setProfile,

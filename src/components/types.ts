@@ -38,6 +38,7 @@ export type HabitType = {
   progress: {[key: string]: boolean};
   habitId: string;
   habitTags: string[];
+  private: boolean;
 };
 
 export type HabitDataType = {

@@ -14,7 +14,6 @@ import {CloseButton} from '../components/Close';
 import React, {ReactNode, useContext, useEffect, useRef} from 'react';
 import {HabitDataType} from '../components/types';
 import AddHabit, {ConfirmAddModal} from './Modals/AddHabit';
-import {addHabitToDB} from '../components/addHabit';
 import userContext from '../Contexts/UserContext';
 import {fetchHabitData} from '../components/firestore/getHabits';
 import Mapping = Animated.Mapping;
@@ -173,7 +172,6 @@ const ShowHabits = (props: {
   habitIds: string[];
   navigation: any;
   scrollOffsetY?: Animated.Value;
-  setConfirmModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const {profile} = useContext(userContext);
   const userHabitIds = profile?.habits.map(habit => habit.habitId);
@@ -187,24 +185,13 @@ const ShowHabits = (props: {
   const firstRender = useRef(true);
 
   useEffect(() => {
-    if (firstRender.current) {
+    if (firstRender.current || habit.name === '') {
       firstRender.current = false;
       return;
     }
     setConfirmModal(true);
   }, [habit]);
 
-  // TODO: Put this in AddHabit.tsx
-  // const onPress = (habit: HabitDataType) => {
-  //   addHabitToDB(
-  //     habit.name.replace(/\b\w/g, l => l.toUpperCase()),
-  //     habit.desc,
-  //     habit.tags,
-  //     username,
-  //     setProfile,
-  //   );
-  //   props.navigation.navigate('Home');
-  // };
   return (
     <ScrollView
       contentContainerStyle={{marginTop: HEADER_MAX_HEIGHT}}
@@ -254,7 +241,13 @@ const ShowHabits = (props: {
         </View>
       ) : null}
       {confirmModal ? (
-        <ConfirmAddModal navigation={props.navigation} visible={confirmModal} setVisible={setConfirmModal} habit={habit} />
+        <ConfirmAddModal
+          navigation={props.navigation}
+          visible={confirmModal}
+          setVisible={setConfirmModal}
+          habit={habit}
+          setHabit={setHabit}
+        />
       ) : null}
       <AddHabit />
     </ScrollView>
