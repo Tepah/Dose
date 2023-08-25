@@ -14,7 +14,6 @@ import {
 } from 'react-native';
 import Styles from '../../components/Styles';
 import {HabitType, ProfileType} from '../../components/types';
-import {mockFriends} from '../../test/mockFriends';
 import {CloseButton} from '../../components/Close';
 import {AppButton} from '../../components/Button';
 import firestore from '@react-native-firebase/firestore';
@@ -76,14 +75,6 @@ const EditHabitScreen = ({
     }
   }, [habits, currentHabitIndex, visible]);
 
-  const mapFollowing = mockFriends.map((following, index) => {
-    return (
-      <View key={index} style={Styles.individualFollowing}>
-        <Image style={Styles.friendProfilePic} source={following.profilePic} />
-        <Text style={[Styles.text, Styles.userText]}>{following.username}</Text>
-      </View>
-    );
-  });
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [newHabit, setNewHabit] = useState<HabitType>({
     name: habitName,
@@ -92,6 +83,7 @@ const EditHabitScreen = ({
     progress: habitProgress,
     habitId: habits ? habits[currentHabitIndex].habitId : '',
     habitTags: habits ? habits[currentHabitIndex].habitTags : [],
+    private: habits ? habits[currentHabitIndex].private : false,
   });
   const editForm = () => {
     const onEditButtonPress = () => {
@@ -102,6 +94,7 @@ const EditHabitScreen = ({
         progress: habitProgress,
         habitId: habits ? habits[currentHabitIndex].habitId : '',
         habitTags: habits ? habits[currentHabitIndex].habitTags : [],
+        private: habits ? habits[currentHabitIndex].private : false,
       });
       setEditModalVisible(true);
     };
@@ -178,18 +171,7 @@ const EditHabitScreen = ({
             <Text style={[Styles.text]}>Streak: </Text>
             <Text style={[Styles.text]}>{habitStreak}</Text>
           </View>
-          <View style={Styles.editModalSocial}>
-            <Text style={Styles.text}>People doing this:</Text>
-            <View style={Styles.editModalFollowing}>
-              {mapFollowing}
-              <View style={Styles.individualFollowing}>
-                <Image
-                  style={Styles.friendProfilePic}
-                  source={require('../../icons/add.png')}
-                />
-              </View>
-            </View>
-          </View>
+          <HabitFollowingList habitName={habitName} />
           <DeleteHabitButton
             username={username}
             habit={habits ? habits[currentHabitIndex] : null}
@@ -293,6 +275,38 @@ const DeleteHabitButton = (props: {
           </View>
         </View>
       </Modal>
+    </View>
+  );
+};
+
+const HabitFollowingList = ({habitName}: {habitName: string}) => {
+  const {profile} = useContext(UserContext);
+  const [following, setFollowing] = useState<string[]>(profile?.following);
+
+  useEffect(() => {
+  }, [habitName]);
+
+  const mapFollowing = following?.map((following, index) => {
+    return (
+      <View key={index} style={Styles.individualFollowing}>
+        <Image style={Styles.friendProfilePic} source={following.profilePic} />
+        <Text style={[Styles.text, Styles.userText]}>{following.username}</Text>
+      </View>
+    );
+  });
+
+  return (
+    <View style={Styles.editModalSocial}>
+      <Text style={Styles.text}>People doing this:</Text>
+      <View style={Styles.editModalFollowing}>
+        {mapFollowing}
+        <View style={Styles.individualFollowing}>
+          <Image
+            style={Styles.friendProfilePic}
+            source={require('../../icons/add.png')}
+          />
+        </View>
+      </View>
     </View>
   );
 };
