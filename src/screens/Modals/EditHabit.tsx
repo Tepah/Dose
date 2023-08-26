@@ -282,15 +282,45 @@ const DeleteHabitButton = (props: {
 const HabitFollowingList = ({habitName}: {habitName: string}) => {
   const {profile} = useContext(UserContext);
   const [following, setFollowing] = useState<string[]>(profile?.following);
+  const [followingPics, setFollowingPics] = useState<string[]>([]);
 
   useEffect(() => {
+    const getFollowingWithHabit = async () => {
+      try {
+        let temp: string[] = [];
+        let tempPics: string[] = [];
+        for (const user of profile?.following) {
+          const userRef = await firestore().collection('Users').doc(user);
+          const userDoc = await userRef.get();
+          if (userDoc.exists) {
+            const userData = userDoc.data();
+            const userHabits = userData?.habits;
+            const habitIndex = userHabits?.findIndex(
+              (habit: HabitType) => habit.name === habitName,
+            );
+            if (habitIndex !== -1) {
+              temp.push(userData?.username);
+              tempPics.push(userData?.profilePic);
+            }
+          }
+        }
+        setFollowing(temp);
+        setFollowingPics(tempPics);
+      } catch (err) {
+        console.log('Error getting following with habit: ' + err);
+      }
+    };
+    getFollowingWithHabit();
   }, [habitName]);
 
   const mapFollowing = following?.map((following, index) => {
     return (
       <View key={index} style={Styles.individualFollowing}>
-        <Image style={Styles.friendProfilePic} source={following.profilePic} />
-        <Text style={[Styles.text, Styles.userText]}>{following.username}</Text>
+        <Image
+          style={Styles.friendProfilePic}
+          source={{uri: followingPics[index]}}
+        />
+        <Text style={[Styles.text, Styles.userText]}>{following}</Text>
       </View>
     );
   });
