@@ -286,6 +286,7 @@ const HabitFollowingList = ({habitName}: {habitName: string}) => {
 
   useEffect(() => {
     const getFollowingWithHabit = async () => {
+      // TODO: possible inefficiency here, can be optimized
       try {
         let temp: string[] = [];
         let tempPics: string[] = [];

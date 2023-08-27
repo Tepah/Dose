@@ -24,4 +24,4 @@ export const checkUserHabit = async (username: string) => {
   } catch (err) {
     console.log('Error getting user Habit: ' + err);
   }
-}
+};

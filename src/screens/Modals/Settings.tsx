@@ -142,7 +142,7 @@ export const SettingsModal = ({user, visible, setVisible}: Props) => {
           </Pressable>
           <AppButton
             title={'Log Out'}
-            onPress={() => signOut()}
+            onPress={() => signOut(setProfile)}
             additionalStyle={{backgroundColor: 'red'}}
           />
         </ScrollView>

@@ -1,6 +1,4 @@
 import firestore from '@react-native-firebase/firestore';
-import {useContext} from 'react';
-import UserContext from '../Contexts/UserContext';
 import {ProfileType} from './types';
 
 type UserChanges = {
