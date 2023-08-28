@@ -179,6 +179,7 @@ const HomeScreen = ({navigation}: any) => {
           visible={editModalVisible}
           setVisible={setEditModalVisible}
           selectedList={selectedList}
+          navigation={navigation}
         />
       ) : null}
       {renderHabits('swiped', swipedHabits)}

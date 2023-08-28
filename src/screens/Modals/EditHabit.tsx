@@ -27,6 +27,7 @@ interface Props {
   currentHabitIndex: number;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   selectedList: string;
+  navigation: any;
 }
 
 const EditHabitScreen = ({
@@ -36,6 +37,7 @@ const EditHabitScreen = ({
   habits,
   currentHabitIndex,
   setVisible,
+  navigation,
 }: Props) => {
   const [habitName, setHabitName] = useState(
     habits ? habits[currentHabitIndex].name : '',
@@ -171,7 +173,7 @@ const EditHabitScreen = ({
             <Text style={[Styles.text]}>Streak: </Text>
             <Text style={[Styles.text]}>{habitStreak}</Text>
           </View>
-          <HabitFollowingList habitName={habitName} />
+          <HabitFollowingList navigation={navigation} habitName={habitName} openCloseModal={openCloseModal} />
           <DeleteHabitButton
             username={username}
             habit={habits ? habits[currentHabitIndex] : null}
@@ -279,7 +281,15 @@ const DeleteHabitButton = (props: {
   );
 };
 
-const HabitFollowingList = ({habitName}: {habitName: string}) => {
+const HabitFollowingList = ({
+  habitName,
+  navigation,
+  openCloseModal,
+}: {
+  habitName: string;
+  navigation: any;
+  openCloseModal: () => void;
+}) => {
   const {profile} = useContext(UserContext);
   const [following, setFollowing] = useState<string[]>(profile?.following);
   const [followingPics, setFollowingPics] = useState<string[]>([]);
@@ -307,6 +317,7 @@ const HabitFollowingList = ({habitName}: {habitName: string}) => {
         }
         setFollowing(temp);
         setFollowingPics(tempPics);
+        console.log('Following with habit: ' + following);
       } catch (err) {
         console.log('Error getting following with habit: ' + err);
       }
@@ -315,14 +326,20 @@ const HabitFollowingList = ({habitName}: {habitName: string}) => {
   }, [habitName]);
 
   const mapFollowing = following?.map((following, index) => {
+    const onPress = () => {
+      openCloseModal();
+      navigation.navigate('Profile', {user: following});
+    };
     return (
-      <View key={index} style={Styles.individualFollowing}>
-        <Image
-          style={Styles.friendProfilePic}
-          source={{uri: followingPics[index]}}
-        />
-        <Text style={[Styles.text, Styles.userText]}>{following}</Text>
-      </View>
+      <Pressable key={index} onPress={onPress}>
+        <View style={Styles.individualFollowing}>
+          <Image
+            style={Styles.friendProfilePic}
+            source={{uri: followingPics[index]}}
+          />
+          <Text style={[Styles.text, Styles.userText]}>{following}</Text>
+        </View>
+      </Pressable>
     );
   });
 
