@@ -13,6 +13,24 @@ export const getUser = async (username: string) => {
   }
 };
 
+export const findUser = async (username: string) => {
+  try {
+    const usersCollection = await firestore().collection('Users');
+    const userDoc = await usersCollection
+      .where('username', 'array-contains', username)
+      .get();
+    if (userDoc.docs.length > 0) {
+      const dataArray = userDoc.docs.map(docRefOrSnapshot => {
+        const docData = docRefOrSnapshot.data();
+        return docData;
+      });
+      return dataArray as ProfileType[];
+    }
+  } catch (err) {
+    console.log('Error finding user: ' + err);
+  }
+};
+
 export const checkUserHabit = async (username: string) => {
   // TODO: Make a batch to collect all values of the users habits
   try {

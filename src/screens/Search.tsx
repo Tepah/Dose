@@ -4,6 +4,7 @@ import Styles from '../components/Styles';
 import {ProfileType} from '../components/types';
 import {mockProfileList} from '../test/mockProfile1';
 import {CloseButton} from '../components/Close';
+import {findUser} from '../components/firestore/getUser';
 
 const SearchScreen = ({navigation}: any) => {
   const [profiles, setProfiles] = useState<{[key: string]: ProfileType}>(
@@ -46,9 +47,17 @@ const SearchHeader = ({navigation}: any) => {
 };
 
 interface SearchBarProps {
+  searchText: string;
   setSearchText: React.Dispatch<React.SetStateAction<string>>;
 }
-const SearchBar = ({setSearchText}: SearchBarProps) => {
+const SearchBar = ({searchText, setSearchText}: SearchBarProps) => {
+  const onPressSearch = () => {
+    findUser(searchText).then((usersSearched: ProfileType[] | undefined) =>
+      console.log(usersSearched),
+    );
+    setSearchText('');
+  };
+
   return (
     <View style={Styles.inputBarContainer}>
       <TextInput
@@ -59,7 +68,7 @@ const SearchBar = ({setSearchText}: SearchBarProps) => {
       />
       <Pressable
         style={Styles.inputBarButton}
-        onPress={() => console.log('Search!')}>
+        onPress={onPressSearch}>
         <Image source={require('../icons/search.png')} />
       </Pressable>
     </View>
