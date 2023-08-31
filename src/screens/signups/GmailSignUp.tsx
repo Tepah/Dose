@@ -11,6 +11,7 @@ import {createUserOnPress} from '../../components/auth/createUserOnPress';
 import {ProfileType} from '../../components/types';
 import createUserDoc from '../../components/auth/createUserDoc';
 import {uploadProfilePic} from '../../components/photo/changeProfilePic';
+import {createSearchTerms} from './EmailSignUp';
 
 export const GmailSignUpScreen = ({route}: any) => {
   const {user, googleCredential} = route.params;
@@ -22,7 +23,6 @@ export const GmailSignUpScreen = ({route}: any) => {
   const [created, setCreated] = React.useState<boolean | undefined>(false);
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
-
   useEffect(() => {
     if (created && !profilePicUrl) {
       const changeProfilePic = async () => {
@@ -31,6 +31,7 @@ export const GmailSignUpScreen = ({route}: any) => {
       changeProfilePic();
     }
     if (created && profilePicUrl) {
+      const searchterms = createSearchTerms(username, name);
       const newUser: ProfileType = {
         username: '@' + username.toLowerCase(),
         name: name.toLowerCase(),
@@ -44,6 +45,7 @@ export const GmailSignUpScreen = ({route}: any) => {
         startDate: new Date().toLocaleDateString('en-US'),
         profilePic: profilePicUrl,
         posts: [],
+        searchterms: searchterms,
       };
       createUserDoc(newUser);
       auth().signInWithCredential(googleCredential);

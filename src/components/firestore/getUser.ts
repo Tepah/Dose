@@ -13,16 +13,16 @@ export const getUser = async (username: string) => {
   }
 };
 
-export const findUser = async (username: string) => {
+export const findUsers = async (search: string) => {
   try {
     const usersCollection = await firestore().collection('Users');
     const userDoc = await usersCollection
-      .where('username', 'array-contains', username)
+      .where('searchterms', 'array-contains', search.toLowerCase())
       .get();
+    console.log('Hello:', userDoc.docs);
     if (userDoc.docs.length > 0) {
       const dataArray = userDoc.docs.map(docRefOrSnapshot => {
-        const docData = docRefOrSnapshot.data();
-        return docData;
+        return docRefOrSnapshot.data();
       });
       return dataArray as ProfileType[];
     }

@@ -4,7 +4,7 @@ import Styles from '../components/Styles';
 import {ProfileType} from '../components/types';
 import {mockProfileList} from '../test/mockProfile1';
 import {CloseButton} from '../components/Close';
-import {findUser} from '../components/firestore/getUser';
+import {findUsers} from '../components/firestore/getUser';
 
 const SearchScreen = ({navigation}: any) => {
   const [profiles, setProfiles] = useState<{[key: string]: ProfileType}>(
@@ -31,7 +31,7 @@ const SearchScreen = ({navigation}: any) => {
   return (
     <View style={Styles.app}>
       <SearchHeader navigation={navigation} />
-      <SearchBar setSearchText={setSearchText} />
+      <SearchBar searchText={searchText} setSearchText={setSearchText} />
       <SearchResults profiles={searchResults} navigation={navigation} />
     </View>
   );
@@ -51,16 +51,22 @@ interface SearchBarProps {
   setSearchText: React.Dispatch<React.SetStateAction<string>>;
 }
 const SearchBar = ({searchText, setSearchText}: SearchBarProps) => {
+  const [searchResults, setSearchResults] = useState<ProfileType[]>();
+
+  useEffect(() => {
+    console.log(searchResults);
+  }, [searchResults]);
+
   const onPressSearch = () => {
-    findUser(searchText).then((usersSearched: ProfileType[] | undefined) =>
-      console.log(usersSearched),
-    );
-    setSearchText('');
+    findUsers(searchText).then(users => {
+      setSearchResults(users);
+    });
   };
 
   return (
     <View style={Styles.inputBarContainer}>
       <TextInput
+        value={searchText}
         style={[Styles.input, Styles.inputBar]}
         onChangeText={setSearchText}
         placeholderTextColor={'grey'}

@@ -17,6 +17,7 @@ export type ProfileType = {
   birthday: string;
   email: string;
   posts: PostType[];
+  searchterms: string[];
 };
 
 export type PostType = {
