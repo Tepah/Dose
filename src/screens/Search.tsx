@@ -2,36 +2,42 @@ import React, {useEffect, useState} from 'react';
 import {Image, Pressable, ScrollView, Text, TextInput, View} from 'react-native';
 import Styles from '../components/Styles';
 import {ProfileType} from '../components/types';
-import {mockProfileList} from '../test/mockProfile1';
 import {CloseButton} from '../components/Close';
 import {findUsers} from '../components/firestore/getUser';
 
 const SearchScreen = ({navigation}: any) => {
-  const [profiles, setProfiles] = useState<{[key: string]: ProfileType}>(
-    mockProfileList,
+  const [profiles, setProfiles] = useState<ProfileType[] | undefined>(
+    undefined,
   );
-  const [searchResults, setSearchResults] = useState<ProfileType[]>(
-    Object.values(profiles),
-  );
+  const [searchResults, setSearchResults] = useState<ProfileType[]>([]);
   const [searchText, setSearchText] = useState<string>('');
 
+  // useEffect(() => {
+  //   if (searchText === '') {
+  //     setSearchResults(Object.values(profiles));
+  //   } else {
+  //     const filteredList = Object.values(profiles).filter(
+  //       (user: ProfileType) =>
+  //         user.username.toLowerCase().includes(searchText.toLowerCase()) ||
+  //         user.name.toLowerCase().includes(searchText.toLowerCase()),
+  //     );
+  //     setSearchResults(filteredList);
+  //   }
+  // }, [searchText]);
+
   useEffect(() => {
-    if (searchText === '') {
-      setSearchResults(Object.values(profiles));
-    } else {
-      const filteredList = Object.values(profiles).filter(
-        (user: ProfileType) =>
-          user.username.toLowerCase().includes(searchText.toLowerCase()) ||
-          user.name.toLowerCase().includes(searchText.toLowerCase()),
-      );
-      setSearchResults(filteredList);
-    }
-  }, [searchText]);
+    setSearchResults(profiles || []);
+  }, [profiles]);
+
 
   return (
     <View style={Styles.app}>
       <SearchHeader navigation={navigation} />
-      <SearchBar searchText={searchText} setSearchText={setSearchText} />
+      <SearchBar
+        searchText={searchText}
+        setSearchText={setSearchText}
+        setProfiles={setProfiles}
+      />
       <SearchResults profiles={searchResults} navigation={navigation} />
     </View>
   );
@@ -49,12 +55,18 @@ const SearchHeader = ({navigation}: any) => {
 interface SearchBarProps {
   searchText: string;
   setSearchText: React.Dispatch<React.SetStateAction<string>>;
+  setProfiles: React.Dispatch<React.SetStateAction<ProfileType[] | undefined>>;
 }
-const SearchBar = ({searchText, setSearchText}: SearchBarProps) => {
+const SearchBar = ({
+  searchText,
+  setSearchText,
+  setProfiles,
+}: SearchBarProps) => {
   const [searchResults, setSearchResults] = useState<ProfileType[]>();
 
   useEffect(() => {
-    console.log(searchResults);
+    setProfiles(searchResults);
+    console.log('profiles set as: ', searchResults);
   }, [searchResults]);
 
   const onPressSearch = () => {
@@ -72,9 +84,7 @@ const SearchBar = ({searchText, setSearchText}: SearchBarProps) => {
         placeholderTextColor={'grey'}
         placeholder="Search..."
       />
-      <Pressable
-        style={Styles.inputBarButton}
-        onPress={onPressSearch}>
+      <Pressable style={Styles.inputBarButton} onPress={onPressSearch}>
         <Image source={require('../icons/search.png')} />
       </Pressable>
     </View>
@@ -91,11 +101,8 @@ const SearchResults = ({profiles, navigation}: SearchResultsProps) => {
     <Pressable
       key={index}
       style={Styles.searchResultContainer}
-      onPress={() => navigation.navigate('Profile', {user: user})}>
-      <Image
-        style={Styles.resultImage}
-        source={require('../test/water.jpeg')}
-      />
+      onPress={() => navigation.navigate('Profile', {user: user.username})}>
+      <Image style={Styles.resultImage} source={{uri: user.profilePic}} />
       <View style={Styles.searchResultText}>
         <Text style={[Styles.paragraphText]}>{user.username}</Text>
         <Text style={[Styles.paragraphText]}>{user.name}</Text>

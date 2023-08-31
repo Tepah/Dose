@@ -11,6 +11,7 @@ import {getUser} from '../components/firestore/getUser';
 import UserContext from '../Contexts/UserContext';
 
 const ProfileScreen = ({route}: any) => {
+  console.log(route.params);
   const {user} = route.params;
   const {username} = useContext(UserContext);
   const isFocused = useIsFocused();
