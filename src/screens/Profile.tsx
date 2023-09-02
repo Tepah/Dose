@@ -9,6 +9,7 @@ import {PostModal} from './Modals/PostModal';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {getUser} from '../components/firestore/getUser';
 import UserContext from '../Contexts/UserContext';
+import firestore from '@react-native-firebase/firestore';
 
 const ProfileScreen = ({route}: any) => {
   console.log(route.params);
@@ -89,7 +90,6 @@ const ProfileScreen = ({route}: any) => {
   if (loading || !userProfile) {
     return null;
   }
-  console.log('render');
 
   return (
     <View style={Styles.app}>
@@ -150,7 +150,13 @@ const Header = () => {
   );
 };
 
-const ProfileInfo = ({user, currentUser}: any) => {
+const ProfileInfo = ({
+  user,
+  currentUser,
+}: {
+  user: ProfileType;
+  currentUser: string;
+}) => {
   const profileCounter = (type: string) => {
     return (
       <View style={Styles.followContainer}>
@@ -181,12 +187,20 @@ const ProfileInfo = ({user, currentUser}: any) => {
         {profileCounter('Following')}
         {profileCounter('Followers')}
       </View>
-      {user.username !== currentUser ? <ProfileButtons user={user} /> : null}
+      {user.username !== currentUser ? (
+        <ProfileButtons user={user} currentUser={currentUser} />
+      ) : null}
     </View>
   );
 };
 
-const ProfileButtons = ({user}: any) => {
+const ProfileButtons = ({
+  user,
+  currentUser,
+}: {
+  user: ProfileType;
+  currentUser: string;
+}) => {
   // TODO: Implement following
   // if (currentUser.following.includes('@' + user.username)) {
   //   return (
@@ -197,12 +211,34 @@ const ProfileButtons = ({user}: any) => {
   //     </View>
   //   );
   // }
+  const {setProfile} = useContext(UserContext);
+
+  const followOnPress = async () => {
+    try {
+      console.log(currentUser);
+      const userRef = await firestore().collection('Users').doc(currentUser);
+      await userRef.update({
+        following: firestore.FieldValue.arrayUnion(user.username),
+      });
+      const userData = await userRef.get();
+      setProfile(userData.data() as ProfileType);
+      const otherUserRef = await firestore()
+        .collection('Users')
+        .doc(user.username);
+      await otherUserRef.update({
+        followers: firestore.FieldValue.arrayUnion(currentUser),
+      });
+    } catch (err) {
+      console.error('Error following user: ', err);
+    }
+  };
+
   return (
     <View style={Styles.profileButtonsContainer}>
       <Pressable style={Styles.profileButton}>
         <Text style={[Styles.paragraphText]}>Challenge</Text>
       </Pressable>
-      <Pressable style={Styles.profileButton}>
+      <Pressable style={Styles.profileButton} onPress={followOnPress}>
         <Text style={[Styles.paragraphText]}>Follow</Text>
       </Pressable>
     </View>
