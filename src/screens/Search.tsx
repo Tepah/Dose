@@ -1,9 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Image, Pressable, ScrollView, Text, TextInput, View} from 'react-native';
 import Styles from '../components/Styles';
 import {ProfileType} from '../components/types';
 import {CloseButton} from '../components/Close';
 import {findUsers} from '../components/firestore/getUser';
+import userContext from '../Contexts/UserContext';
 
 const SearchScreen = ({navigation}: any) => {
   const [profiles, setProfiles] = useState<ProfileType[] | undefined>(
@@ -66,7 +67,6 @@ const SearchBar = ({
 
   useEffect(() => {
     setProfiles(searchResults);
-    console.log('profiles set as: ', searchResults);
   }, [searchResults]);
 
   const onPressSearch = () => {
@@ -97,18 +97,24 @@ interface SearchResultsProps {
 }
 
 const SearchResults = ({profiles, navigation}: SearchResultsProps) => {
-  const renderProfiles = profiles.map((user: ProfileType, index: number) => (
-    <Pressable
-      key={index}
-      style={Styles.searchResultContainer}
-      onPress={() => navigation.navigate('Profile', {user: user.username})}>
-      <Image style={Styles.resultImage} source={{uri: user.profilePic}} />
-      <View style={Styles.searchResultText}>
-        <Text style={[Styles.paragraphText]}>{user.username}</Text>
-        <Text style={[Styles.paragraphText]}>{user.name}</Text>
-      </View>
-    </Pressable>
-  ));
+  const {username} = useContext(userContext);
+  const renderProfiles = profiles.map((user: ProfileType, index: number) => {
+    if (user.username === username) {
+      return null;
+    }
+    return (
+      <Pressable
+        key={index}
+        style={Styles.searchResultContainer}
+        onPress={() => navigation.navigate('Profile', {user: user.username})}>
+        <Image style={Styles.resultImage} source={{uri: user.profilePic}} />
+        <View style={Styles.searchResultText}>
+          <Text style={[Styles.paragraphText]}>{user.username}</Text>
+          <Text style={[Styles.paragraphText]}>{user.name}</Text>
+        </View>
+      </Pressable>
+    );
+  });
 
   return (
     <ScrollView style={Styles.searchResults}>
