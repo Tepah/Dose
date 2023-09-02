@@ -1,4 +1,4 @@
-import React, {ReactNode, useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Image,
   Modal,
@@ -8,13 +8,16 @@ import {
   TouchableWithoutFeedback,
   View,
   StyleSheet,
+  Switch,
 } from 'react-native';
 import Styles from '../../components/Styles';
 import {CloseButton} from '../../components/Close';
 import UserContext from '../../Contexts/UserContext';
-import {addHabitToDB} from '../../components/addHabit';
+import {addHabitToDB} from '../../components/firestore/addHabit';
+import {HabitDataType} from '../../components/types';
+import {AppButton} from '../../components/Button';
 
-const AddHabitScreen = () => {
+const AddHabitScreen = ({navigation}: any) => {
   const {username: user, setProfile} = useContext(UserContext);
   const [addScreenVisible, setAddScreenVisible] = useState(false);
   const [habitName, setHabitName] = useState('');
@@ -22,11 +25,13 @@ const AddHabitScreen = () => {
   const [tag, setTag] = useState('');
   const [habitTags, setHabitTags] = useState<string[]>([]);
   const [errorModal, setErrorModal] = useState(false);
+  const [privateHabit, setPrivateHabit] = useState(false);
 
   const openCloseModal = () => {
     setAddScreenVisible(() => !addScreenVisible);
     setHabitName('');
     setHabitDesc('');
+    setPrivateHabit(false);
   };
 
   const addHabitHandler = () => {
@@ -34,9 +39,16 @@ const AddHabitScreen = () => {
       setErrorModal(true);
       return;
     }
-    addHabitToDB(habitName, habitDesc, habitTags, user, setProfile);
-    setHabitName('');
+    addHabitToDB(
+      habitName,
+      habitDesc,
+      habitTags,
+      user,
+      setProfile,
+      privateHabit,
+    );
     openCloseModal();
+    navigation.navigate('Home');
   };
 
   const addModal = () => {
@@ -179,8 +191,125 @@ const AddHabitScreen = () => {
   );
 };
 
+export const ConfirmAddModal = (props: {
+  navigation: any;
+  habit: HabitDataType;
+  setHabit: (arg0: HabitDataType) => void;
+  visible: boolean;
+  setVisible: (arg0: boolean) => void;
+}) => {
+  const {username, setProfile} = useContext(UserContext);
+  const [privateHabit, setPrivateHabit] = useState(false);
+  const openCloseModal = () => {
+    props.setVisible(false);
+    props.setHabit({name: '', desc: '', tags: []});
+    setPrivateHabit(false);
+  };
+
+  const onPress = (habit: HabitDataType) => {
+    addHabitToDB(
+      habit.name.replace(/\b\w/g, l => l.toUpperCase()),
+      habit.desc,
+      habit.tags,
+      username,
+      setProfile,
+      privateHabit,
+    );
+    openCloseModal();
+    props.navigation.navigate('Home');
+    console.log('Habit added to DB');
+  };
+
+  const addForm = () => {
+    return (
+      <View style={[Styles.addHabitForm]}>
+        <View style={Styles.pageHeader}>
+          <Text style={[Styles.text, {alignSelf: 'center'}]}>
+            Add this Habit?
+          </Text>
+          <CloseButton type={'close'} closeFunction={() => openCloseModal()} />
+        </View>
+        <View style={innerStyles.confirmHabitForm}>
+          <View style={innerStyles.habitNameContainer}>
+            <Text style={Styles.text}>
+              {props.habit.name.replace(/\b\w/g, i => i.toUpperCase())}
+            </Text>
+          </View>
+          <Text style={Styles.paragraphText}>{props.habit.desc}</Text>
+          <View style={innerStyles.habitTagsContainer}>
+            {props.habit.tags.map((tag, index) => {
+              return (
+                <View key={index} style={innerStyles.habitTag}>
+                  <Text style={innerStyles.paragraphText}>
+                    {tag.replace(/\b\w/g, i => i.toUpperCase())}
+                  </Text>
+                </View>
+              );
+            })}
+          </View>
+          <View style={innerStyles.privateSwitchContainer}>
+            <Text style={Styles.text}>Private</Text>
+            <Switch
+              trackColor={{false: '#767577', true: '#81b0ff'}}
+              thumbColor={'white'}
+              ios_backgroundColor={'#3e3e3e'}
+              onValueChange={() => setPrivateHabit(temp => !temp)}
+              value={privateHabit}
+            />
+          </View>
+        </View>
+        <AppButton onPress={() => onPress(props.habit)} title={'Submit'} />
+      </View>
+    );
+  };
+
+  return (
+    <Modal visible={props.visible} animationType="slide" transparent={true}>
+      <TouchableWithoutFeedback onPress={() => openCloseModal()}>
+        <View style={Styles.inputFieldBackground}></View>
+      </TouchableWithoutFeedback>
+      <View style={Styles.addModal}>{addForm()}</View>
+    </Modal>
+  );
+};
+
 const innerStyles = StyleSheet.create({
   inputBar: {flex: 10, marginRight: 5},
+  privateSwitchContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  confirmHabitForm: {
+    padding: 15,
+    height: '75%',
+    justifyContent: 'space-evenly',
+    backgroundColor: '#344966',
+    borderRadius: 15,
+  },
+  habitNameContainer: {
+    paddingBottom: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: 'white',
+  },
+  paragraphText: {
+    fontSize: 16,
+    color: '#D9D9D9',
+  },
+  tagContainers: {
+    paddingVertical: 5,
+    borderRadius: 5,
+    margin: 2,
+  },
+  habitTagsContainer: {
+    flexDirection: 'row',
+    paddingTop: 5,
+  },
+  habitTag: {
+    backgroundColor: '#1D2B3E',
+    borderRadius: 10,
+    padding: 7,
+    marginVertical: 5,
+  },
 });
 
 export default AddHabitScreen;

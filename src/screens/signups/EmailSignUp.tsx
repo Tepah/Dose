@@ -11,7 +11,28 @@ import {createUserOnPress} from '../../components/auth/createUserOnPress';
 import {uploadProfilePic} from '../../components/photo/changeProfilePic';
 import {ProfileType} from '../../components/types';
 import createUserDoc from '../../components/auth/createUserDoc';
-import profile from '../Profile';
+
+export function createSearchTerms(username: string, name: string) {
+  let usernameSplit = [];
+  let current = '';
+  for (let i = 0; i < username.length; i++) {
+    current += username[i].toLowerCase();
+    usernameSplit.push(current);
+  }
+  current = '';
+  for (let i = 0; i < name.length; i++) {
+    current += name[i].toLowerCase();
+    usernameSplit.push(current);
+  }
+  name.split(' ').forEach((word) => {
+    current = '';
+    for (let i = 0; i < word.length; i++) {
+      current += word[i].toLowerCase();
+      usernameSplit.push(current);
+    }
+  });
+  return usernameSplit;
+}
 
 export const EmailSignUpScreen = () => {
   const [email, setEmail] = React.useState('');
@@ -33,6 +54,7 @@ export const EmailSignUpScreen = () => {
       changeProfilePic();
     }
     if (profilePicUrl && created) {
+      const searchterms = createSearchTerms(username, name);
       const user: ProfileType = {
         username: '@' + username.toLowerCase(),
         name: name.toLowerCase(),
@@ -46,6 +68,7 @@ export const EmailSignUpScreen = () => {
         startDate: new Date().toLocaleDateString('en-US'),
         profilePic: profilePicUrl,
         posts: [],
+        searchterms: searchterms,
       };
       createUserDoc(user);
       createEmailUser(email, password);

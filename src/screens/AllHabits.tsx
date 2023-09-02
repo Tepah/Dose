@@ -13,8 +13,7 @@ import Styles from '../components/Styles';
 import {CloseButton} from '../components/Close';
 import React, {ReactNode, useContext, useEffect, useRef} from 'react';
 import {HabitDataType} from '../components/types';
-import AddHabit from './Modals/AddHabit';
-import {addHabitToDB} from '../components/addHabit';
+import AddHabit, {ConfirmAddModal} from './Modals/AddHabit';
 import userContext from '../Contexts/UserContext';
 import {fetchHabitData} from '../components/firestore/getHabits';
 import Mapping = Animated.Mapping;
@@ -174,19 +173,25 @@ const ShowHabits = (props: {
   navigation: any;
   scrollOffsetY?: Animated.Value;
 }) => {
-  const {username, profile, setProfile} = useContext(userContext);
+  const {profile} = useContext(userContext);
   const userHabitIds = profile?.habits.map(habit => habit.habitId);
   const habitsShown = React.useRef(0);
-  const onPress = (habit: HabitDataType) => {
-    addHabitToDB(
-      habit.name.replace(/\b\w/g, l => l.toUpperCase()),
-      habit.desc,
-      habit.tags,
-      username,
-      setProfile,
-    );
-    props.navigation.navigate('Home');
-  };
+  const [confirmModal, setConfirmModal] = React.useState<boolean>(false);
+  const [habit, setHabit] = React.useState<HabitDataType>({
+    name: '',
+    desc: '',
+    tags: [],
+  });
+  const firstRender = useRef(true);
+
+  useEffect(() => {
+    if (firstRender.current || habit.name === '') {
+      firstRender.current = false;
+      return;
+    }
+    setConfirmModal(true);
+  }, [habit]);
+
   return (
     <ScrollView
       contentContainerStyle={{marginTop: HEADER_MAX_HEIGHT}}
@@ -203,7 +208,9 @@ const ShowHabits = (props: {
             <Pressable
               key={index}
               style={innerStyles.habitContainer}
-              onPress={() => onPress(habit)}>
+              onPress={() => {
+                setHabit(habit);
+              }}>
               <Text style={Styles.text}>
                 {habit.name.replace(/\b\w/g, char => char.toUpperCase())}
               </Text>
@@ -232,6 +239,15 @@ const ShowHabits = (props: {
             Try a different tag or add your own!
           </Text>
         </View>
+      ) : null}
+      {confirmModal ? (
+        <ConfirmAddModal
+          navigation={props.navigation}
+          visible={confirmModal}
+          setVisible={setConfirmModal}
+          habit={habit}
+          setHabit={setHabit}
+        />
       ) : null}
       <AddHabit />
     </ScrollView>

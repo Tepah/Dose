@@ -17,6 +17,7 @@ export type ProfileType = {
   birthday: string;
   email: string;
   posts: PostType[];
+  searchterms: string[];
 };
 
 export type PostType = {
@@ -38,6 +39,7 @@ export type HabitType = {
   progress: {[key: string]: boolean};
   habitId: string;
   habitTags: string[];
+  private: boolean;
 };
 
 export type HabitDataType = {

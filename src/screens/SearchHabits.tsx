@@ -16,7 +16,7 @@ import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {HabitDataType, RootStackParamList} from '../components/types';
 import {fetchHabitData, getHabitSearch} from '../components/firestore/getHabits';
 import UserContext from '../Contexts/UserContext';
-import {addHabitToDB} from '../components/addHabit';
+import {addHabitToDB} from '../components/firestore/addHabit';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Habits'>;
 

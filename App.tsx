@@ -28,6 +28,7 @@ function App() {
   }, []);
   useEffect(() => {
     setInitializing(false);
+    firstRender.current = true;
   }, [user]);
 
   if (initializing) {
@@ -58,7 +59,8 @@ function App() {
       console.error('Error getting user data: ', err);
     }
   };
-  if (firstRender.current) {
+  if (firstRender.current || !profile) {
+    console.log('Getting user data...');
     getUserDataByEmail();
     firstRender.current = false;
   }

@@ -14,7 +14,6 @@ import {
 } from 'react-native';
 import Styles from '../../components/Styles';
 import {HabitType, ProfileType} from '../../components/types';
-import {mockFriends} from '../../test/mockFriends';
 import {CloseButton} from '../../components/Close';
 import {AppButton} from '../../components/Button';
 import firestore from '@react-native-firebase/firestore';
@@ -28,6 +27,7 @@ interface Props {
   currentHabitIndex: number;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   selectedList: string;
+  navigation: any;
 }
 
 const EditHabitScreen = ({
@@ -37,6 +37,7 @@ const EditHabitScreen = ({
   habits,
   currentHabitIndex,
   setVisible,
+  navigation,
 }: Props) => {
   const [habitName, setHabitName] = useState(
     habits ? habits[currentHabitIndex].name : '',
@@ -76,14 +77,6 @@ const EditHabitScreen = ({
     }
   }, [habits, currentHabitIndex, visible]);
 
-  const mapFollowing = mockFriends.map((following, index) => {
-    return (
-      <View key={index} style={Styles.individualFollowing}>
-        <Image style={Styles.friendProfilePic} source={following.profilePic} />
-        <Text style={[Styles.text, Styles.userText]}>{following.username}</Text>
-      </View>
-    );
-  });
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [newHabit, setNewHabit] = useState<HabitType>({
     name: habitName,
@@ -92,6 +85,7 @@ const EditHabitScreen = ({
     progress: habitProgress,
     habitId: habits ? habits[currentHabitIndex].habitId : '',
     habitTags: habits ? habits[currentHabitIndex].habitTags : [],
+    private: habits ? habits[currentHabitIndex].private : false,
   });
   const editForm = () => {
     const onEditButtonPress = () => {
@@ -102,6 +96,7 @@ const EditHabitScreen = ({
         progress: habitProgress,
         habitId: habits ? habits[currentHabitIndex].habitId : '',
         habitTags: habits ? habits[currentHabitIndex].habitTags : [],
+        private: habits ? habits[currentHabitIndex].private : false,
       });
       setEditModalVisible(true);
     };
@@ -178,18 +173,7 @@ const EditHabitScreen = ({
             <Text style={[Styles.text]}>Streak: </Text>
             <Text style={[Styles.text]}>{habitStreak}</Text>
           </View>
-          <View style={Styles.editModalSocial}>
-            <Text style={Styles.text}>People doing this:</Text>
-            <View style={Styles.editModalFollowing}>
-              {mapFollowing}
-              <View style={Styles.individualFollowing}>
-                <Image
-                  style={Styles.friendProfilePic}
-                  source={require('../../icons/add.png')}
-                />
-              </View>
-            </View>
-          </View>
+          <HabitFollowingList navigation={navigation} habitName={habitName} openCloseModal={openCloseModal} />
           <DeleteHabitButton
             username={username}
             habit={habits ? habits[currentHabitIndex] : null}
@@ -293,6 +277,84 @@ const DeleteHabitButton = (props: {
           </View>
         </View>
       </Modal>
+    </View>
+  );
+};
+
+const HabitFollowingList = ({
+  habitName,
+  navigation,
+  openCloseModal,
+}: {
+  habitName: string;
+  navigation: any;
+  openCloseModal: () => void;
+}) => {
+  const {profile} = useContext(UserContext);
+  const [following, setFollowing] = useState<string[]>(profile?.following);
+  const [followingPics, setFollowingPics] = useState<string[]>([]);
+
+  useEffect(() => {
+    const getFollowingWithHabit = async () => {
+      // TODO: possible inefficiency here, can be optimized
+      try {
+        let temp: string[] = [];
+        let tempPics: string[] = [];
+        for (const user of profile?.following) {
+          const userRef = await firestore().collection('Users').doc(user);
+          const userDoc = await userRef.get();
+          if (userDoc.exists) {
+            const userData = userDoc.data();
+            const userHabits = userData?.habits;
+            const habitIndex = userHabits?.findIndex(
+              (habit: HabitType) => habit.name === habitName,
+            );
+            if (habitIndex !== -1) {
+              temp.push(userData?.username);
+              tempPics.push(userData?.profilePic);
+            }
+          }
+        }
+        setFollowing(temp);
+        setFollowingPics(tempPics);
+        console.log('Following with habit: ' + following);
+      } catch (err) {
+        console.log('Error getting following with habit: ' + err);
+      }
+    };
+    getFollowingWithHabit();
+  }, [habitName]);
+
+  const mapFollowing = following?.map((following, index) => {
+    const onPress = () => {
+      openCloseModal();
+      navigation.navigate('Profile', {user: following});
+    };
+    return (
+      <Pressable key={index} onPress={onPress}>
+        <View style={Styles.individualFollowing}>
+          <Image
+            style={Styles.friendProfilePic}
+            source={{uri: followingPics[index]}}
+          />
+          <Text style={[Styles.text, Styles.userText]}>{following}</Text>
+        </View>
+      </Pressable>
+    );
+  });
+
+  return (
+    <View style={Styles.editModalSocial}>
+      <Text style={Styles.text}>People doing this:</Text>
+      <View style={Styles.editModalFollowing}>
+        {mapFollowing}
+        <View style={Styles.individualFollowing}>
+          <Image
+            style={Styles.friendProfilePic}
+            source={require('../../icons/add.png')}
+          />
+        </View>
+      </View>
     </View>
   );
 };
