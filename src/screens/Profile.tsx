@@ -16,6 +16,7 @@ const ProfileScreen = ({route}: any) => {
   const {user} = route.params;
   const {username} = useContext(UserContext);
   const isFocused = useIsFocused();
+  const [userInfo, setUserInfo] = useState<ProfileType | undefined>(user);
   const [selected, setSelected] = useState(true);
   const [userProfile, setUserProfile] = useState<ProfileType | undefined>();
   const [settingsVisible, setSettingsVisible] = useState(false);
@@ -201,18 +202,7 @@ const ProfileButtons = ({
   user: ProfileType;
   currentUser: string;
 }) => {
-  // TODO: Implement following
-  // if (currentUser.following.includes('@' + user.username)) {
-  //   return (
-  //     <View style={Styles.profileButtonsContainer}>
-  //       <Pressable style={Styles.profileButton}>
-  //         <Text style={[Styles.paragraphText]}>Unfollow</Text>
-  //       </Pressable>
-  //     </View>
-  //   );
-  // }
   const {setProfile} = useContext(UserContext);
-
   const followOnPress = async () => {
     try {
       console.log(currentUser);
@@ -233,14 +223,32 @@ const ProfileButtons = ({
     }
   };
 
+  const followButtonComponent = () => {
+    if (user.followers.includes(currentUser)) {
+      return (
+        <View style={Styles.profileButtonsContainer}>
+          <Pressable style={Styles.profileButton}>
+            <Text style={[Styles.paragraphText]}>Challenge</Text>
+          </Pressable>
+          <Pressable style={Styles.profileButton}>
+            <Text style={[Styles.paragraphText]}>Unfollow</Text>
+          </Pressable>
+        </View>
+      );
+    } else {
+      return (
+        <View style={Styles.profileButtonsContainer}>
+          <Pressable style={Styles.profileButton} onPress={followOnPress}>
+            <Text style={[Styles.paragraphText]}>Follow</Text>
+          </Pressable>
+        </View>
+      );
+    }
+  };
+
   return (
-    <View style={Styles.profileButtonsContainer}>
-      <Pressable style={Styles.profileButton}>
-        <Text style={[Styles.paragraphText]}>Challenge</Text>
-      </Pressable>
-      <Pressable style={Styles.profileButton} onPress={followOnPress}>
-        <Text style={[Styles.paragraphText]}>Follow</Text>
-      </Pressable>
+    <View>
+      {followButtonComponent()}
     </View>
   );
 };
