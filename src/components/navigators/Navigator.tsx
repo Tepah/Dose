@@ -13,6 +13,7 @@ import {useContext, useEffect} from 'react';
 import UserContext from '../../Contexts/UserContext';
 import {AllHabitsScreen} from '../../screens/AllHabits';
 import {SearchHabitsScreen} from '../../screens/SearchHabits';
+import {FollowsScreen} from '../../screens/Follows';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -20,7 +21,7 @@ const Stack = createNativeStackNavigator();
 const Navigator = () => {
   const {username, profile} = useContext(UserContext);
   const [loading, setLoading] = React.useState(true);
-  const [imageUrl, setImageUrl] = React.useState<string>(profile?.profilePic);
+  const [imageUrl, setImageUrl] = React.useState<string | undefined>(profile?.profilePic);
   const [imageLoaded, setImageLoaded] = React.useState<Boolean>(false);
 
   useEffect(() => {
@@ -90,7 +91,7 @@ const Navigator = () => {
       />
       <Tab.Screen
         name="MainProfile"
-        component={ProfileStackNavigator}
+        component={MainProfileStackNavigator}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={focused ? styles.iconFocused : null}>
@@ -152,6 +153,13 @@ const SocialStackNavigator = () => {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="Follows"
+        component={FollowsScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 };
@@ -187,6 +195,13 @@ const HomeStackNavigator = () => {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="Follows"
+        component={FollowsScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 };
@@ -212,7 +227,7 @@ const SearchStackNavigator = () => {
   );
 };
 
-const ProfileStackNavigator = () => {
+const MainProfileStackNavigator = () => {
   const {username} = useContext(UserContext);
   return (
     <Stack.Navigator>
@@ -229,6 +244,34 @@ const ProfileStackNavigator = () => {
       <Stack.Screen
         name="Profile"
         component={ProfileScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Follows"
+        component={FollowsScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+const ProfileStackNavigator = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name={'Follows'}
+        component={FollowsScreen}
         options={{
           headerShown: false,
         }}

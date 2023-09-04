@@ -13,11 +13,17 @@ export type ProfileType = {
   name: string;
   username: string;
   startDate: string;
-  profilePic: any;
+  profilePic: string;
   birthday: string;
   email: string;
   posts: PostType[];
   searchterms: string[];
+};
+
+export type ShortProfileType = {
+  username: string;
+  profilePic: string;
+  name: string;
 };
 
 export type PostType = {

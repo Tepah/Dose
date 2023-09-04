@@ -11,7 +11,7 @@ import {getUser} from '../components/firestore/getUser';
 import UserContext from '../Contexts/UserContext';
 import firestore from '@react-native-firebase/firestore';
 
-const ProfileScreen = ({route}: any) => {
+const ProfileScreen = ({route, navigation}: any) => {
   console.log(route.params);
   const {user} = route.params;
   const {username} = useContext(UserContext);
@@ -106,6 +106,7 @@ const ProfileScreen = ({route}: any) => {
         <ProfileInfo
           user={userProfile}
           setUser={setUserProfile}
+          navigation={navigation}
           currentUser={username}
         />
         <ProfileDescription user={userProfile} />
@@ -157,23 +158,35 @@ const Header = () => {
 const ProfileInfo = ({
   user,
   setUser,
+  navigation,
   currentUser,
 }: {
   user: ProfileType;
   setUser: React.Dispatch<React.SetStateAction<ProfileType | undefined>>;
+  navigation: any;
   currentUser: string;
 }) => {
   const profileCounter = (type: string) => {
+    const onPressHandler = () => {
+      if (type !== 'Habits') {
+        navigation.navigate('Follows', {user: user.username, headerText: type});
+      }
+    };
+
     return (
       <View style={Styles.followContainer}>
         <Text style={[Styles.text, Styles.profileHeaderText]}>{type}</Text>
-        <Text style={[Styles.text, Styles.followCount]}>
-          {type === 'Habits'
-            ? user.habits.length
-            : type === 'Following'
-            ? user.following.length
-            : user.followers.length}
-        </Text>
+        <Pressable onPress={onPressHandler}>
+          <Text style={[Styles.text, Styles.followCount]}>
+            {type === 'Habits'
+              ? user.habits.length
+              : type === 'Following'
+              ? user.following.length
+              : type === 'Followers'
+              ? user.followers.length
+              : null}
+          </Text>
+        </Pressable>
       </View>
     );
   };
@@ -271,8 +284,7 @@ const ProfileButtons = ({
     } else {
       return (
         <View style={Styles.profileButtonsContainer}>
-          <View style={Styles.fauxProfileButton}>
-          </View>
+          <View style={Styles.fauxProfileButton}></View>
           <Pressable style={Styles.profileButton} onPress={followOnPress}>
             <Text style={[Styles.paragraphText]}>Follow</Text>
           </Pressable>
