@@ -16,7 +16,6 @@ const ProfileScreen = ({route}: any) => {
   const {user} = route.params;
   const {username} = useContext(UserContext);
   const isFocused = useIsFocused();
-  const [userInfo, setUserInfo] = useState<ProfileType | undefined>(user);
   const [selected, setSelected] = useState(true);
   const [userProfile, setUserProfile] = useState<ProfileType | undefined>();
   const [settingsVisible, setSettingsVisible] = useState(false);
@@ -104,7 +103,11 @@ const ProfileScreen = ({route}: any) => {
         <Header />
       )}
       <ScrollView style={Styles.profileContainer}>
-        <ProfileInfo user={userProfile} currentUser={username} />
+        <ProfileInfo
+          user={userProfile}
+          setUser={setUserProfile}
+          currentUser={username}
+        />
         <ProfileDescription user={userProfile} />
         {profileTabs()}
         {!selected ? (
@@ -153,9 +156,11 @@ const Header = () => {
 
 const ProfileInfo = ({
   user,
+  setUser,
   currentUser,
 }: {
   user: ProfileType;
+  setUser: React.Dispatch<React.SetStateAction<ProfileType | undefined>>;
   currentUser: string;
 }) => {
   const profileCounter = (type: string) => {
@@ -189,7 +194,11 @@ const ProfileInfo = ({
         {profileCounter('Followers')}
       </View>
       {user.username !== currentUser ? (
-        <ProfileButtons user={user} currentUser={currentUser} />
+        <ProfileButtons
+          user={user}
+          setUser={setUser}
+          currentUser={currentUser}
+        />
       ) : null}
     </View>
   );
@@ -197,15 +206,16 @@ const ProfileInfo = ({
 
 const ProfileButtons = ({
   user,
+  setUser,
   currentUser,
 }: {
   user: ProfileType;
+  setUser: React.Dispatch<React.SetStateAction<ProfileType | undefined>>;
   currentUser: string;
 }) => {
   const {setProfile} = useContext(UserContext);
   const followOnPress = async () => {
     try {
-      console.log(currentUser);
       const userRef = await firestore().collection('Users').doc(currentUser);
       await userRef.update({
         following: firestore.FieldValue.arrayUnion(user.username),
@@ -218,8 +228,31 @@ const ProfileButtons = ({
       await otherUserRef.update({
         followers: firestore.FieldValue.arrayUnion(currentUser),
       });
+      const otherUserData = await otherUserRef.get();
+      setUser(otherUserData.data() as ProfileType);
     } catch (err) {
       console.error('Error following user: ', err);
+    }
+  };
+
+  const unfollowOnPress = async () => {
+    try {
+      const userRef = await firestore().collection('Users').doc(currentUser);
+      await userRef.update({
+        following: firestore.FieldValue.arrayRemove(user.username),
+      });
+      const userData = await userRef.get();
+      setProfile(userData.data() as ProfileType);
+      const otherUserRef = await firestore()
+        .collection('Users')
+        .doc(user.username);
+      await otherUserRef.update({
+        followers: firestore.FieldValue.arrayRemove(currentUser),
+      });
+      const otherUserData = await otherUserRef.get();
+      setUser(otherUserData.data() as ProfileType);
+    } catch (err) {
+      console.error('Error unfollowing user: ', err);
     }
   };
 
@@ -230,7 +263,7 @@ const ProfileButtons = ({
           <Pressable style={Styles.profileButton}>
             <Text style={[Styles.paragraphText]}>Challenge</Text>
           </Pressable>
-          <Pressable style={Styles.profileButton}>
+          <Pressable style={Styles.profileButton} onPress={unfollowOnPress}>
             <Text style={[Styles.paragraphText]}>Unfollow</Text>
           </Pressable>
         </View>
@@ -238,6 +271,8 @@ const ProfileButtons = ({
     } else {
       return (
         <View style={Styles.profileButtonsContainer}>
+          <View style={Styles.fauxProfileButton}>
+          </View>
           <Pressable style={Styles.profileButton} onPress={followOnPress}>
             <Text style={[Styles.paragraphText]}>Follow</Text>
           </Pressable>
@@ -246,11 +281,7 @@ const ProfileButtons = ({
     }
   };
 
-  return (
-    <View>
-      {followButtonComponent()}
-    </View>
-  );
+  return <View>{followButtonComponent()}</View>;
 };
 
 const ProfileDescription = ({user}: any) => {

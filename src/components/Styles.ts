@@ -570,6 +570,13 @@ const styles = StyleSheet.create({
     backgroundColor: menu,
     borderRadius: 5,
   },
+  fauxProfileButton: {
+    flex: 1,
+    alignItems: 'center',
+    padding: 8,
+    marginHorizontal: 10,
+    borderRadius: 5,
+  },
   profileDescriptionContainer: {
     flex: 1,
     paddingHorizontal: 20,
