@@ -59,7 +59,7 @@ export const FollowsScreen = ({route, navigation}: any) => {
 
   return (
     <View style={Styles.app}>
-      <Header navigation={navigation} />
+      <Header headerText={headerText} navigation={navigation} />
       <FollowList profiles={follows} navigation={navigation} />
     </View>
   );
@@ -68,7 +68,9 @@ export const FollowsScreen = ({route, navigation}: any) => {
 const Header = ({headerText, navigation}: any) => {
   return (
     <View style={Styles.header}>
-      <Text style={[Styles.text, Styles.notificationHeaderText]}>{headerText}</Text>
+      <Text style={[Styles.text, Styles.notificationHeaderText]}>
+        {headerText}
+      </Text>
       <CloseButton type={'back'} closeFunction={() => navigation.goBack()} />
     </View>
   );
@@ -102,4 +104,4 @@ const FollowList = ({profiles, navigation}: any) => {
       })}
     </ScrollView>
   );
-}
+};

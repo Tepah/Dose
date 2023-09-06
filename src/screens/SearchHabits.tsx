@@ -65,6 +65,7 @@ export const SearchHabitsScreen = ({route, navigation}: any) => {
       habit.tags,
       username,
       setProfile,
+      false,
     );
     navigation.navigate('Home');
   };
