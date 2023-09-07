@@ -73,6 +73,9 @@ const ProfileScreen = ({route, navigation}: any) => {
 
   const mappedHabits = userProfile?.habits.map(
     (habit: HabitType, index: number) => {
+      if (habit.private) {
+        return null;
+      }
       return (
         <View key={index} style={Styles.profileHabit}>
           <Text style={[Styles.text, Styles.proHabitText]}>{habit.name}</Text>
