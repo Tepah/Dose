@@ -114,10 +114,17 @@ const ProfileScreen = ({route, navigation}: any) => {
         />
         <ProfileDescription user={userProfile} />
         {profileTabs()}
-        {!selected ? (
-          <MediaTab posts={userProfile.posts} />
+        {!userProfile.private &&
+        (user === username || userProfile.followers.includes(username)) ? (
+          !selected ? (
+            <MediaTab posts={userProfile.posts} />
+          ) : (
+            <View style={Styles.profileHabitsContainer}>{mappedHabits}</View>
+          )
         ) : (
-          <View style={Styles.profileHabitsContainer}>{mappedHabits}</View>
+          <View>
+            <Text>This account is private.</Text>
+          </View>
         )}
       </ScrollView>
     </View>
@@ -314,12 +321,15 @@ const ProfileDescription = ({user}: any) => {
 };
 
 const MediaTab = (props: {posts: PostType[]}) => {
+  const {username} = useContext(UserContext);
   console.log(props.posts);
   const renderPosts = props.posts.map((post: PostType, index) => {
-    if (post.postType === 'image') {
-      return <ImagePost key={index} post={post} />;
-    } else if (post.postType === 'challenge') {
-      return <ChallengePost key={index} post={post} />;
+    if (post.username === username || !post.private) {
+      if (post.postType === 'image') {
+        return <ImagePost key={index} post={post} />;
+      } else if (post.postType === 'challenge') {
+        return <ChallengePost key={index} post={post} />;
+      }
     }
   });
 

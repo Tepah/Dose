@@ -36,6 +36,7 @@ export type PostType = {
   postComments: {[key: string]: string}[];
   image?: any;
   challenger?: string;
+  private: boolean;
 };
 
 export type HabitType = {
