@@ -61,6 +61,8 @@ export const SettingsModal = ({user, visible, setVisible}: Props) => {
           profilePic: url,
           private: isEnabled,
         });
+      } else {
+        throw new Error('Image cannot be empty');
       }
     } else {
       throw new Error('Name cannot be empty');

@@ -4,16 +4,15 @@ import Calendar from '../components/Calendar';
 import Styles from '../components/Styles';
 import EditHabitScreen from './Modals/EditHabit';
 import {HabitType, ProfileType} from '../components/types';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
-import firestore from '@react-native-firebase/firestore';
+import {useIsFocused} from '@react-navigation/native';
 import {NonSwipeableItem, SwipeableItem} from '../components/Swipables';
-import {getProfileHabits} from '../components/firestore/getHabits';
 import UserContext from '../Contexts/UserContext';
+import {syncHabit, updateHabits} from '../components/firestore/setHabits';
+import {getProfileHabits} from '../components/firestore/getHabits';
 
 /* TODO: add past date rendering, */
 /*   add clickable past dates to track progress, but don't allow editing on past dates. */
 /*   make dates have completion status icons. */
-/* TODO: fix bug where the streak doesn't go away if the next day is done */
 
 const HomeScreen = ({navigation}: any) => {
   const {username, profile, setProfile} = useContext(UserContext);
@@ -43,14 +42,14 @@ const HomeScreen = ({navigation}: any) => {
             habit.progress[newDay] = false;
           }
           if (
-            (habit.progress[formattedDayBeforeDate] === undefined ||
-              !habit.progress[formattedDayBeforeDate]) &&
-            habit.streak > 1
+            habit.progress[formattedDayBeforeDate] === undefined ||
+            (!habit.progress[formattedDayBeforeDate] && habit.streak > 1)
           ) {
             habit.streak = 0;
           }
         });
       }
+      await updateHabits(username, allHabits);
     } catch (err) {
       console.error('Error setting new day: ', err);
     }
@@ -82,7 +81,7 @@ const HomeScreen = ({navigation}: any) => {
         setSwipedHabits(() => dateHabitsNotDone);
       }
     } catch (err) {
-      console.error('Error getting habits: ', err);
+      console.error('Error getting habits in Home: ', err);
     }
   };
 
@@ -119,35 +118,8 @@ const HomeScreen = ({navigation}: any) => {
   };
 
   const editHabit = (habit: HabitType, editType: string) => {
-    const syncHabit = async () => {
-      try {
-        const allHabits = await getProfileHabits(username);
-        if (allHabits) {
-          const habitIndex = allHabits.findIndex(
-            obj => obj.habitId === habit.habitId,
-          );
-          allHabits[habitIndex].description = habit.description;
-        }
-        const userRef = firestore().collection('Users').doc(username);
-        await userRef.update({habits: allHabits});
-        if (allHabits) {
-          const dateHabitsDone = allHabits.filter(
-            (obj: HabitType) => !obj.progress[date],
-          );
-          setHabits(() => dateHabitsDone);
-          const dateHabitsNotDone = allHabits.filter(
-            (obj: HabitType) => obj.progress[date],
-          );
-          setSwipedHabits(() => dateHabitsNotDone);
-        }
-        const userDocs = await userRef.get();
-        setProfile(userDocs.data() as ProfileType);
-      } catch (err) {
-        console.error('Error Editing habit: ', err);
-      }
-    };
     if (editType === 'edit') {
-      syncHabit();
+      syncHabit(username, date, habit, setHabits, setSwipedHabits, setProfile);
     } else if (editType === 'delete') {
       getHabits();
     }

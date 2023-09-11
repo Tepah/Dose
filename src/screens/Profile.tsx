@@ -114,8 +114,9 @@ const ProfileScreen = ({route, navigation}: any) => {
         />
         <ProfileDescription user={userProfile} />
         {profileTabs()}
-        {!userProfile.private &&
-        (user === username || userProfile.followers.includes(username)) ? (
+        {!userProfile.private ||
+        user === username ||
+        userProfile.followers.includes(username) ? (
           !selected ? (
             <MediaTab posts={userProfile.posts} />
           ) : (

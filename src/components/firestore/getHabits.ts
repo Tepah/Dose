@@ -1,5 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
-import {HabitDataType, ProfileType} from '../types';
+import {HabitDataType, HabitType, ProfileType} from '../types';
 import {SetStateAction} from 'react';
 
 export const getProfileHabits = async (username: string) => {

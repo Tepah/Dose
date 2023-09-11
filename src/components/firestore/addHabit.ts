@@ -1,7 +1,5 @@
 import {HabitType, ProfileType} from '../types';
 import firestore from '@react-native-firebase/firestore';
-import {useContext} from 'react';
-import userContext from '../../Contexts/UserContext';
 
 const addHabit = (
   habit: HabitType,
