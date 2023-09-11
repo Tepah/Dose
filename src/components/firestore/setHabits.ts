@@ -8,11 +8,14 @@ export const updateHabits = async (
   habits: HabitType[] | undefined,
 ) => {
   try {
-    const userRef = await firestore().collection('Users').doc(username).get();
-    if (userRef.exists) {
-      await firestore().collection('Users').doc(username).update({
-        habits: habits,
-      });
+    console.log('Updating habits: ', habits);
+    if (habits) {
+      const userRef = await firestore().collection('Users').doc(username).get();
+      if (userRef.exists) {
+        await firestore().collection('Users').doc(username).update({
+          habits: habits,
+        });
+      }
     }
   } catch (err) {
     console.log('Error updating habits: ', err);

@@ -71,6 +71,7 @@ export const SwipeableItem = ({
       }).start();
       if (habits && type === 'current') {
         setHabits([...habits.slice(0, index), ...habits.slice(index + 1)]);
+        habit.streak++;
         setSwipedHabits([...swipedHabits, habit]);
         updateHabitProgress();
       } else if (habits && type === 'swiped') {
@@ -78,6 +79,7 @@ export const SwipeableItem = ({
           ...swipedHabits.slice(0, index),
           ...swipedHabits.slice(index + 1),
         ]);
+        habit.streak--;
         setHabits([...habits, habit]);
         updateHabitProgress();
       }
