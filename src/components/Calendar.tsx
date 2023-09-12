@@ -14,6 +14,7 @@ import {useIsFocused} from '@react-navigation/native';
 import {HabitType, ProfileType} from './types';
 import Styles from './Styles';
 import UserContext from '../Contexts/UserContext';
+import {mockProfileList} from '../test/mockProfile1';
 
 interface Props {
   dateChange: (date: string) => void;

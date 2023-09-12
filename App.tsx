@@ -1,19 +1,21 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import Navigator from './src/components/navigators/Navigator';
-import {StatusBar} from 'react-native';
+import {StatusBar, Text, View} from 'react-native';
 import {LoginNavigator} from './src/components/navigators/LoginNavigator';
 import firebaseInit from './src/configs/firebase/config';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import UserContext from './src/Contexts/UserContext';
 import {ProfileType} from './src/components/types';
+import Styles from './src/components/Styles';
 
 function App() {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
   const [username, setUsername] = useState<string>('');
   const [profile, setProfile] = useState<ProfileType | undefined>();
+  const loading = useRef(true);
   const firstRender = useRef(true);
 
   firebaseInit();
@@ -32,8 +34,9 @@ function App() {
   }, [user]);
 
   useEffect(() => {
+    console.log(profile);
     if (profile) {
-      console.log('Profile updated: ', profile);
+      loading.current = false;
     }
   }, [profile]);
 
@@ -65,10 +68,18 @@ function App() {
       console.error('Error getting user data: ', err);
     }
   };
-  if (firstRender.current || !profile) {
+  if (firstRender.current && !profile) {
     console.log('Getting user data...');
     getUserDataByEmail();
     firstRender.current = false;
+  }
+
+  if (loading.current) {
+    return (
+      <View style={Styles.app}>
+        <Text style={Styles.text}>Loading...</Text>
+      </View>
+    );
   }
 
   // Main Page
