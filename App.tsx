@@ -31,6 +31,12 @@ function App() {
     firstRender.current = true;
   }, [user]);
 
+  useEffect(() => {
+    if (profile) {
+      console.log('Profile updated: ', profile);
+    }
+  }, [profile]);
+
   if (initializing) {
     return null;
   }

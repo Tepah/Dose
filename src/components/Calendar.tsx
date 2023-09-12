@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -11,9 +11,9 @@ import {
 } from 'react-native';
 import styles from './Styles';
 import {useIsFocused} from '@react-navigation/native';
-import {mockProfileList} from '../test/mockProfile1';
-import {HabitType} from './types';
+import {HabitType, ProfileType} from './types';
 import Styles from './Styles';
+import UserContext from '../Contexts/UserContext';
 
 interface Props {
   dateChange: (date: string) => void;
@@ -26,6 +26,7 @@ type DateType = {
 };
 // TODO: RN, you can click on month in calendar and it'll change if you close out of the calendar box
 const Calendar = ({dateChange}: Props) => {
+  const {profile} = useContext(UserContext);
   const isFocused = useIsFocused();
   const scrollViewRef = useRef(null);
   const months = {
@@ -102,10 +103,10 @@ const Calendar = ({dateChange}: Props) => {
 
   const renderViews = () => {
     let habits = 0;
-    let totalHabits = mockProfileList['@petah'].habits.length;
+    let totalHabits = profile?.habits.length;
     return daysArray.map((day, index) => {
       habits = 0;
-      mockProfileList['@petah'].habits.forEach((habit: HabitType) => {
+      profile?.habits.forEach((habit: HabitType) => {
         if (habit.progress[`${date.month + 1}/${day}/${date.year}`]) {
           habits += 1;
         }
@@ -178,6 +179,7 @@ const Calendar = ({dateChange}: Props) => {
         setVisible={setMonthYearModal}
         date={date}
         dateChange={onDatePress}
+        profile={profile as ProfileType}
       />
     </View>
   );
@@ -189,11 +191,11 @@ interface datePickerProps {
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   date: DateType;
   dateChange: (date: string) => void;
+  profile: ProfileType;
 }
 
 const DatePicker = (props: datePickerProps) => {
-  const [startMonth, startDay, startYear] =
-    mockProfileList['@petah'].startDate.split('/');
+  const [startMonth, startDay, startYear] = props.profile.startDate.split('/');
   const [selectedYear, setSelectedYear] = useState(props.date.year);
   const years = [];
   for (
