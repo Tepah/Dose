@@ -359,6 +359,18 @@ const HabitFollowingList = ({
   );
 };
 
+const ShareButton = ({habit}: {habit: HabitType}) => {
+  const shareOnPress = () => {
+    console.log('Share button pressed');
+  };
+
+  return (
+    <View>
+      <AppButton onPress={} title={'Share'} />
+    </View>
+  );
+};
+
 const innerStyles = StyleSheet.create({
   optionsContainer: {
     flex: 1,
