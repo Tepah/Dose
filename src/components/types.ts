@@ -27,7 +27,6 @@ export type ShortProfileType = {
 };
 
 export type PostType = {
-  postID: number;
   username: string;
   postType: string;
   postContent: string;

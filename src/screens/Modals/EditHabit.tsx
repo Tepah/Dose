@@ -18,6 +18,7 @@ import {CloseButton} from '../../components/Close';
 import {AppButton} from '../../components/Button';
 import firestore from '@react-native-firebase/firestore';
 import UserContext from '../../Contexts/UserContext';
+import {postPost} from '../../components/firestore/addPosts';
 
 interface Props {
   username: string;
@@ -168,12 +169,17 @@ const EditHabitScreen = ({
                 </KeyboardAvoidingView>
               </Modal>
             </View>
+          <ShareButton habit={habits ? habits[currentHabitIndex] : null} />
           </View>
           <View style={Styles.editModalStreaks}>
             <Text style={[Styles.text]}>Streak: </Text>
             <Text style={[Styles.text]}>{habitStreak}</Text>
           </View>
-          <HabitFollowingList navigation={navigation} habitName={habitName} openCloseModal={openCloseModal} />
+          <HabitFollowingList
+            navigation={navigation}
+            habitName={habitName}
+            openCloseModal={openCloseModal}
+          />
           <DeleteHabitButton
             username={username}
             habit={habits ? habits[currentHabitIndex] : null}
@@ -223,7 +229,7 @@ const deleteHabit = (
             });
           }
         }
-        const userRef = await firestore().collection('Users').doc(username);
+        const userRef = firestore().collection('Users').doc(username);
         const userDoc = await userRef.get();
         if (userDoc.exists) {
           setProfile(userDoc.data() as ProfileType);
@@ -359,14 +365,17 @@ const HabitFollowingList = ({
   );
 };
 
-const ShareButton = ({habit}: {habit: HabitType}) => {
+const ShareButton = ({habit}: {habit: HabitType | null}) => {
   const shareOnPress = () => {
-    console.log('Share button pressed');
+    postPost(habit?.habitId, 'share', 'test', '');
   };
+  if (!habit) {
+    return <View></View>;
+  }
 
   return (
     <View>
-      <AppButton onPress={} title={'Share'} />
+      <AppButton onPress={shareOnPress} title={'Share'} />
     </View>
   );
 };

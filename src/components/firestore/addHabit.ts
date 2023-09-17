@@ -38,7 +38,7 @@ export const addHabitToDB = async (
       .where('name', '==', habitName.toLowerCase())
       .get();
     if (habitRef.docs.length === 0) {
-      const newRef = await firestore().collection('Habits').doc();
+      const newRef = firestore().collection('Habits').doc();
       await newRef.set({
         name: habitName.toLowerCase(),
         users: [user],
