@@ -169,7 +169,7 @@ const EditHabitScreen = ({
                 </KeyboardAvoidingView>
               </Modal>
             </View>
-          <ShareButton habit={habits ? habits[currentHabitIndex] : null} />
+          <ShareButton habit={habits ? habits[currentHabitIndex] : null} navigation={navigation} openCloseModal={openCloseModal}/>
           </View>
           <View style={Styles.editModalStreaks}>
             <Text style={[Styles.text]}>Streak: </Text>
@@ -365,9 +365,18 @@ const HabitFollowingList = ({
   );
 };
 
-const ShareButton = ({habit}: {habit: HabitType | null}) => {
+const ShareButton = ({
+  habit,
+  navigation,
+  openCloseModal,
+}: {
+  habit: HabitType | null;
+  navigation: any;
+  openCloseModal: () => void;
+}) => {
   const shareOnPress = () => {
-    postPost(habit?.habitId, 'share', 'test', '');
+    navigation.navigate('Share', {habit: habit});
+    openCloseModal();
   };
   if (!habit) {
     return <View></View>;
