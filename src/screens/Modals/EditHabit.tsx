@@ -18,7 +18,6 @@ import {CloseButton} from '../../components/Close';
 import {AppButton} from '../../components/Button';
 import firestore from '@react-native-firebase/firestore';
 import UserContext from '../../Contexts/UserContext';
-import {postPost} from '../../components/firestore/addPosts';
 
 interface Props {
   username: string;
