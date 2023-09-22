@@ -1,4 +1,4 @@
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Pressable, Text, TouchableOpacity, View} from 'react-native';
 import {AppButton} from '../components/Button';
 import {useNavigation} from '@react-navigation/native';
 import { Camera } from 'react-native-camera-kit';
@@ -12,9 +12,18 @@ export const PostScreen = ({route}: any) => {
     navigation.goBack();
   };
 
-  const handleCapture = async () => {
+  // const handleCapture = async () => {
+  //   try {
+  //     const image = await Camera.capture();
+  //     console.log(image);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
+
+  const handleChoosePhoto = async () => {
     try {
-      const image = await Camera.capture();
+      const image = await Camera.selectImage();
       console.log(image);
     } catch (e) {
       console.log(e);
@@ -23,15 +32,19 @@ export const PostScreen = ({route}: any) => {
 
   return (
     <View style={Styles.app}>
-      <View style={{ flex: 1 }}>
-        <Camera
-          ref={(ref) => (this.camera = ref)}
-          style={{ flex: 1 }}
-        />
-        <TouchableOpacity onPress={handleCapture}>
-          <Text>Take Picture</Text>
-        </TouchableOpacity>
-      </View>
+      {/*<View style={{ flex: 1 }}>*/}
+      {/*  <Camera*/}
+      {/*    ref={(ref) => (this?.camera = ref)}*/}
+      {/*    style={{ flex: 1 }}*/}
+      {/*  />*/}
+      {/*  <TouchableOpacity onPress={handleCapture}>*/}
+      {/*    <Text>Take Picture</Text>*/}
+      {/*  </TouchableOpacity>*/}
+      {/*</View>*/}
+      <Pressable onpress={handleChoosePhoto}>
+        <Text>Choose Photo</Text>
+      </Pressable>
+
       <Text>{habit.name}</Text>
       <AppButton onPress={onPress} title={'back'} />
     </View>
