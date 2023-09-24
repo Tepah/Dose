@@ -14,7 +14,6 @@ import UserContext from '../../Contexts/UserContext';
 import {AllHabitsScreen} from '../../screens/AllHabits';
 import {SearchHabitsScreen} from '../../screens/SearchHabits';
 import {FollowsScreen} from '../../screens/Follows';
-import {PostScreen} from '../../screens/CreatePost';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -199,13 +198,6 @@ const HomeStackNavigator = () => {
       <Stack.Screen
         name="Follows"
         component={FollowsScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="Share"
-        component={PostScreen}
         options={{
           headerShown: false,
         }}
