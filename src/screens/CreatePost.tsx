@@ -1,7 +1,7 @@
 import {Pressable, Text, TouchableOpacity, View} from 'react-native';
 import {AppButton} from '../components/Button';
 import {useNavigation} from '@react-navigation/native';
-import { Camera } from 'react-native-camera-kit';
+// import { Camera } from 'react-native-camera-kit';
 import Styles from '../components/Styles';
 import React from 'react';
 
@@ -21,14 +21,14 @@ export const PostScreen = ({route}: any) => {
   //   }
   // };
 
-  const handleChoosePhoto = async () => {
-    try {
-      const image = await Camera.selectImage();
-      console.log(image);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // const handleChoosePhoto = async () => {
+  //   try {
+  //     const image = await Camera.selectImage();
+  //     console.log(image);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   return (
     <View style={Styles.app}>
@@ -41,7 +41,7 @@ export const PostScreen = ({route}: any) => {
       {/*    <Text>Take Picture</Text>*/}
       {/*  </TouchableOpacity>*/}
       {/*</View>*/}
-      <Pressable onpress={handleChoosePhoto}>
+      <Pressable onPress={() => console.log('Testing')}>
         <Text>Choose Photo</Text>
       </Pressable>
 
